@@ -1,0 +1,219 @@
+<section style="max-width: 896px; margin: 0 auto;">
+
+    <!-- HERO -->
+    <div style="background-color: #714B67; color: #ffffff; padding: 60px 20px; text-align: center; border-radius: 0 0 8px 8px;">
+        <h1 style="font-size: 42px; font-weight: 700; color: #ffffff; margin: 0 0 8px;">PDF Password Protection</h1>
+        <p style="font-size: 20px; color: #ffffff; margin: 0 0 20px;">Encrypt any Odoo PDF report with a password - per report, per partner</p>
+        <span style="display: inline-block; background-color: #5a3a50; border: 1px solid #8a6a80; border-radius: 20px; padding: 5px 16px; font-size: 14px; color: #ffffff; margin: 0 4px;">Odoo 19</span>
+        <span style="display: inline-block; background-color: #017E84; border-radius: 20px; padding: 5px 16px; font-size: 14px; color: #ffffff; margin: 0 4px;">FREE</span>
+        <span style="display: inline-block; background-color: #e6a817; border-radius: 20px; padding: 5px 16px; font-size: 14px; color: #333333; margin: 0 4px;">GDPR Ready</span>
+    </div>
+
+    <!-- PROBLEM -->
+    <div class="container py-5" style="text-align: center;">
+        <h2 style="color: #714B67; font-size: 28px; font-weight: 700; margin-bottom: 8px;">The Problem</h2>
+        <p style="color: #666666; font-size: 16px; margin-bottom: 32px;">Odoo sends invoices, payslips, and quotations as unprotected PDFs. Anyone who intercepts the email can open them.</p>
+
+        <div class="row">
+            <div class="col-md-6 col-12 mb-4">
+                <div style="background-color: #f8d7da; border: 2px solid #f5c6cb; border-radius: 10px; padding: 24px; text-align: center; height: 100%;">
+                    <p style="font-size: 14px; font-weight: 600; color: #721c24; margin: 0 0 12px;">Without this module</p>
+                    <div style="font-size: 48px; margin-bottom: 8px;">&#128275;</div>
+                    <p style="font-size: 14px; color: #721c24; margin: 0;">PDF reports are sent in plain text. No encryption. No password. Anyone can open them.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-12 mb-4">
+                <div style="background-color: #d4edda; border: 2px solid #c3e6cb; border-radius: 10px; padding: 24px; text-align: center; height: 100%;">
+                    <p style="font-size: 14px; font-weight: 600; color: #155724; margin: 0 0 12px;">With this module</p>
+                    <div style="font-size: 48px; margin-bottom: 8px;">&#128274;</div>
+                    <p style="font-size: 14px; color: #155724; margin: 0;">PDFs are encrypted with a password. Only the recipient who knows the password can open them.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PASSWORD MODES -->
+    <div style="background-color: #f8f5f7; padding: 48px 0; border-radius: 8px;">
+        <div class="container" style="text-align: center;">
+            <h2 style="color: #714B67; font-size: 28px; font-weight: 700; margin-bottom: 8px;">4 Password Modes</h2>
+            <p style="color: #666666; font-size: 16px; margin-bottom: 32px;">Choose how the password is determined - per report action.</p>
+
+            <div class="row">
+                <div class="col-md-3 col-sm-6 col-12 mb-4">
+                    <div style="background-color: #ffffff; border: 2px solid #e8dde5; border-top: 4px solid #714B67; border-radius: 10px; padding: 20px; text-align: center; height: 100%;">
+                        <div style="font-size: 28px; margin-bottom: 8px;">&#128273;</div>
+                        <strong style="font-size: 15px;">Static Password</strong>
+                        <p style="font-size: 13px; color: #666666; margin-top: 8px;">Same password for all PDFs of this report type</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-12 mb-4">
+                    <div style="background-color: #ffffff; border: 2px solid #e8dde5; border-top: 4px solid #017E84; border-radius: 10px; padding: 20px; text-align: center; height: 100%;">
+                        <div style="font-size: 28px; margin-bottom: 8px;">&#127970;</div>
+                        <strong style="font-size: 15px;">Partner VAT</strong>
+                        <p style="font-size: 13px; color: #666666; margin-top: 8px;">Password = partner's VAT/tax ID number</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-12 mb-4">
+                    <div style="background-color: #ffffff; border: 2px solid #e8dde5; border-top: 4px solid #dc3545; border-radius: 10px; padding: 20px; text-align: center; height: 100%;">
+                        <div style="font-size: 28px; margin-bottom: 8px;">&#128222;</div>
+                        <strong style="font-size: 15px;">Partner Phone</strong>
+                        <p style="font-size: 13px; color: #666666; margin-top: 8px;">Password = partner's phone or mobile number</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-12 mb-4">
+                    <div style="background-color: #ffffff; border: 2px solid #e8dde5; border-top: 4px solid #e6a817; border-radius: 10px; padding: 20px; text-align: center; height: 100%;">
+                        <div style="font-size: 28px; margin-bottom: 8px;">&#9993;</div>
+                        <strong style="font-size: 15px;">Partner Email</strong>
+                        <p style="font-size: 13px; color: #666666; margin-top: 8px;">Password = partner's email address</p>
+                    </div>
+                </div>
+            </div>
+
+            <p style="color: #888888; font-size: 14px; margin-top: 8px;">All dynamic modes fall back to the static password if the partner field is empty.</p>
+        </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div class="container py-5" style="text-align: center;">
+        <h2 style="color: #714B67; font-size: 28px; font-weight: 700; margin-bottom: 32px;">How It Works</h2>
+
+        <div class="row">
+            <div class="col-md-4 col-12 mb-4">
+                <div style="background-color: #ffffff; border: 1px solid #e8dde5; border-radius: 10px; padding: 24px; text-align: center; height: 100%;">
+                    <div style="font-size: 32px; margin-bottom: 8px;">1</div>
+                    <strong>Enable</strong>
+                    <p style="font-size: 14px; color: #666666; margin-top: 8px;">Go to Settings &gt; Technical &gt; Reports. Open any report action and enable password protection.</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-12 mb-4">
+                <div style="background-color: #ffffff; border: 1px solid #e8dde5; border-radius: 10px; padding: 24px; text-align: center; height: 100%;">
+                    <div style="font-size: 32px; margin-bottom: 8px;">2</div>
+                    <strong>Configure</strong>
+                    <p style="font-size: 14px; color: #666666; margin-top: 8px;">Choose password mode: static value, partner VAT, phone, or email. Set a fallback password.</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-12 mb-4">
+                <div style="background-color: #ffffff; border: 1px solid #e8dde5; border-radius: 10px; padding: 24px; text-align: center; height: 100%;">
+                    <div style="font-size: 32px; margin-bottom: 8px;">3</div>
+                    <strong>Done</strong>
+                    <p style="font-size: 14px; color: #666666; margin-top: 8px;">Every PDF generated from that report is now encrypted. Recipients need the password to open it.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WORKS WITH -->
+    <div style="background-color: #f8f5f7; padding: 48px 0; border-radius: 8px;">
+        <div class="container" style="text-align: center;">
+            <h2 style="color: #714B67; font-size: 28px; font-weight: 700; margin-bottom: 32px;">Works With All PDF Reports</h2>
+
+            <div class="row">
+                <div class="col-md-4 col-sm-6 col-12 mb-4">
+                    <div style="background-color: #ffffff; border: 1px solid #e8dde5; border-radius: 8px; padding: 16px; text-align: center;">
+                        <strong style="color: #714B67;">Invoices</strong>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 col-12 mb-4">
+                    <div style="background-color: #ffffff; border: 1px solid #e8dde5; border-radius: 8px; padding: 16px; text-align: center;">
+                        <strong style="color: #714B67;">Quotations</strong>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 col-12 mb-4">
+                    <div style="background-color: #ffffff; border: 1px solid #e8dde5; border-radius: 8px; padding: 16px; text-align: center;">
+                        <strong style="color: #714B67;">Purchase Orders</strong>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 col-12 mb-4">
+                    <div style="background-color: #ffffff; border: 1px solid #e8dde5; border-radius: 8px; padding: 16px; text-align: center;">
+                        <strong style="color: #714B67;">Delivery Slips</strong>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 col-12 mb-4">
+                    <div style="background-color: #ffffff; border: 1px solid #e8dde5; border-radius: 8px; padding: 16px; text-align: center;">
+                        <strong style="color: #714B67;">Payslips</strong>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 col-12 mb-4">
+                    <div style="background-color: #ffffff; border: 1px solid #e8dde5; border-radius: 8px; padding: 16px; text-align: center;">
+                        <strong style="color: #714B67;">Any Custom Report</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TECHNICAL -->
+    <div class="container py-5" style="text-align: center;">
+        <h2 style="color: #714B67; font-size: 28px; font-weight: 700; margin-bottom: 32px;">Technical Details</h2>
+        <div style="max-width: 600px; margin: 0 auto;">
+            <div class="row" style="border-bottom: 1px solid #e8dde5; padding: 10px 0;">
+                <div class="col-md-5 col-12" style="text-align: left;"><strong style="color: #714B67;">Module</strong></div>
+                <div class="col-md-7 col-12" style="text-align: left;">no_pdf_password_protection</div>
+            </div>
+            <div class="row" style="border-bottom: 1px solid #e8dde5; padding: 10px 0;">
+                <div class="col-md-5 col-12" style="text-align: left;"><strong style="color: #714B67;">Version</strong></div>
+                <div class="col-md-7 col-12" style="text-align: left;">19.0.1.0.0</div>
+            </div>
+            <div class="row" style="border-bottom: 1px solid #e8dde5; padding: 10px 0;">
+                <div class="col-md-5 col-12" style="text-align: left;"><strong style="color: #714B67;">Dependencies</strong></div>
+                <div class="col-md-7 col-12" style="text-align: left;">base + PyPDF2</div>
+            </div>
+            <div class="row" style="border-bottom: 1px solid #e8dde5; padding: 10px 0;">
+                <div class="col-md-5 col-12" style="text-align: left;"><strong style="color: #714B67;">License</strong></div>
+                <div class="col-md-7 col-12" style="text-align: left;">LGPL-3 (Free / Open Source)</div>
+            </div>
+            <div class="row" style="border-bottom: 1px solid #e8dde5; padding: 10px 0;">
+                <div class="col-md-5 col-12" style="text-align: left;"><strong style="color: #714B67;">Mechanism</strong></div>
+                <div class="col-md-7 col-12" style="text-align: left;">Overrides _render_qweb_pdf on ir.actions.report</div>
+            </div>
+            <div class="row" style="padding: 10px 0;">
+                <div class="col-md-5 col-12" style="text-align: left;"><strong style="color: #714B67;">Tests</strong></div>
+                <div class="col-md-7 col-12" style="text-align: left;">7 unit tests</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CROSS-PROMOTION -->
+    <div style="background-color: #2d2233; padding: 48px 0; border-radius: 8px;">
+        <div class="container" style="text-align: center;">
+            <h2 style="color: #d4b8cf; font-size: 28px; font-weight: 700; margin-bottom: 8px;">More Modules by Naim OUDAYET</h2>
+            <p style="color: #bba8b5; font-size: 16px; margin-bottom: 32px;">Production-ready Odoo 19 modules. Tested. Documented.</p>
+
+            <div class="row">
+                <div class="col-md-4 col-12 mb-4">
+                    <div style="background-color: #3a2d40; border: 1px solid #4a3d50; border-radius: 10px; padding: 20px; text-align: center; height: 100%;">
+                        <div style="font-size: 28px; margin-bottom: 8px;">&#128465;</div>
+                        <strong style="color: #ffffff; font-size: 16px;">Smart Undo - Recycle Bin</strong>
+                        <p style="font-size: 13px; color: #bba8b5; margin: 8px 0 12px;">Undo delete, undo edit, undo archive. 3-in-1 safety net. 25 unit tests.</p>
+                        <span style="display: inline-block; background-color: #e6a817; color: #333333; border-radius: 12px; padding: 3px 12px; font-size: 13px; font-weight: 600;">$39.99</span>
+                    </div>
+                </div>
+                <div class="col-md-4 col-12 mb-4">
+                    <div style="background-color: #3a2d40; border: 1px solid #4a3d50; border-radius: 10px; padding: 20px; text-align: center; height: 100%;">
+                        <div style="font-size: 28px; margin-bottom: 8px;">&#128196;</div>
+                        <strong style="color: #ffffff; font-size: 16px;">PDF Preview Before Print</strong>
+                        <p style="font-size: 13px; color: #bba8b5; margin: 8px 0 12px;">Preview any PDF report before printing or downloading.</p>
+                        <span style="display: inline-block; background-color: #017E84; color: #ffffff; border-radius: 12px; padding: 3px 12px; font-size: 13px; font-weight: 600;">FREE</span>
+                    </div>
+                </div>
+                <div class="col-md-4 col-12 mb-4">
+                    <div style="background-color: #3a2d40; border: 1px solid #4a3d50; border-radius: 10px; padding: 20px; text-align: center; height: 100%;">
+                        <div style="font-size: 28px; margin-bottom: 8px;">&#128269;</div>
+                        <strong style="color: #ffffff; font-size: 16px;">View All Modules</strong>
+                        <p style="font-size: 13px; color: #bba8b5; margin: 8px 0 12px;">Browse our complete catalog of Odoo 19 modules.</p>
+                        <span style="display: inline-block; background-color: #714B67; color: #ffffff; border-radius: 12px; padding: 3px 12px; font-size: 13px; font-weight: 600;">apps.odoo.com</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div style="text-align: center; padding: 36px 0; font-size: 14px; color: #888888; border-top: 1px solid #eeeeee;">
+        <p style="margin: 0;">
+            <strong style="color: #714B67;">PDF Password Protection</strong> - Free, open source, Odoo 19<br/>
+            &copy; <strong style="color: #714B67;">Naim OUDAYET</strong> - LGPL-3 License - Odoo 19 Community &amp; Enterprise
+        </p>
+    </div>
+
+</section>

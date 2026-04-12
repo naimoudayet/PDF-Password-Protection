@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres19_pdf_password_protection
+    environment:
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo
+      POSTGRES_DB: postgres
+    ports:
+      - "7819:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  odoo:
+    image: odoo:19.0
+    container_name: odoo19_pdf_password_protection
+    depends_on:
+      - postgres
+    ports:
+      - "11819:8069"
+    volumes:
+      - ./addons:/mnt/extra-addons
+      - ./config/odoo.conf:/etc/odoo/odoo.conf
+      - odoo_data:/var/lib/odoo
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  odoo_data:
