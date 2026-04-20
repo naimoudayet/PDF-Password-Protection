@@ -1,32 +1,31 @@
-version: "3.8"
+name: pdfpass-19
 
 services:
-  postgres:
+  db:
     image: postgres:16
-    container_name: postgres19_pdf_password_protection
+    container_name: pdfpass-pg-19
     environment:
       POSTGRES_USER: odoo
       POSTGRES_PASSWORD: odoo
       POSTGRES_DB: postgres
-    ports:
-      - "7819:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    restart: unless-stopped
+      - db-data:/var/lib/postgresql/data
 
   odoo:
-    image: odoo:19.0
-    container_name: odoo19_pdf_password_protection
+    build: .
+    container_name: pdfpass-odoo-19
     depends_on:
-      - postgres
+      - db
     ports:
-      - "11819:8069"
+      - "1819:8069"
+    environment:
+      HOST: db
+      USER: odoo
+      PASSWORD: odoo
     volumes:
-      - ./addons:/mnt/extra-addons
-      - ./config/odoo.conf:/etc/odoo/odoo.conf
-      - odoo_data:/var/lib/odoo
-    restart: unless-stopped
+      - odoo-data:/var/lib/odoo
+      - ./no_pdf_password_protection:/mnt/extra-addons/no_pdf_password_protection
 
 volumes:
-  postgres_data:
-  odoo_data:
+  db-data:
+  odoo-data:
