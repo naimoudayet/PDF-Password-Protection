@@ -7,7 +7,7 @@
 Static password or dynamic from partner fields (VAT, phone, email).
 GDPR-friendly. Works with all QWeb PDF reports.""",
     "author": "Naim OUDAYET",
-    "website": "https://apps.odoo.com/apps/modules/browse?author=Naim%20OUDAYET",
+    "website": "https://www.oudayet.com",
     "license": "LGPL-3",
     "depends": ["base"],
     "external_dependencies": {"python": ["PyPDF2"]},
