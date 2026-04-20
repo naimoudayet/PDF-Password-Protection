@@ -24,7 +24,7 @@ The module overrides `_render_qweb_pdf` on `ir.actions.report` to encrypt the ge
 
 | Item                  | Value                                              |
 |-----------------------|----------------------------------------------------|
-| Odoo Version          | 19.0                                               |
+| Odoo Version          | 18.0                                               |
 | License               | LGPL-3                                             |
 | Dependencies          | `base`                                             |
 | Python Dependencies   | `PyPDF2` (or `pypdf`, auto-detected)               |
@@ -80,7 +80,7 @@ Under GDPR Article 32, organizations must implement appropriate technical measur
 
 ## Compatibility
 
-- Odoo 19.0 Community and Enterprise
+- Odoo 18.0 Community and Enterprise
 - Works with any module that generates QWeb PDF reports (Accounting, Sale, Purchase, HR, Stock, etc.)
 
 ## Author
@@ -88,7 +88,7 @@ Under GDPR Article 32, organizations must implement appropriate technical measur
 **Naim OUDAYET**
 Odoo developer based in Tunisia.
 
-- [Odoo App Store](https://apps.odoo.com/apps/modules/19.0/no_pdf_password_protection)
+- [Odoo App Store](https://apps.odoo.com/apps/modules/18.0/no_pdf_password_protection)
 
 ## License
 
