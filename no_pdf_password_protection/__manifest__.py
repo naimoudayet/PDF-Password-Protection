@@ -1,6 +1,6 @@
 {
     "name": "PDF Password Protection",
-    "version": "19.0.1.0.0",
+    "version": "16.0.1.0.0",
     "category": "Extra Tools",
     "summary": "Encrypt PDF reports with passwords - static or dynamic (partner VAT, phone, email)",
     "description": """PDF Password Protection - encrypt any Odoo PDF report with passwords.
