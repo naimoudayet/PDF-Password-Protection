@@ -95,8 +95,12 @@ class IrActionsReport(models.Model):
         if method == "vat":
             return partner.vat or report.x_pdf_static_password
         elif method == "phone":
+            # res.partner.mobile was dropped in Odoo 19 — use getattr so the
+            # same codebase works on v16/v17/v18 (mobile present) and v19+
+            # (mobile absent) without AttributeError.
+            mobile = getattr(partner, "mobile", False)
             return (
-                (partner.phone or partner.mobile or "").replace(" ", "")
+                (partner.phone or mobile or "").replace(" ", "")
                 or report.x_pdf_static_password
             )
         elif method == "email":
