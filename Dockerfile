@@ -1,4 +1,4 @@
-FROM odoo:19
+FROM odoo:17
 USER root
 
 # PyPDF2 — the module's external Python dep for PDF encryption
