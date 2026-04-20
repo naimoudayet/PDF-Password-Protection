@@ -8,8 +8,11 @@
             <xpath expr="//group" position="after">
                 <group string="PDF Password Protection">
                     <field name="x_pdf_password_enabled"/>
-                    <field name="x_pdf_password_method" invisible="not x_pdf_password_enabled"/>
-                    <field name="x_pdf_static_password" invisible="not x_pdf_password_enabled or x_pdf_password_method != 'static'" password="True"/>
+                    <field name="x_pdf_password_method"
+                           attrs="{'invisible': [('x_pdf_password_enabled', '=', False)]}"/>
+                    <field name="x_pdf_static_password"
+                           attrs="{'invisible': ['|', ('x_pdf_password_enabled', '=', False), ('x_pdf_password_method', '!=', 'static')]}"
+                           password="True"/>
                 </group>
             </xpath>
         </field>
