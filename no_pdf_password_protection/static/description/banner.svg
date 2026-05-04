@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" width="1280" height="640">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#714B67"/>
+      <stop offset="100%" stop-color="#5A3A52"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1280" height="640" fill="url(#bg)"/>
+
+  <!-- Top accent stripe -->
+  <rect width="1280" height="6" fill="#00A09D"/>
+
+  <!-- ODOO MODULE label -->
+  <text x="640" y="100" text-anchor="middle"
+        font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700"
+        letter-spacing="3" fill="#D4B8CF">ODOO MODULE</text>
+
+  <!-- Title line 1 -->
+  <text x="640" y="200" text-anchor="middle"
+        font-family="Helvetica, Arial, sans-serif" font-size="84" font-weight="800"
+        fill="#FFFFFF">PDF Password</text>
+
+  <!-- Title line 2 - accent -->
+  <text x="640" y="290" text-anchor="middle"
+        font-family="Helvetica, Arial, sans-serif" font-size="84" font-weight="800"
+        fill="#FF7F4F">Protection.</text>
+
+  <!-- Subtitle -->
+  <text x="640" y="360" text-anchor="middle"
+        font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="500"
+        fill="#FFFFFF">Encrypt any Odoo PDF report with a password.</text>
+
+  <!-- Tagline -->
+  <text x="640" y="400" text-anchor="middle"
+        font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="400"
+        fill="#D4B8CF">Per report action. Per recipient. Works with every QWeb PDF report.</text>
+
+  <!-- Divider -->
+  <line x1="100" y1="475" x2="1180" y2="475" stroke="#8A6A80" stroke-width="1"/>
+
+  <!-- Feature row -->
+  <g font-family="Helvetica, Arial, sans-serif" font-size="16" font-weight="700"
+     letter-spacing="1.5" fill="#F5C84A" text-anchor="middle">
+    <text x="225" y="540">STATIC</text>
+    <text x="430" y="540">PARTNER VAT</text>
+    <text x="640" y="540">PARTNER PHONE</text>
+    <text x="850" y="540">PARTNER EMAIL</text>
+    <text x="1055" y="540">GDPR READY</text>
+  </g>
+
+  <!-- Separator dots between features -->
+  <g fill="#8A6A80">
+    <circle cx="320" cy="535" r="2.5"/>
+    <circle cx="535" cy="535" r="2.5"/>
+    <circle cx="745" cy="535" r="2.5"/>
+    <circle cx="950" cy="535" r="2.5"/>
+  </g>
+
+  <!-- Bottom row: license + free -->
+  <g font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="600"
+     letter-spacing="2" fill="#BBA8B5" text-anchor="middle">
+    <text x="640" y="600">LGPL-3 &#8226; FREE &amp; OPEN SOURCE</text>
+  </g>
+</svg>
