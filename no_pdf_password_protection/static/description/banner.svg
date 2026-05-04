@@ -7,61 +7,21 @@
     </linearGradient>
   </defs>
 
-  <!-- Background -->
   <rect width="1280" height="640" fill="url(#bg)"/>
-
-  <!-- Top accent stripe -->
   <rect width="1280" height="6" fill="#00A09D"/>
 
-  <!-- ODOO MODULE label -->
-  <text x="640" y="100" text-anchor="middle"
-        font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="700"
-        letter-spacing="3" fill="#D4B8CF">ODOO MODULE</text>
-
-  <!-- Title line 1 -->
-  <text x="640" y="200" text-anchor="middle"
-        font-family="Helvetica, Arial, sans-serif" font-size="84" font-weight="800"
-        fill="#FFFFFF">PDF Password</text>
-
-  <!-- Title line 2 - accent -->
-  <text x="640" y="290" text-anchor="middle"
-        font-family="Helvetica, Arial, sans-serif" font-size="84" font-weight="800"
-        fill="#FF7F4F">Protection.</text>
-
-  <!-- Subtitle -->
-  <text x="640" y="360" text-anchor="middle"
-        font-family="Helvetica, Arial, sans-serif" font-size="26" font-weight="500"
-        fill="#FFFFFF">Encrypt any Odoo PDF report with a password.</text>
-
-  <!-- Tagline -->
-  <text x="640" y="400" text-anchor="middle"
-        font-family="Helvetica, Arial, sans-serif" font-size="18" font-weight="400"
-        fill="#D4B8CF">Per report action. Per recipient. Works with every QWeb PDF report.</text>
-
-  <!-- Divider -->
-  <line x1="100" y1="475" x2="1180" y2="475" stroke="#8A6A80" stroke-width="1"/>
-
-  <!-- Feature row -->
-  <g font-family="Helvetica, Arial, sans-serif" font-size="16" font-weight="700"
-     letter-spacing="1.5" fill="#F5C84A" text-anchor="middle">
-    <text x="225" y="540">STATIC</text>
-    <text x="430" y="540">PARTNER VAT</text>
-    <text x="640" y="540">PARTNER PHONE</text>
-    <text x="850" y="540">PARTNER EMAIL</text>
-    <text x="1055" y="540">GDPR READY</text>
+  <g font-family="Helvetica, Arial, sans-serif" fill="#FFFFFF">
+    <text x="80" y="240" font-size="92" font-weight="700">PDF Password</text>
+    <text x="80" y="340" font-size="92" font-weight="700" fill="#FF7F4F">Protection.</text>
+    <text x="80" y="400" font-size="26" font-weight="400" fill="#94A3B8">
+      Encrypt any Odoo PDF report with a password. Per report. Per recipient.
+    </text>
+    <text x="80" y="540" font-size="20" font-weight="600" letter-spacing="3">
+      STATIC  &#183;  PARTNER VAT  &#183;  PARTNER PHONE  &#183;  PARTNER EMAIL  &#183;  GDPR
+    </text>
   </g>
 
-  <!-- Separator dots between features -->
-  <g fill="#8A6A80">
-    <circle cx="320" cy="535" r="2.5"/>
-    <circle cx="535" cy="535" r="2.5"/>
-    <circle cx="745" cy="535" r="2.5"/>
-    <circle cx="950" cy="535" r="2.5"/>
-  </g>
-
-  <!-- Bottom row: license + free -->
-  <g font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="600"
-     letter-spacing="2" fill="#BBA8B5" text-anchor="middle">
-    <text x="640" y="600">LGPL-3 &#8226; FREE &amp; OPEN SOURCE</text>
+  <g font-family="Helvetica, Arial, sans-serif" text-anchor="end">
+    <text x="1200" y="540" font-size="22" font-weight="700" fill="#FF7F4F">LGPL-3 &#183; FREE</text>
   </g>
 </svg>
