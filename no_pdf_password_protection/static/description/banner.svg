@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" width="1280" height="640">
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#714B67"/>
@@ -7,21 +7,45 @@
     </linearGradient>
   </defs>
 
-  <rect width="1280" height="640" fill="url(#bg)"/>
-  <rect width="1280" height="6" fill="#00A09D"/>
+  <!-- Background -->
+  <rect x="0" y="0" width="1280" height="640" fill="url(#bg)"/>
 
-  <g font-family="Helvetica, Arial, sans-serif" fill="#FFFFFF">
-    <text x="80" y="240" font-size="92" font-weight="700">PDF Password</text>
-    <text x="80" y="340" font-size="92" font-weight="700" fill="#FF7F4F">Protection.</text>
-    <text x="80" y="400" font-size="26" font-weight="400" fill="#94A3B8">
-      Encrypt any Odoo PDF report with a password. Per report. Per recipient.
-    </text>
-    <text x="80" y="540" font-size="20" font-weight="600" letter-spacing="3">
-      STATIC  &#183;  PARTNER VAT  &#183;  PARTNER PHONE  &#183;  PARTNER EMAIL  &#183;  GDPR
-    </text>
+  <!-- Top accent stripe -->
+  <rect x="0" y="0" width="1280" height="6" fill="#00A09D"/>
+
+  <!-- Top-left module label -->
+  <text x="100" y="98" fill="#94A3B8" font-size="14" font-weight="700" letter-spacing="3">ODOO MODULE</text>
+
+  <!-- Title - line 1 (white) -->
+  <text x="100" y="240" fill="#ffffff" font-size="92" font-weight="800" letter-spacing="-1">PDF Password</text>
+
+  <!-- Title - line 2 (orange accent word) -->
+  <text x="100" y="340" fill="#FF7F4F" font-size="92" font-weight="800" letter-spacing="-1">Protection.</text>
+
+  <!-- Subtitle - prominent -->
+  <text x="100" y="412" fill="#ffffff" font-size="26" font-weight="500">Encrypt any Odoo PDF report with a password.</text>
+
+  <!-- Subtitle - muted -->
+  <text x="100" y="450" fill="#BBA8B5" font-size="20" font-weight="400">Per report. Per recipient. Works with every QWeb PDF report.</text>
+
+  <!-- Divider -->
+  <line x1="100" y1="510" x2="1180" y2="510" stroke="#8A6A80" stroke-width="1" opacity="0.6"/>
+
+  <!-- Bottom feature row -->
+  <g font-size="16" font-weight="700" letter-spacing="2">
+    <text x="100" y="560" fill="#ffffff">STATIC</text>
+    <text x="200" y="560" fill="#8A6A80">&#183;</text>
+    <text x="225" y="560" fill="#ffffff">PARTNER VAT</text>
+    <text x="395" y="560" fill="#8A6A80">&#183;</text>
+    <text x="420" y="560" fill="#ffffff">PARTNER PHONE</text>
+    <text x="620" y="560" fill="#8A6A80">&#183;</text>
+    <text x="645" y="560" fill="#ffffff">PARTNER EMAIL</text>
+    <text x="840" y="560" fill="#8A6A80">&#183;</text>
+    <text x="865" y="560" fill="#ffffff">GDPR</text>
   </g>
 
-  <g font-family="Helvetica, Arial, sans-serif" text-anchor="end">
-    <text x="1200" y="540" font-size="22" font-weight="700" fill="#FF7F4F">LGPL-3 &#183; FREE</text>
+  <!-- Bottom-right license / status -->
+  <g font-size="16" font-weight="700" letter-spacing="2">
+    <text x="1180" y="560" fill="#FF7F4F" text-anchor="end">LGPL-3 &#183; FREE</text>
   </g>
 </svg>
