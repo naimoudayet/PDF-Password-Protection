@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" width="1280" height="640">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#714B67"/>
+      <stop offset="100%" stop-color="#5A3A52"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1280" height="640" fill="url(#bg)"/>
+  <rect width="1280" height="6" fill="#00A09D"/>
+
+  <g font-family="Helvetica, Arial, sans-serif" fill="#FFFFFF">
+    <text x="80" y="240" font-size="92" font-weight="700">PDF Password</text>
+    <text x="80" y="340" font-size="92" font-weight="700" fill="#FF7F4F">Protection.</text>
+    <text x="80" y="400" font-size="26" font-weight="400" fill="#94A3B8">
+      Encrypt any Odoo PDF report with a password. Per report. Per recipient.
+    </text>
+    <text x="80" y="540" font-size="20" font-weight="600" letter-spacing="3">
+      STATIC  &#183;  PARTNER VAT  &#183;  PARTNER PHONE  &#183;  PARTNER EMAIL  &#183;  GDPR
+    </text>
+  </g>
+
+  <g font-family="Helvetica, Arial, sans-serif" text-anchor="end">
+    <text x="1200" y="540" font-size="22" font-weight="700" fill="#FF7F4F">LGPL-3 &#183; FREE</text>
+  </g>
+</svg>
