@@ -140,15 +140,15 @@
     <!-- INSTALLATION -->
     <div class="container py-5">
         <h2 style="color: #714B67; font-size: 28px; font-weight: 700; margin-bottom: 16px; text-align: center;">Installation</h2>
-        <p style="color: #475569; font-size: 16px; margin-bottom: 32px; text-align: center;">Two steps. The Python dependency <strong>must be installed first</strong> - the module itself won't refuse to install without it, but encryption will be silently no-op.</p>
+        <p style="color: #475569; font-size: 16px; margin-bottom: 32px; text-align: center;">One step in Odoo. The PDF library (PyPDF2 or pypdf) ships with Odoo by default - the module picks up whichever is installed, no extra setup needed.</p>
 
         <div class="row">
             <div class="col-md-6 col-12 mb-4">
                 <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 10px; padding: 24px; height: 100%;">
-                    <p style="font-size: 13px; font-weight: 600; color: #94A3B8; margin: 0 0 8px; text-transform: uppercase;">Step 1 - server side</p>
-                    <strong style="color: #714B67;">Install PyPDF2</strong>
-                    <pre style="background-color: #2D2233; color: #FFFFFF; padding: 12px 16px; border-radius: 6px; margin: 12px 0 0; font-size: 14px;">pip install pypdf</pre>
-                    <p style="font-size: 13px; color: #475569; margin-top: 12px;">Run this on the Odoo server where reports are rendered. <em>pypdf</em> also works as a drop-in replacement.</p>
+                    <p style="font-size: 13px; font-weight: 600; color: #94A3B8; margin: 0 0 8px; text-transform: uppercase;">Step 1 - dependency</p>
+                    <strong style="color: #714B67;">Bundled with Odoo</strong>
+                    <p style="font-size: 14px; color: #475569; margin-top: 12px;">Odoo 16-19 already ship a PDF library: <em>PyPDF2</em> on Python &lt;= 3.12, or <em>pypdf</em> on Python &gt;= 3.13. The module uses whichever is available - no manual <em>pip install</em> needed in the typical case.</p>
+                    <p style="font-size: 13px; color: #94A3B8; margin-top: 8px;">If you see an <em>ImportError</em> in your logs, your Python environment is non-standard; run <em>pip install pypdf</em> on the Odoo server.</p>
                 </div>
             </div>
             <div class="col-md-6 col-12 mb-4">
