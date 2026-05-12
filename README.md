@@ -11,6 +11,7 @@ Encrypt Odoo PDF reports with passwords. Choose a static password or generate on
 - **Per-Report Configuration** -- Enable or disable password protection on each report individually.
 - **Smart Fallback** -- If a dynamic field is empty, the module falls back to the static password.
 - **Works with All QWeb PDF Reports** -- Invoices, quotations, payslips, delivery slips, and any custom report.
+- **Translated into 8 Languages** -- English, French, Spanish, German, Dutch, Portuguese (BR), Italian, Chinese (Simplified). Each user sees the dialog in their own Odoo language.
 
 ## How It Works
 
@@ -18,27 +19,28 @@ Encrypt Odoo PDF reports with passwords. Choose a static password or generate on
 2. Enable **"PDF Password Protection"** and choose the password source.
 3. Generate the report. The output PDF is encrypted with the chosen password.
 
-The module overrides `_render_qweb_pdf` on `ir.actions.report` to encrypt the generated PDF using PyPDF2/pypdf after Odoo renders it.
+The module overrides `_render_qweb_pdf` on `ir.actions.report` to encrypt the generated PDF using pypdf (or PyPDF2 as a fallback) after Odoo renders it.
 
 ## Technical Details
 
 | Item                  | Value                                              |
 |-----------------------|----------------------------------------------------|
-| Odoo Version          | 17.0                                               |
+| Odoo Version          | 17.0                                     |
 | License               | LGPL-3                                             |
 | Dependencies          | `base`                                             |
-| Python Dependencies   | `PyPDF2` (or `pypdf`, auto-detected)               |
+| Python Dependencies   | `pypdf` (`PyPDF2` as fallback)                     |
 | Custom Fields Prefix  | `x_` (upgrade-safe)                                |
-| Encryption Standard   | AES-128 (PyPDF2 default)                           |
+| Encryption Standard   | AES-128 (pypdf default)                            |
 | Performance Impact    | Minimal (< 100ms per report)                       |
+| Languages             | EN, FR, ES, DE, NL, PT-BR, IT, ZH-CN               |
 
 ## Fields Added to `ir.actions.report`
 
-| Field                      | Type      | Description                           |
-|----------------------------|-----------|---------------------------------------|
-| `x_pdf_password_enabled`   | Boolean   | Enable PDF password protection        |
+| Field                      | Type      | Description                              |
+|----------------------------|-----------|------------------------------------------|
+| `x_pdf_password_enabled`   | Boolean   | Enable PDF password protection           |
 | `x_pdf_password_method`    | Selection | Password source (static/vat/phone/email) |
-| `x_pdf_static_password`    | Char      | Static password value                 |
+| `x_pdf_static_password`    | Char      | Static password value                    |
 
 ## Installation
 
@@ -62,17 +64,34 @@ The module overrides `_render_qweb_pdf` on `ir.actions.report` to encrypt the ge
 docker-compose up -d
 ```
 
-- Odoo: http://localhost:11819
-- PostgreSQL: localhost:7819
+- Odoo: http://localhost:1816
+- PostgreSQL: internal `db` service (no exposed port by default)
 
 ## Running Tests
 
 ```bash
-docker exec -it odoo19_no_pdf_password_protection \
+docker exec -it pdfpwd-odoo-17 \
   odoo --test-enable --stop-after-init \
   -d test_db -i no_pdf_password_protection \
   --test-tags no_pdf_password_protection
 ```
+
+## Languages
+
+Ships with translations for:
+
+| Code     | Language                |
+|----------|-------------------------|
+| `en_US`  | English (source)        |
+| `fr`     | French                  |
+| `es`     | Spanish                 |
+| `de`     | German                  |
+| `nl`     | Dutch                   |
+| `pt_BR`  | Portuguese (Brazil)     |
+| `it`     | Italian                 |
+| `zh_CN`  | Chinese (Simplified)    |
+
+Each user sees the dialog in the language set in **Preferences -> Language**. Regional variants (e.g. `fr_BE`, `nl_BE`) inherit from the base language via Odoo's standard fallback. To add a new language, drop a `<code>.po` file into `i18n/` - the canonical template is `i18n/no_pdf_password_protection.pot`.
 
 ## GDPR & Compliance
 
@@ -85,11 +104,13 @@ Under GDPR Article 32, organizations must implement appropriate technical measur
 
 ## Author
 
-**Naim OUDAYET**
-Odoo developer based in Tunisia.
+**Naim OUDAYET** - Odoo developer based in Tunisia.
 
+- Website: [oudayet.com](https://www.oudayet.com)
+- Email: contact@oudayet.com
+- GitHub: [@naimoudayet](https://github.com/naimoudayet)
 - [Odoo App Store](https://apps.odoo.com/apps/modules/17.0/no_pdf_password_protection)
 
 ## License
 
-This module is licensed under LGPL-3. See the [LICENSE](https://www.gnu.org/licenses/lgpl-3.0.html) file for details.
+This module is licensed under [LGPL-3](https://www.gnu.org/licenses/lgpl-3.0.html).

@@ -1,0 +1,68 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* no_pdf_password_protection
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-12 00:00+0000\n"
+"PO-Revision-Date: 2026-05-12 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: Spanish\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: no_pdf_password_protection
+#. odoo-python
+#: code:addons/no_pdf_password_protection/models/ir_actions_report.py:0
+msgid "Enable PDF Password Protection"
+msgstr "Activar protección de PDF con contraseña"
+
+#. module: no_pdf_password_protection
+#. odoo-python
+#: code:addons/no_pdf_password_protection/models/ir_actions_report.py:0
+msgid "Partner Email"
+msgstr "Email del partner"
+
+#. module: no_pdf_password_protection
+#. odoo-python
+#: code:addons/no_pdf_password_protection/models/ir_actions_report.py:0
+msgid "Partner Phone"
+msgstr "Teléfono del partner"
+
+#. module: no_pdf_password_protection
+#. odoo-python
+#: code:addons/no_pdf_password_protection/models/ir_actions_report.py:0
+msgid "Partner VAT Number"
+msgstr "NIF del partner"
+
+#. module: no_pdf_password_protection
+#. odoo-python
+#: code:addons/no_pdf_password_protection/models/ir_actions_report.py:0
+msgid "Password Source"
+msgstr "Origen de la contraseña"
+
+#. module: no_pdf_password_protection
+#: model:ir.module.module,shortdesc:no_pdf_password_protection.module_meta_information
+msgid "PDF Password Protection"
+msgstr "Protección de PDF con contraseña"
+
+#. module: no_pdf_password_protection
+#: model:ir.module.module,description:no_pdf_password_protection.module_meta_information
+msgid "PDF Password Protection - encrypt any Odoo PDF report with passwords. Static password or dynamic from partner fields (VAT, phone, email). GDPR-friendly. Works with all QWeb PDF reports."
+msgstr "Protección de PDF con contraseña - cifre cualquier informe PDF de Odoo con contraseñas. Contraseña estática o dinámica desde campos del partner (NIF, teléfono, email). Compatible con RGPD. Funciona con todos los informes QWeb PDF."
+
+#. module: no_pdf_password_protection
+#: model:ir.module.module,summary:no_pdf_password_protection.module_meta_information
+msgid "Encrypt PDF reports with passwords - static or dynamic (partner VAT, phone, email)"
+msgstr "Cifre informes PDF con contraseñas - estática o dinámica (NIF, teléfono, email del partner)"
+
+#. module: no_pdf_password_protection
+#. odoo-python
+#: code:addons/no_pdf_password_protection/models/ir_actions_report.py:0
+msgid "Static Password"
+msgstr "Contraseña estática"
