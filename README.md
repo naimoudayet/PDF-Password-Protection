@@ -1,6 +1,6 @@
 # PDF Password Protection
 
-Encrypt every Odoo PDF report with a password — static or dynamic from partner data (VAT, phone, email). GDPR-friendly, zero configuration, available in 8 languages.
+Encrypt every Odoo PDF report with a password — static or dynamic from partner data (VAT, phone, email). Per-report toggle, AES-128 encryption, GDPR-friendly, available in 8 languages.
 
 ## Choose Your Odoo Version
 
