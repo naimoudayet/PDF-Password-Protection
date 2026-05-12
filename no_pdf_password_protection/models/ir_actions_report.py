@@ -1,3 +1,5 @@
+# Copyright 2026 Naim OUDAYET
+# License LGPL-3
 import io
 import logging
 
@@ -6,14 +8,14 @@ from odoo import api, fields, models
 _logger = logging.getLogger(__name__)
 
 try:
-    from PyPDF2 import PdfReader, PdfWriter
+    from pypdf import PdfReader, PdfWriter
 except ImportError:
     try:
-        from pypdf import PdfReader, PdfWriter
+        from PyPDF2 import PdfReader, PdfWriter
     except ImportError:
         PdfReader = PdfWriter = None
         _logger.warning(
-            "PyPDF2/pypdf not installed. PDF password protection will not work."
+            "pypdf / PyPDF2 not installed. PDF password protection will not work."
         )
 
 
@@ -80,7 +82,6 @@ class IrActionsReport(models.Model):
         if not res_ids:
             return report.x_pdf_static_password or None
 
-        # Try to get partner from the first record
         record = self.env[report.model].browse(res_ids[0])
         partner = None
 
@@ -95,7 +96,7 @@ class IrActionsReport(models.Model):
         if method == "vat":
             return partner.vat or report.x_pdf_static_password
         elif method == "phone":
-            # res.partner.mobile was dropped in Odoo 19 — use getattr so the
+            # res.partner.mobile was dropped in Odoo 19 - use getattr so the
             # same codebase works on v16/v17/v18 (mobile present) and v19+
             # (mobile absent) without AttributeError.
             mobile = getattr(partner, "mobile", False)

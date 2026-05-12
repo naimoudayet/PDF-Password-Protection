@@ -1,9 +1,9 @@
-name: pdfpass-16
+name: pdfpwd-16
 
 services:
   db:
     image: postgres:16
-    container_name: pdfpass-pg-16
+    container_name: pdfpwd-pg-16
     environment:
       POSTGRES_USER: odoo
       POSTGRES_PASSWORD: odoo
@@ -13,7 +13,7 @@ services:
 
   odoo:
     build: .
-    container_name: pdfpass-odoo-16
+    container_name: pdfpwd-odoo-16
     depends_on:
       - db
     ports:
