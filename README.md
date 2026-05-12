@@ -28,7 +28,7 @@ The module overrides `_render_qweb_pdf` on `ir.actions.report` to encrypt the ge
 | Odoo Version          | 18.0                                     |
 | License               | LGPL-3                                             |
 | Dependencies          | `base`                                             |
-| Python Dependencies   | `pypdf` (`PyPDF2` as fallback)                     |
+| Python Dependencies   | Bundled with Odoo (PyPDF2 / pypdf)                 |
 | Custom Fields Prefix  | `x_` (upgrade-safe)                                |
 | Encryption Standard   | AES-128 (pypdf default)                            |
 | Performance Impact    | Minimal (< 100ms per report)                       |
