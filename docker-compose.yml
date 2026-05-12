@@ -1,9 +1,9 @@
-name: pdfpass-19
+name: pdfpwd-19
 
 services:
   db:
     image: postgres:16
-    container_name: pdfpass-pg-19
+    container_name: pdfpwd-pg-19
     environment:
       POSTGRES_USER: odoo
       POSTGRES_PASSWORD: odoo
@@ -13,11 +13,11 @@ services:
 
   odoo:
     build: .
-    container_name: pdfpass-odoo-19
+    container_name: pdfpwd-odoo-19
     depends_on:
       - db
     ports:
-      - "1819:8069"
+      - "1816:8069"
     environment:
       HOST: db
       USER: odoo
