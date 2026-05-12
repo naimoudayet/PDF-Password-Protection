@@ -307,8 +307,8 @@
             <div class="col-md-6 col-12 mb-3">
                 <div style="background-color: #FFF3CD; border: 1px solid #FFEEBA; border-radius: 8px; padding: 16px 20px;">
                     <strong style="color: #856404;">&#9888;</strong>&nbsp;
-                    <strong>PyPDF2 must be installed</strong>
-                    <p style="font-size: 13px; color: #856404; margin: 6px 0 0;">If the Python library isn't installed on the Odoo server, the module loads but encryption is a no-op. A warning appears in the log on startup.</p>
+                    <strong>PDF library required (bundled with Odoo)</strong>
+                    <p style="font-size: 13px; color: #856404; margin: 6px 0 0;">Odoo ships PyPDF2 (Python &lt;= 3.12) or pypdf (Python &gt;= 3.13). On non-standard Python environments where neither is present, the module loads but encryption is silently a no-op - a warning appears in the log on startup.</p>
                 </div>
             </div>
         </div>
@@ -367,7 +367,7 @@
                 </div>
                 <div class="row" style="border-bottom: 1px solid #E8DDE5; padding: 10px 0;">
                     <div class="col-md-5 col-12" style="text-align: left;"><strong style="color: #714B67;">Version</strong></div>
-                    <div class="col-md-7 col-12" style="text-align: left;">19.0.1.0.0</div>
+                    <div class="col-md-7 col-12" style="text-align: left;">19.0.1.1.0</div>
                 </div>
                 <div class="row" style="border-bottom: 1px solid #E8DDE5; padding: 10px 0;">
                     <div class="col-md-5 col-12" style="text-align: left;"><strong style="color: #714B67;">Depends on</strong></div>
@@ -375,7 +375,11 @@
                 </div>
                 <div class="row" style="border-bottom: 1px solid #E8DDE5; padding: 10px 0;">
                     <div class="col-md-5 col-12" style="text-align: left;"><strong style="color: #714B67;">Python dep</strong></div>
-                    <div class="col-md-7 col-12" style="text-align: left;">PyPDF2 (or pypdf)</div>
+                    <div class="col-md-7 col-12" style="text-align: left;">Bundled with Odoo (PyPDF2 / pypdf)</div>
+                </div>
+                <div class="row" style="border-bottom: 1px solid #E8DDE5; padding: 10px 0;">
+                    <div class="col-md-5 col-12" style="text-align: left;"><strong style="color: #714B67;">Languages</strong></div>
+                    <div class="col-md-7 col-12" style="text-align: left;">EN, FR, ES, DE, NL, PT-BR, IT, ZH-CN (gettext PO)</div>
                 </div>
                 <div class="row" style="border-bottom: 1px solid #E8DDE5; padding: 10px 0;">
                     <div class="col-md-5 col-12" style="text-align: left;"><strong style="color: #714B67;">License</strong></div>
