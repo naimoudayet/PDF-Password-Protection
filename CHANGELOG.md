@@ -1,41 +1,25 @@
 # Changelog
 
-All notable changes to **PDF Password Protection** for Odoo 19.0 are documented here.
+This repository hosts **PDF Password Protection** as separate per-Odoo-version branches. Each version branch maintains its own detailed changelog. This file tracks repository-level changes only.
 
-This file follows the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
-Versions use Odoo's `<odoo_version>.<module_major>.<module_minor>.<module_patch>` scheme.
+## 2026-05-12
 
-## [19.0.1.1.0] - 2026-05-12
+- `main` rewritten as a multi-version landing page (module code, `Dockerfile`, and `docker-compose.yml` removed — they now live on the per-version branches only).
+- Full ODOO_GUIDELINES.md compliance pass applied across all version branches:
+  - **i18n** — Tier 2 set added (8 languages: EN source, FR, ES, DE, NL, PT-BR, IT, ZH-CN). POT + 7 PO files under `no_pdf_password_protection/i18n/`. Flag PNGs under `no_pdf_password_protection/static/description/flags/`.
+  - **App Store description** — sanitizer hardening (`<code>` → `<em>`, monospace `<div>` → `<pre>`, banded sections use `padding: 48px 32px`). Hero gets a "8 Languages" badge. Color palette canonicalized to canonical uppercase per §1; legacy `#5a3a50` / `#017E84` / `#e6a817` mapped to `#5A3A52` / `#00A09D` / `#FF7F4F`.
+  - **Manifest** — added required `maintainers`, `price`, `currency: "USD"`, `support` fields and `# Copyright 2026 Naim OUDAYET` header.
+  - **Python dependency** — switched primary import from `PyPDF2` to `pypdf` (maintained successor, identical API); `PyPDF2` kept as fallback.
+  - **Infra** — added `Dockerfile` (pypdf install with PEP 668 workaround), `docker-compose.yml` (port 1816), `CHANGELOG.md`, regenerated `banner.svg` per §3 canonical template.
+- All version branches bumped to `X.0.1.1.0`.
 
-### Added
-- **Internationalization (i18n) support** with 8 languages: English (source), French, Spanish, German, Dutch, Portuguese (Brazil), Italian, Chinese (Simplified).
-- POT template + 7 PO files under `no_pdf_password_protection/i18n/`.
-- `static/description/flags/` folder with 8 PNG flags (referenced relatively from `index.html`).
-- **"Available in 8 Languages"** section in App Store description.
-- **"8 Languages"** badge in App Store hero banner.
-- `Languages` section + table in `README.md`.
-- `CHANGELOG.md` at repo root.
-- `Dockerfile` and `docker-compose.yml` for dev stack (port 1816).
-- `banner.svg` source (renders to `banner.png` via cairosvg).
-- Copyright header in `__manifest__.py` and `models/ir_actions_report.py`.
+## Per-version changelogs
 
-### Changed
-- `external_dependencies.python` updated from `PyPDF2` to `pypdf` (maintained successor; identical API). Python import order in `models/ir_actions_report.py` tries `pypdf` first, falls back to `PyPDF2`.
-- Manifest: added required portfolio fields `maintainers`, `price`, `currency`, `support` (per ODOO_GUIDELINES.md section 4).
-- `index.html` sanitizer hardening:
-  - Banded sections now use `padding: 48px 32px` (was `48px 0`).
-  - Inline `<code>` replaced with `<em>` (Odoo stylesheet otherwise restyles `<code>` red).
-  - Monospace `<div>` code block replaced with `<pre>` (no `font-family` declaration).
-- `index.html` color palette canonicalized to uppercase `#714B67` / `#5A3A52` / `#00A09D` / `#FF7F4F` / `#475569` / `#94A3B8` / `#E8DDE5` / `#F8F5F7` (per section 1).
-- Legacy badge colors `#5a3a50` -> `#5A3A52`, `#017E84` -> `#00A09D`, `#e6a817` (yellow) -> `#FF7F4F` (orange, NO yellow rule).
-- Module version bumped from `19.0.1.0.0` to `19.0.1.1.0`.
+For module-level history, see the `CHANGELOG.md` on each version branch:
 
-## [19.0.1.0.0] - Initial release
-
-### Added
-- Override `_render_qweb_pdf` on `ir.actions.report` to encrypt generated PDFs.
-- Three password sources: Static, Partner VAT, Partner Phone, Partner Email.
-- Smart fallback to static password when dynamic field is empty.
-- Per-report toggle via `x_pdf_password_enabled` Boolean.
-- AES-128 encryption via PyPDF2 / pypdf.
-- Tests at `tests/test_pdf_encryption.py`.
+| Odoo Version | Stable | Development |
+|---|---|---|
+| 19.0 | [`19.0/CHANGELOG.md`](../../blob/19.0/CHANGELOG.md) | [`19.0.dev/CHANGELOG.md`](../../blob/19.0.dev/CHANGELOG.md) |
+| 18.0 | [`18.0/CHANGELOG.md`](../../blob/18.0/CHANGELOG.md) | [`18.0.dev/CHANGELOG.md`](../../blob/18.0.dev/CHANGELOG.md) |
+| 17.0 | [`17.0/CHANGELOG.md`](../../blob/17.0/CHANGELOG.md) | [`17.0.dev/CHANGELOG.md`](../../blob/17.0.dev/CHANGELOG.md) |
+| 16.0 | [`16.0/CHANGELOG.md`](../../blob/16.0/CHANGELOG.md) | [`16.0.dev/CHANGELOG.md`](../../blob/16.0.dev/CHANGELOG.md) |
