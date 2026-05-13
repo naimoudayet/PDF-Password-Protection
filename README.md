@@ -11,7 +11,7 @@ Encrypt Odoo PDF reports with passwords. Choose a static password or generate on
 - **Per-Report Configuration** -- Enable or disable password protection on each report individually.
 - **Smart Fallback** -- If a dynamic field is empty, the module falls back to the static password.
 - **Works with All QWeb PDF Reports** -- Invoices, quotations, payslips, delivery slips, and any custom report.
-- **Translated into 8 Languages** -- English, French, Spanish, German, Dutch, Portuguese (BR), Italian, Chinese (Simplified). Each user sees the dialog in their own Odoo language.
+- **Translated into 9 Languages** -- English, French, Spanish, German, Dutch, Portuguese (BR), Italian, Chinese (Simplified), Arabic. Each user sees the dialog in their own Odoo language.
 
 ## How It Works
 
@@ -32,7 +32,7 @@ The module overrides `_render_qweb_pdf` on `ir.actions.report` to encrypt the ge
 | Custom Fields Prefix  | `x_` (upgrade-safe)                                |
 | Encryption Standard   | AES-128 (pypdf default)                            |
 | Performance Impact    | Minimal (< 100ms per report)                       |
-| Languages             | EN, FR, ES, DE, NL, PT-BR, IT, ZH-CN               |
+| Languages             | EN, FR, ES, DE, NL, PT-BR, IT, ZH-CN, AR           |
 
 ## Fields Added to `ir.actions.report`
 
@@ -90,6 +90,7 @@ Ships with translations for:
 | `pt_BR`  | Portuguese (Brazil)     |
 | `it`     | Italian                 |
 | `zh_CN`  | Chinese (Simplified)    |
+| `ar`     | Arabic                  |
 
 Each user sees the dialog in the language set in **Preferences -> Language**. Regional variants (e.g. `fr_BE`, `nl_BE`) inherit from the base language via Odoo's standard fallback. To add a new language, drop a `<code>.po` file into `i18n/` - the canonical template is `i18n/no_pdf_password_protection.pot`.
 
