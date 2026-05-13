@@ -2,6 +2,11 @@
 
 This repository hosts **PDF Password Protection** as separate per-Odoo-version branches. Each version branch maintains its own detailed changelog. This file tracks repository-level changes only.
 
+## 2026-05-13 (v1.2.0 — Arabic + .po reference fix)
+
+- All version branches bumped to `X.0.1.2.0`. **9 languages total** with the addition of `ar` (Arabic). New `ar.png` flag added to the shared library at `N:\Apps\_shared\flags\`.
+- **Fixed broken translation pipeline** that affected every version since the initial i18n release. The original .po files used `code:addons/.../py:0` references for Python `string="..."` field declarations — wrong format for Odoo's jsonb translation merge, so none of fr/es/de/nl/pt_BR/it/zh_CN actually translated field labels, selection values, or the form-section view header. Regenerated the .pot via `odoo --i18n-export` to get the canonical reference format (`model:ir.model.fields,field_description:...` / `model:ir.model.fields.selection,name:...` / `model_terms:ir.ui.view,arch_db:...`), then ported every existing translation into the corrected structure. Validated on fresh v16/v17/v18/v19 DBs with `--load-language=fr_FR,ar_001`: all three jsonb columns (en_US/fr_FR/ar_001) now populate correctly.
+
 ## 2026-05-12
 
 - `main` rewritten as a multi-version landing page (module code, `Dockerfile`, and `docker-compose.yml` removed — they now live on the per-version branches only).

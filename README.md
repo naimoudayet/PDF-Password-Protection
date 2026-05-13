@@ -1,6 +1,6 @@
 # PDF Password Protection
 
-Encrypt every Odoo PDF report with a password — static or dynamic from partner data (VAT, phone, email). Per-report toggle, AES-128 encryption, GDPR-friendly, available in 8 languages.
+Encrypt every Odoo PDF report with a password — static or dynamic from partner data (VAT, phone, email). Per-report toggle, AES-128 encryption, GDPR-friendly, available in 9 languages.
 
 ## Choose Your Odoo Version
 
@@ -24,7 +24,7 @@ The technical module name is **`no_pdf_password_protection`** on every version b
 - **Per-Report Configuration** — Enable or disable on each report individually.
 - **Smart Fallback** — If the dynamic field is empty, falls back to the static password.
 - **Works with Every QWeb PDF Report** — Invoices, quotations, payslips, delivery slips, and any custom report.
-- **Translated into 8 Languages** — English, French, Spanish, German, Dutch, Portuguese (BR), Italian, Chinese (Simplified). Each user sees the configuration in their own Odoo language.
+- **Translated into 9 Languages** — English, French, Spanish, German, Dutch, Portuguese (BR), Italian, Chinese (Simplified), Arabic. Each user sees the configuration in their own Odoo language.
 
 ## Quick Install
 
@@ -48,6 +48,7 @@ Ships with translations for:
 | `pt_BR`  | Portuguese (Brazil)     |
 | `it`     | Italian                 |
 | `zh_CN`  | Chinese (Simplified)    |
+| `ar`     | Arabic                  |
 
 Regional variants (e.g. `fr_BE`, `nl_BE`) inherit from the base language via Odoo's standard fallback. To add a new language, drop a `<code>.po` file into the branch's `i18n/` folder — the canonical template is `i18n/no_pdf_password_protection.pot`.
 
