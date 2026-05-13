@@ -5,6 +5,19 @@ All notable changes to **PDF Password Protection** for Odoo 17.0 are documented 
 This file follows the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 Versions use Odoo's `<odoo_version>.<module_major>.<module_minor>.<module_patch>` scheme.
 
+## [17.0.1.2.0] - 2026-05-13
+
+### Added
+- **Arabic translation** (`ar`) — 9 languages total. All 8 field/selection msgids covered (`Enable PDF Password Protection`, `Partner Email / Phone / VAT Number`, `Password Source`, `Static Password`) plus the form-section view label and manifest fields.
+- New language card with AR flag in the "Available in 9 Languages" section of the App Store description.
+- `ar` row in the Languages table in README.
+- `ar.png` added under `static/description/flags/` (sourced from the shared `_shared/flags/` library).
+
+### Changed
+- **Fixed broken .po references**: every existing language (fr/es/de/nl/pt_BR/it/zh_CN) used `code:addons/.../py:0` references for Python field `string="..."` declarations — wrong format for jsonb translation merge, so none of them actually translated field labels or selection values in the UI. Regenerated all .po files via `odoo --i18n-export` to get the canonical reference format (`model:ir.model.fields,field_description:...` / `model:ir.model.fields.selection,name:...` / `model_terms:ir.ui.view,arch_db:...`), then ported existing translations into the corrected structure. Verified on a fresh DB with `--load-language=fr_FR,ar_001` that field labels, selection values, and the form-section view header all translate correctly.
+- Hero "8 Languages" badge updated to "9 Languages".
+- Module version bumped from `17.0.1.1.0` to `17.0.1.2.0` (semver minor for new feature + translation fix).
+
 ## [17.0.1.1.0] - 2026-05-12
 
 ### Added
