@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-12 00:00+0000\n"
-"PO-Revision-Date: 2026-05-12 00:00+0000\n"
+"POT-Creation-Date: 2026-05-13 00:00+0000\n"
+"PO-Revision-Date: 2026-05-13 00:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: Chinese (Simplified)\n"
 "Language: zh_CN\n"
@@ -17,37 +17,18 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #. module: no_pdf_password_protection
-#. odoo-python
-#: code:addons/no_pdf_password_protection/models/ir_actions_report.py:0
+#: model:ir.model.fields,field_description:no_pdf_password_protection.field_ir_actions_report__x_pdf_password_enabled
 msgid "Enable PDF Password Protection"
 msgstr "启用PDF密码保护"
 
 #. module: no_pdf_password_protection
-#. odoo-python
-#: code:addons/no_pdf_password_protection/models/ir_actions_report.py:0
-msgid "Partner Email"
-msgstr "合作伙伴邮箱"
-
-#. module: no_pdf_password_protection
-#. odoo-python
-#: code:addons/no_pdf_password_protection/models/ir_actions_report.py:0
-msgid "Partner Phone"
-msgstr "合作伙伴电话"
-
-#. module: no_pdf_password_protection
-#. odoo-python
-#: code:addons/no_pdf_password_protection/models/ir_actions_report.py:0
-msgid "Partner VAT Number"
-msgstr "合作伙伴增值税号"
-
-#. module: no_pdf_password_protection
-#. odoo-python
-#: code:addons/no_pdf_password_protection/models/ir_actions_report.py:0
-msgid "Password Source"
-msgstr "密码来源"
+#: model:ir.module.module,summary:no_pdf_password_protection.module_meta_information
+msgid "Encrypt PDF reports with passwords - static or dynamic (partner VAT, phone, email)"
+msgstr "使用密码加密PDF报告 - 静态或动态（合作伙伴的增值税号、电话、邮箱）"
 
 #. module: no_pdf_password_protection
 #: model:ir.module.module,shortdesc:no_pdf_password_protection.module_meta_information
+#: model_terms:ir.ui.view,arch_db:no_pdf_password_protection.view_ir_actions_report_form_pdf_password
 msgid "PDF Password Protection"
 msgstr "PDF密码保护"
 
@@ -57,12 +38,27 @@ msgid "PDF Password Protection - encrypt any Odoo PDF report with passwords. Sta
 msgstr "PDF密码保护 - 使用密码加密任何Odoo的PDF报告。静态密码或基于合作伙伴字段（增值税号、电话、邮箱）的动态密码。符合GDPR要求。适用于所有QWeb PDF报告。"
 
 #. module: no_pdf_password_protection
-#: model:ir.module.module,summary:no_pdf_password_protection.module_meta_information
-msgid "Encrypt PDF reports with passwords - static or dynamic (partner VAT, phone, email)"
-msgstr "使用密码加密PDF报告 - 静态或动态（合作伙伴的增值税号、电话、邮箱）"
+#: model:ir.model.fields.selection,name:no_pdf_password_protection.selection__ir_actions_report__x_pdf_password_method__email
+msgid "Partner Email"
+msgstr "合作伙伴邮箱"
 
 #. module: no_pdf_password_protection
-#. odoo-python
-#: code:addons/no_pdf_password_protection/models/ir_actions_report.py:0
+#: model:ir.model.fields.selection,name:no_pdf_password_protection.selection__ir_actions_report__x_pdf_password_method__phone
+msgid "Partner Phone"
+msgstr "合作伙伴电话"
+
+#. module: no_pdf_password_protection
+#: model:ir.model.fields.selection,name:no_pdf_password_protection.selection__ir_actions_report__x_pdf_password_method__vat
+msgid "Partner VAT Number"
+msgstr "合作伙伴增值税号"
+
+#. module: no_pdf_password_protection
+#: model:ir.model.fields,field_description:no_pdf_password_protection.field_ir_actions_report__x_pdf_password_method
+msgid "Password Source"
+msgstr "密码来源"
+
+#. module: no_pdf_password_protection
+#: model:ir.model.fields,field_description:no_pdf_password_protection.field_ir_actions_report__x_pdf_static_password
+#: model:ir.model.fields.selection,name:no_pdf_password_protection.selection__ir_actions_report__x_pdf_password_method__static
 msgid "Static Password"
 msgstr "静态密码"

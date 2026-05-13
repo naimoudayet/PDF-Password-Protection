@@ -5,6 +5,18 @@ All notable changes to **PDF Password Protection** for Odoo 16.0 are documented 
 This file follows the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 Versions use Odoo's `<odoo_version>.<module_major>.<module_minor>.<module_patch>` scheme.
 
+## [16.0.1.2.0] - 2026-05-13
+
+### Added
+- **Arabic translation** (`ar`) — 9 languages total. All 9 msgids covered (5 Python field labels: `Enable PDF Password Protection`, `Partner Email / Phone / VAT Number`, `Password Source`; manifest `name` / `summary` / `description`; selection value `Static Password`).
+- New language card with AR flag in the "Available in 9 Languages" section of the App Store description.
+- `ar` row in the Languages table in README.
+- `ar.png` added under `static/description/flags/` (sourced from the shared `_shared/flags/` library).
+
+### Changed
+- Hero "8 Languages" badge updated to "9 Languages".
+- Module version bumped from `16.0.1.1.0` to `16.0.1.2.0` (semver minor for new feature).
+
 ## [16.0.1.1.0] - 2026-05-12
 
 ### Added

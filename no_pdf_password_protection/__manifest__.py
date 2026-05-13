@@ -6,7 +6,7 @@
     "description": "PDF Password Protection - encrypt any Odoo PDF report with passwords. "
                    "Static password or dynamic from partner fields (VAT, phone, email). "
                    "GDPR-friendly. Works with all QWeb PDF reports.",
-    "version": "16.0.1.1.0",
+    "version": "16.0.1.2.0",
     "category": "Extra Tools",
     "website": "https://www.oudayet.com",
     "author": "Naim OUDAYET",
