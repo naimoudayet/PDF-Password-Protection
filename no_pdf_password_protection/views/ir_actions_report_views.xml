@@ -7,10 +7,25 @@
         <field name="arch" type="xml">
             <xpath expr="//group" position="after">
                 <group string="PDF Password Protection">
+                    <field name="x_pdf_aes_unavailable" invisible="1"/>
                     <field name="x_pdf_password_enabled"/>
+                    <field name="x_pdf_encryption_algo" invisible="not x_pdf_password_enabled"/>
                     <field name="x_pdf_password_method" invisible="not x_pdf_password_enabled"/>
                     <field name="x_pdf_static_password" invisible="not x_pdf_password_enabled or x_pdf_password_method != 'static'" password="True"/>
                 </group>
+                <div class="alert alert-warning" role="alert"
+                     invisible="not x_pdf_password_enabled or not x_pdf_aes_unavailable or x_pdf_encryption_algo == 'rc4_128'">
+                    This server only has the older PyPDF2 library, which cannot produce AES.
+                    Documents will be encrypted with RC4-128 whatever is selected above.
+                    Install <b>pypdf</b> on the server to enable AES.
+                </div>
+                <div class="alert alert-info" role="alert"
+                     invisible="not x_pdf_password_enabled or x_pdf_password_method == 'static'">
+                    Records that resolve to different passwords cannot be printed together:
+                    a merged file carries only one password, so it would open for one recipient
+                    and expose the others' documents to them. Print one at a time, or use
+                    Send &amp; Print, which encrypts each document separately.
+                </div>
             </xpath>
         </field>
     </record>

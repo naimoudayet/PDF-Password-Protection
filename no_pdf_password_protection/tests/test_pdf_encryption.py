@@ -1,12 +1,16 @@
 import io
 from unittest.mock import patch
 
+from odoo.exceptions import UserError
 from odoo.tests.common import TransactionCase
 
+# Mirror the module's own import order (pypdf first). The module emits
+# AES-256 by default, and PyPDF2 2.x cannot verify a /V 5 encryption
+# dictionary - reading back with it would fail on the library, not the module.
 try:
-    from PyPDF2 import PdfReader, PdfWriter
-except ImportError:  # pragma: no cover
     from pypdf import PdfReader, PdfWriter
+except ImportError:  # pragma: no cover
+    from PyPDF2 import PdfReader, PdfWriter
 
 from odoo.addons.no_pdf_password_protection.models import ir_actions_report as mod
 
@@ -18,6 +22,53 @@ def _blank_pdf(pages=1, width=612, height=792):
     buf = io.BytesIO()
     writer.write(buf)
     return buf.getvalue()
+
+
+def _partners(env, count=1):
+    """Return `count` partners to experiment on, without creating any.
+
+    This module depends only on `base`, so Odoo loads it - and runs these
+    tests - *before* `account`. At that point the registry has none of
+    account's res.partner fields, yet the database still carries their NOT
+    NULL columns (autopost_bills and friends). `res.partner.create()` therefore
+    raises NotNullViolation on any database where Accounting is installed,
+    which is most of them. Reusing existing records sidesteps it; the
+    surrounding TransactionCase rolls the writes back.
+    """
+    # parent_id=False only: vat/phone/email are commercial fields, so writing
+    # them on a child syncs the whole commercial entity - picking a parent and
+    # its own child would silently give two "different" partners one password.
+    partners = env["res.partner"].search([("parent_id", "=", False)], limit=count)
+    missing = count - len(partners)
+    if missing > 0:
+        # A base-only database has nothing installed that would break create().
+        partners |= env["res.partner"].create(
+            [{"name": "PwdTest %d" % i} for i in range(missing)]
+        )
+    return partners
+
+
+def _scrub(partner, **vals):
+    """Point a partner at known values, clearing the other password sources."""
+    partner.write(dict({"vat": False, "phone": False, "email": False}, **vals))
+    return partner
+
+
+def _make_report(env, model="res.partner"):
+    """Create a throwaway qweb-pdf report for `model`.
+
+    These tests used to search for an existing res.partner PDF report and skip
+    when the database had none - which silently disabled coverage of the batch
+    guard, the archived-attachment path and the phone resolver on a plain
+    install. Creating the record keeps every assertion running on any database
+    and any Odoo series.
+    """
+    return env["ir.actions.report"].create({
+        "name": "Test PDF Password Report",
+        "model": model,
+        "report_type": "qweb-pdf",
+        "report_name": "no_pdf_password_protection.test_report",
+    })
 
 
 def _super_class_of_override(report):
@@ -41,17 +92,16 @@ class TestPdfPasswordResolver(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.any_report = cls.env["ir.actions.report"].search([], limit=1)
-        cls.partner_report = cls.env["ir.actions.report"].search(
-            [("model", "=", "res.partner")], limit=1
-        )
+        cls.partner_report = _make_report(cls.env)
 
     def _partner(self, **vals):
         vals.setdefault("name", "T")
-        return self.env["res.partner"].create(vals)
+        return _scrub(_partners(self.env), **vals)
 
     def _need_partner_report(self):
-        if not self.partner_report:
-            self.skipTest("no res.partner report in base install")
+        # kept as a no-op: the report is created in setUpClass, so the former
+        # "skip when the database has none" branch would hide real failures.
+        return
 
     # ------------------------------------------------------------------ fields
 
@@ -150,7 +200,10 @@ class TestPdfPasswordResolver(TransactionCase):
 
     # ------------------------------------------------------------------ phone
 
-    def test_10_phone_strips_spaces(self):
+    def test_10_phone_reduces_to_digits(self):
+        # 19.0.2.0.0 changed this from "strip spaces" to "digits only": a
+        # recipient cannot be expected to guess whether their number was
+        # stored with a +, brackets, dots or dashes.
         self._need_partner_report()
         p = self._partner(phone="+216 12 345 678")
         self.partner_report.write({
@@ -159,7 +212,7 @@ class TestPdfPasswordResolver(TransactionCase):
         })
         self.assertEqual(
             self.partner_report._get_pdf_password(self.partner_report, [p.id]),
-            "+21612345678",
+            "21612345678",
         )
 
     def test_11_phone_prefers_phone_over_mobile(self):
@@ -473,15 +526,9 @@ class TestPdfEncryption(TransactionCase):
     def test_32_dynamic_method_uses_resolved_partner_password(self):
         # prove the resolver picks up the partner's VAT and the encryption
         # uses THAT password, not a stale static fallback
-        partner_report = self.env["ir.actions.report"].search(
-            [("model", "=", "res.partner"), ("report_type", "=", "qweb-pdf")],
-            limit=1,
-        )
-        if not partner_report:
-            self.skipTest("no partner qweb-pdf report")
-        partner = self.env["res.partner"].create({
-            "name": "VATCarrier", "vat": "PARTNER-VAT",
-        })
+        partner_report = _make_report(self.env)
+        partner = _scrub(_partners(self.env), name="VATCarrier",
+                         vat="PARTNER-VAT")
         partner_report.write({
             "x_pdf_password_enabled": True,
             "x_pdf_password_method": "vat",
@@ -498,3 +545,317 @@ class TestPdfEncryption(TransactionCase):
         self.assertTrue(reader.is_encrypted)
         self.assertTrue(reader.decrypt("PARTNER-VAT"))
         self.assertEqual(reader.decrypt("SHOULD-NOT-USE"), 0)
+
+
+class TestPdfEncryptionAlgorithm(TransactionCase):
+    """Cover x_pdf_encryption_algo: the emitted cipher must match the choice.
+
+    Assertions are made on the raw PDF bytes rather than through a reader, so
+    they hold regardless of which backend the test runner happens to import.
+    A PDF encrypted with AES carries an /AESV2 (AES-128) or /AESV3 (AES-256)
+    crypt filter; RC4 carries neither and sits at /V 2.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.report = cls.env["ir.actions.report"].search(
+            [("report_type", "=", "qweb-pdf")], limit=1
+        )
+
+    def setUp(self):
+        super().setUp()
+        if not self.report:
+            self.skipTest("no qweb-pdf report available")
+        self.report.write({
+            "x_pdf_password_enabled": True,
+            "x_pdf_password_method": "static",
+            "x_pdf_static_password": "Secret123",
+        })
+
+    def _render_with(self, algo):
+        if algo is not None:
+            self.report.x_pdf_encryption_algo = algo
+        parent = _super_class_of_override(self.report)
+        source = _blank_pdf()
+        with patch.object(parent, "_render_qweb_pdf", return_value=(source, "pdf")):
+            result, _ = self.report._render_qweb_pdf(self.report.id)
+        return result
+
+    def _require_aes(self):
+        if not mod.backend_supports_aes():
+            self.skipTest(
+                f"backend {mod.PDF_BACKEND} has no encrypt(algorithm=...)"
+            )
+
+    def test_33_default_is_aes256(self):
+        fresh = self.env["ir.actions.report"].new({})
+        self.assertEqual(fresh.x_pdf_encryption_algo, "aes256")
+
+    def test_34_aes256_emits_aesv3(self):
+        self._require_aes()
+        result = self._render_with("aes256")
+        self.assertIn(b"AESV3", result)
+        self.assertNotIn(b"AESV2", result)
+
+    def test_35_aes128_emits_aesv2(self):
+        self._require_aes()
+        result = self._render_with("aes128")
+        self.assertIn(b"AESV2", result)
+        self.assertNotIn(b"AESV3", result)
+
+    def test_36_rc4_emits_no_aes(self):
+        result = self._render_with("rc4_128")
+        self.assertIn(b"/Encrypt", result)
+        self.assertNotIn(b"AESV2", result)
+        self.assertNotIn(b"AESV3", result)
+
+    def test_37_unset_algo_still_defaults_to_aes256(self):
+        """Rows written before this field existed read back NULL on upgrade."""
+        self._require_aes()
+        self.report.x_pdf_encryption_algo = False
+        result = self._render_with(None)
+        self.assertIn(b"AESV3", result)
+
+    def test_38_backend_without_aes_falls_back_to_rc4(self):
+        """A PyPDF2-only deployment must still encrypt, just with RC4."""
+        with patch.object(mod, "backend_supports_aes", return_value=False):
+            result = self._render_with("aes256")
+        self.assertIn(b"/Encrypt", result)
+        self.assertNotIn(b"AESV3", result)
+
+    def test_39_aes256_opens_with_the_configured_password(self):
+        self._require_aes()
+        result = self._render_with("aes256")
+        reader = mod.PdfReader(io.BytesIO(result))
+        self.assertTrue(reader.is_encrypted)
+        self.assertTrue(reader.decrypt("Secret123"))
+
+    def test_40_wrong_password_rejected_under_aes256(self):
+        self._require_aes()
+        result = self._render_with("aes256")
+        reader = mod.PdfReader(io.BytesIO(result))
+        self.assertEqual(reader.decrypt("NotThePassword"), 0)
+
+
+class TestBatchPasswordGuard(TransactionCase):
+    """Cover _check_batch_shares_one_password.
+
+    A merged multi-record PDF can carry only one password. With a dynamic
+    source that password comes from the first record, so the file opens for
+    one recipient and exposes every other recipient's document to them, while
+    those recipients cannot open it at all. The module refuses instead.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.report = _make_report(cls.env)
+
+    def setUp(self):
+        super().setUp()
+        self.report.write({
+            "x_pdf_password_enabled": True,
+            "x_pdf_password_method": "vat",
+            "x_pdf_static_password": False,
+        })
+        pair = _partners(self.env, 2)
+        self.a = _scrub(pair[0], name="A", vat="VAT-A")
+        self.b = _scrub(pair[1], name="B", vat="VAT-B")
+
+    def test_41_batch_with_different_passwords_is_refused(self):
+        with self.assertRaises(UserError):
+            self.report._check_batch_shares_one_password([self.a.id, self.b.id])
+
+    def test_42_batch_sharing_one_password_is_allowed(self):
+        same = _scrub(_partners(self.env, 3)[2], name="A2", vat="VAT-A")
+        self.report._check_batch_shares_one_password([self.a.id, same.id])
+
+    def test_43_single_record_is_always_allowed(self):
+        self.report._check_batch_shares_one_password([self.a.id])
+
+    def test_44_static_password_batches_are_unaffected(self):
+        self.report.write({
+            "x_pdf_password_method": "static",
+            "x_pdf_static_password": "Shared",
+        })
+        self.report._check_batch_shares_one_password([self.a.id, self.b.id])
+
+    def test_45_guard_fires_through_the_render_entry_point(self):
+        """The check must run before rendering, not only when called directly."""
+        with self.assertRaises(UserError):
+            self.report._render_qweb_pdf(self.report.id, res_ids=[self.a.id, self.b.id])
+
+
+class TestPhoneNormalisation(TransactionCase):
+    """A recipient cannot guess the punctuation their number was stored with."""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.report = _make_report(cls.env)
+
+    def setUp(self):
+        super().setUp()
+        self.report.write({
+            "x_pdf_password_enabled": True,
+            "x_pdf_password_method": "phone",
+            "x_pdf_static_password": False,
+        })
+
+    def _password_for(self, phone):
+        partner = _scrub(_partners(self.env), name="P", phone=phone)
+        return self.report._get_pdf_password(self.report, [partner.id])
+
+    def test_46_every_punctuation_style_yields_the_same_digits(self):
+        for raw in ["+216 71 123 456", "(216) 71-123-456",
+                    "216.71.123.456", "216 71 123 456"]:
+            self.assertEqual(
+                self._password_for(raw), "21671123456",
+                "phone %r did not normalise to digits" % raw,
+            )
+
+    def test_47_phone_without_digits_falls_back_to_static(self):
+        self.report.x_pdf_static_password = "Fallback"
+        self.assertEqual(self._password_for("no number"), "Fallback")
+
+
+class TestEncryptionSuppression(TransactionCase):
+    """Some callers need a PDF they can still process themselves."""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.report = cls.env["ir.actions.report"].search(
+            [("report_type", "=", "qweb-pdf")], limit=1
+        )
+
+    def setUp(self):
+        super().setUp()
+        self.report.write({
+            "x_pdf_password_enabled": True,
+            "x_pdf_password_method": "static",
+            "x_pdf_static_password": "Secret123",
+        })
+
+    def test_48_snailmail_context_suppresses_encryption(self):
+        """The postal provider cannot print an encrypted file."""
+        source = _blank_pdf()
+        parent = _super_class_of_override(self.report)
+        report = self.report.with_context(snailmail_layout=True)
+        with patch.object(parent, "_render_qweb_pdf", return_value=(source, "pdf")):
+            result, _ = report._render_qweb_pdf(report.id)
+        self.assertEqual(result, source, "snailmail must receive a readable PDF")
+
+    def test_49_suppression_tests_the_key_not_its_value(self):
+        """snailmail passes snailmail_layout=not self.cover, so it can be False."""
+        source = _blank_pdf()
+        parent = _super_class_of_override(self.report)
+        report = self.report.with_context(snailmail_layout=False)
+        with patch.object(parent, "_render_qweb_pdf", return_value=(source, "pdf")):
+            result, _ = report._render_qweb_pdf(report.id)
+        self.assertEqual(result, source)
+
+    def test_50_normal_render_is_still_encrypted(self):
+        source = _blank_pdf()
+        parent = _super_class_of_override(self.report)
+        with patch.object(parent, "_render_qweb_pdf", return_value=(source, "pdf")):
+            result, _ = self.report._render_qweb_pdf(self.report.id)
+        self.assertIn(b"/Encrypt", result)
+
+
+class TestArchivedAttachment(TransactionCase):
+    """Cover _prepare_pdf_report_attachment_vals_list.
+
+    Core archives the PDF on the record from inside _render_qweb_pdf, before
+    the merged bytes reach our override. Without this hook the download would
+    be encrypted while the archived copy - what the chatter shows and what
+    mail templates attach - stayed plaintext.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.report = _make_report(cls.env)
+
+    def setUp(self):
+        super().setUp()
+        self.report.write({
+            "x_pdf_password_enabled": True,
+            "x_pdf_password_method": "static",
+            "x_pdf_static_password": "Secret123",
+            "attachment": "'archived.pdf'",
+        })
+
+    def _streams_for(self, partners):
+        return {
+            p.id: {"stream": io.BytesIO(_blank_pdf()), "attachment": False}
+            for p in partners
+        }
+
+    def test_51_archived_copy_is_encrypted(self):
+        p = _scrub(_partners(self.env), name="Archived", vat="V1")
+        vals = self.report._prepare_pdf_report_attachment_vals_list(
+            self.report, self._streams_for(p)
+        )
+        self.assertTrue(vals, "core produced no attachment vals")
+        for v in vals:
+            self.assertIn(b"/Encrypt", v["raw"], "archived copy is plaintext")
+
+    def test_52_each_archived_copy_uses_its_own_partner_password(self):
+        self.report.write({
+            "x_pdf_password_method": "vat",
+            "x_pdf_static_password": False,
+        })
+        pair = _partners(self.env, 2)
+        a = _scrub(pair[0], name="A", vat="VAT-A")
+        b = _scrub(pair[1], name="B", vat="VAT-B")
+        vals = {
+            v["res_id"]: v["raw"]
+            for v in self.report._prepare_pdf_report_attachment_vals_list(
+                self.report, self._streams_for(a | b)
+            )
+        }
+        self.assertTrue(PdfReader(io.BytesIO(vals[a.id])).decrypt("VAT-A"))
+        self.assertTrue(PdfReader(io.BytesIO(vals[b.id])).decrypt("VAT-B"))
+        self.assertEqual(PdfReader(io.BytesIO(vals[a.id])).decrypt("VAT-B"), 0)
+
+    def test_53_disabled_report_archives_plaintext(self):
+        self.report.x_pdf_password_enabled = False
+        p = _scrub(_partners(self.env), name="Plain", vat="V2")
+        vals = self.report._prepare_pdf_report_attachment_vals_list(
+            self.report, self._streams_for(p)
+        )
+        for v in vals:
+            self.assertNotIn(b"/Encrypt", v["raw"])
+
+
+class TestPasswordLimits(TransactionCase):
+    """ISO 32000 caps the standard security handler password at 127 bytes."""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.report = cls.env["ir.actions.report"].search(
+            [("report_type", "=", "qweb-pdf")], limit=1
+        )
+
+    def setUp(self):
+        super().setUp()
+        self.report.write({
+            "x_pdf_password_enabled": True,
+            "x_pdf_password_method": "static",
+        })
+
+    def test_54_password_at_the_limit_is_accepted(self):
+        self.report.x_pdf_static_password = "x" * 127
+        self.assertIsNotNone(self.report._encrypt_pdf(_blank_pdf(), None))
+
+    def test_55_over_limit_password_refuses_rather_than_truncating(self):
+        """Readers truncate differently; an unopenable file is the worst case."""
+        self.report.x_pdf_static_password = "x" * 128
+        self.assertIsNone(self.report._encrypt_pdf(_blank_pdf(), None))
+
+    def test_56_limit_is_measured_in_bytes_not_characters(self):
+        self.report.x_pdf_static_password = "é" * 64  # 64 x 2 bytes = 128 bytes in UTF-8
+        self.assertIsNone(self.report._encrypt_pdf(_blank_pdf(), None))

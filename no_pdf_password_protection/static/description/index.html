@@ -58,7 +58,7 @@
                     <div style="background-color: #FFFFFF; border: 2px solid #E8DDE5; border-top: 4px solid #DC3545; border-radius: 10px; padding: 20px; text-align: center; height: 100%;">
                         <div style="font-size: 28px; margin-bottom: 8px;">&#128222;</div>
                         <strong style="font-size: 15px;">Partner Phone</strong>
-                        <p style="font-size: 13px; color: #475569; margin-top: 8px;">Password = partner's phone number (spaces stripped). Fits payslips and personal documents.</p>
+                        <p style="font-size: 13px; color: #475569; margin-top: 8px;">Password = partner's phone number, digits only. Fits payslips and personal documents - tell the recipient "your number, digits only" and it always matches.</p>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6 col-12 mb-4">
@@ -284,7 +284,7 @@
                 <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px 20px;">
                     <strong style="color: #DC3545;">&#10007;</strong>&nbsp;
                     <strong>Email body / attachments</strong>
-                    <p style="font-size: 13px; color: #475569; margin: 6px 0 0;">Only the report PDF itself is encrypted. The email body isn't, and neither are other attachments you add manually.</p>
+                    <p style="font-size: 13px; color: #475569; margin: 6px 0 0;">Only the report PDF itself is encrypted. The email body isn't, and neither are other attachments you add manually. Invoices sent with <strong>Send &amp; Print</strong> are covered when you also install the free companion module for Accounting.</p>
                 </div>
             </div>
             <div class="col-md-6 col-12 mb-3">
@@ -311,8 +311,22 @@
             <div class="col-md-6 col-12 mb-3">
                 <div style="background-color: #FFF3CD; border: 1px solid #FFEEBA; border-radius: 8px; padding: 16px 20px;">
                     <strong style="color: #856404;">&#9888;</strong>&nbsp;
+                    <strong>One customer at a time on dynamic modes</strong>
+                    <p style="font-size: 13px; color: #856404; margin: 6px 0 0;">Odoo merges a multi-record print into one file, and a file carries one password. Selecting several customers together is refused with a clear message rather than producing a document that opens for one of them and exposes the others. Print them individually, or use Send &amp; Print, which encrypts each one separately.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+                <div style="background-color: #FFF3CD; border: 1px solid #FFEEBA; border-radius: 8px; padding: 16px 20px;">
+                    <strong style="color: #856404;">&#9888;</strong>&nbsp;
+                    <strong>Send by Post is left readable</strong>
+                    <p style="font-size: 13px; color: #856404; margin: 6px 0 0;">Odoo's postal-mail service hands your document to a printing provider that cannot open an encrypted file, so that route is deliberately skipped.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+                <div style="background-color: #FFF3CD; border: 1px solid #FFEEBA; border-radius: 8px; padding: 16px 20px;">
+                    <strong style="color: #856404;">&#9888;</strong>&nbsp;
                     <strong>PDF library required (bundled with Odoo)</strong>
-                    <p style="font-size: 13px; color: #856404; margin: 6px 0 0;">Odoo ships PyPDF2 (Python &lt;= 3.12) or pypdf (Python &gt;= 3.13). On non-standard Python environments where neither is present, the module loads but encryption is silently a no-op - a warning appears in the log on startup.</p>
+                    <p style="font-size: 13px; color: #856404; margin: 6px 0 0;">Odoo already ships one of the two libraries this module uses, so there is nothing to install. AES needs the newer <em>pypdf</em>; on a server that only has the older PyPDF2, the module keeps working at RC4-128 and writes a warning to the log telling you how to enable AES.</p>
                 </div>
             </div>
         </div>
@@ -323,7 +337,7 @@
         <div class="container">
             <h2 style="color: #D4B8CF; font-size: 22px; font-weight: 700; margin-bottom: 12px; text-align: center;">&#128737; A Note on PDF Encryption Strength</h2>
             <p style="color: #BBA8B5; font-size: 14px; line-height: 1.7; margin: 0; max-width: 760px; margin-left: auto; margin-right: auto; text-align: center;">
-                PDF password protection is <strong>convenience crypto</strong>, not TLS-grade encryption. It stops a casual viewer with Adobe Reader. It does <em>not</em> stop a determined attacker with time and open-source tools. Use it as a meaningful deterrent and a compliance checkbox (HIPAA, GDPR), not as your only defence. For truly sensitive data, pair it with TLS email transport, access logs, and short retention windows. PyPDF2 uses RC4 / AES-128 depending on the PDF version.
+                This module encrypts with <strong>AES-256</strong> by default - the same standard Acrobat itself uses, readable by Acrobat 9+ and every modern PDF viewer. That is real encryption: a strong, unguessable password cannot be brute-forced. Its strength is therefore only as good as the password you choose, so prefer a static passphrase over a partner field that a recipient's contacts already know. AES-128 and legacy RC4-128 stay selectable per report for very old readers - RC4 is broken and offered only for compatibility. Encryption protects the file, not the delivery: pair it with TLS email transport, access logs, and short retention windows.
             </p>
         </div>
     </div>
@@ -335,7 +349,7 @@
         <div style="max-width: 760px; margin: 0 auto;">
             <div style="border-bottom: 1px solid #E8DDE5; padding: 16px 0;">
                 <strong style="color: #714B67;">What if a partner's VAT has spaces or special characters?</strong>
-                <p style="color: #475569; font-size: 14px; margin: 8px 0 0;">The VAT value is used verbatim. Phone numbers get spaces stripped; everything else passes through unchanged.</p>
+                <p style="color: #475569; font-size: 14px; margin: 8px 0 0;">The VAT value and the email address are used verbatim. Phone numbers are reduced to digits, so a number stored as "+216 71 123 456", "(216) 71-123-456" or "216.71.123.456" all give the same password - the recipient never has to guess the punctuation.</p>
             </div>
             <div style="border-bottom: 1px solid #E8DDE5; padding: 16px 0;">
                 <strong style="color: #714B67;">Does encryption slow down PDF generation?</strong>
@@ -355,7 +369,7 @@
             </div>
             <div style="padding: 16px 0;">
                 <strong style="color: #714B67;">Does it work on Odoo.sh / Odoo Online?</strong>
-                <p style="color: #475569; font-size: 14px; margin: 8px 0 0;">On Odoo.sh yes (you control <em>requirements.txt</em>). On Odoo Online / SaaS, custom Python packages cannot be installed, so this module won't encrypt - use self-hosted or Odoo.sh.</p>
+                <p style="color: #475569; font-size: 14px; margin: 8px 0 0;">Yes. The module no longer requires any Python package you'd have to install yourself - it uses the PDF library Odoo already ships. On Odoo.sh and self-hosted you can add <em>pypdf</em> to unlock AES-256; where only the older library is available, encryption still works at RC4-128.</p>
             </div>
         </div>
     </div>
@@ -395,7 +409,7 @@
                 </div>
                 <div class="row" style="padding: 10px 0;">
                     <div class="col-md-5 col-12" style="text-align: left;"><strong style="color: #714B67;">Test coverage</strong></div>
-                    <div class="col-md-7 col-12" style="text-align: left;">32 unit tests (resolver + encryption, edge cases)</div>
+                    <div class="col-md-7 col-12" style="text-align: left;">69 unit tests (resolver, cipher per algorithm, invoice email path, batch guard, archived copy, edge cases)</div>
                 </div>
             </div>
         </div>

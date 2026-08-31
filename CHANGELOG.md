@@ -5,6 +5,45 @@ All notable changes to **PDF Password Protection** for Odoo 19.0 are documented 
 This file follows the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 Versions use Odoo's `<odoo_version>.<module_major>.<module_minor>.<module_patch>` scheme.
 
+## [19.0.2.0.0] - 2026-08-31
+
+### Security
+
+- **PDF encryption now uses AES-256 by default.** Previous releases called `PdfWriter.encrypt(password)` without an `algorithm` argument, and both pypdf and PyPDF2 default that to **RC4-128** - a cipher that is cryptographically broken and deprecated in PDF 2.0. Generated files carried `/V 2 /R 3`; they now carry `/V 5 /R 6` with an `AESV3` crypt filter. Anyone relying on this module for confidential documents should regenerate previously issued PDFs.
+- **"Send & Print" no longer emails an unencrypted invoice.** `account.move.send` builds its PDF through `_pre_render_qweb_pdf()`, never `_render_qweb_pdf()`, so the encryption override was never reached on that path: the Print button produced an encrypted file while the customer received a plaintext one. Fixed by the new companion module (below).
+- **Printing several customers at once no longer leaks one customer's document to another.** Odoo merges a multi-record print into a single PDF, which can carry only one password; with a dynamic source that password came from the first record, so the file opened for one recipient and exposed every other recipient's document inside it, while those recipients could not open it at all. Such a batch is now refused with an explanatory error pointing at Send & Print, which encrypts each document separately. Batches that resolve to one password (same customer, or a static password) are unaffected.
+- **The archived copy is encrypted too.** Odoo writes the `ir.attachment` copy from *inside* `_render_qweb_pdf`, before the module saw the bytes, so on any report with an `attachment` expression the download was encrypted while the copy kept on the record - the one shown in the chatter and picked up by mail templates - stayed plaintext. Each archived document is now encrypted with its own partner's password.
+- **"Send by Post" (snailmail) is no longer broken.** It renders the report and hands the bytes to a postal printing provider, which cannot open an encrypted file. Encryption is now skipped for that render.
+
+### Added
+
+- **`x_pdf_encryption_algo`** on `ir.actions.report` - choose AES-256 (default), AES-128, or RC4-128. RC4-128 is retained only for very old readers and is labelled as such.
+- **`no_pdf_password_protection_account`** - companion module bridging this module and Accounting. `auto_install`, LGPL-3, ships in this repository. It encrypts the invoice at the final step of the send pipeline (`_link_invoice_documents`), after Odoo's own post-processing has run, so each invoice is encrypted with **its own customer's** password rather than the first record's.
+- PDF/A e-invoices are detected and deliberately left unencrypted, with an explanatory note posted to the invoice chatter. ISO 19005 forbids encryption; encrypting a Factur-X or ZUGFeRD invoice would break conformance and hide the embedded e-invoicing XML from the recipient's AP system.
+- 8 new tests covering the emitted cipher per algorithm, and 13 covering the accounting send path (53 total across both modules).
+
+### Fixed
+
+- **The module could not be installed on a stock Odoo.** The manifest declared `external_dependencies: {"python": ["pypdf"]}`, which Odoo enforces at install time, but the official `odoo:19` image ships **PyPDF2 2.12.1 and no pypdf** - so installation failed with `MissingDependency` even though the code already had a working PyPDF2 fallback. The declaration is removed; the backend is detected at runtime instead.
+- When only PyPDF2 is available, AES is impossible (its `encrypt()` has no `algorithm` parameter). The module now logs a clear warning naming `pip install pypdf` and falls back to RC4-128 rather than raising.
+
+### Changed
+
+- **Phone passwords are now digits only.** Previously only spaces were stripped, so `(216) 71-123-456` became `(216)71-123-456` and `216.71.123.456` was left untouched - a recipient had to guess the punctuation their number happened to be stored with. All formats now reduce to the same digits.
+- Passwords longer than 127 bytes are refused rather than encrypted. ISO 32000 caps the standard security handler there, and readers have historically truncated over-long passwords differently, which produces a file the recipient cannot open.
+- A warning is shown on the report form when the server's PDF library cannot produce AES, so a silent RC4 fallback is visible in the UI and not only in the log.
+- The test suite no longer skips when the database has no `res.partner` PDF report - it creates one. Ten tests covering the batch guard, the archived copy and the phone resolver were silently skipping on a normal database.
+- Tests reuse existing partners instead of creating them. This module depends only on `base`, so Odoo runs its tests *before* `account` loads; the registry then lacks account's `res.partner` fields while the database still has their NOT NULL columns, making `res.partner.create()` fail on any database with Accounting installed.
+- The test suite imports `pypdf` before `PyPDF2`, matching the module. PyPDF2 2.x cannot verify a `/V 5` encryption dictionary, so reading AES-256 output back with it failed on the library, not the module.
+- Translations regenerated for all 9 languages via `odoo i18n export`. The `model:ir.module.module,summary|shortdesc|description` entries carried by earlier `.po` files were dropped: `module_meta_information` no longer exists anywhere in Odoo 19, so those entries translated nothing.
+
+### Upgrade notes
+
+- **Default cipher changes on upgrade.** Reports with no explicit algorithm set (including every report configured before this release) will produce AES-256 from now on. Set **Encryption Algorithm** to *RC4-128 (legacy readers only)* on a per-report basis if you must keep serving readers older than Acrobat 9 (2008).
+- **`auto_install` does not apply retroactively.** Odoo only marks an auto-install module when one of its dependencies is being installed in the same operation. If you already run this module alongside Accounting, install `no_pdf_password_protection_account` once from the Apps list; new installations pick it up automatically.
+- **Phone-sourced passwords change.** Anyone using the Partner Phone source must tell recipients the new rule: their number, digits only. Previously issued PDFs keep their old password.
+- AES requires `pypdf`. If your deployment only has PyPDF2, run `pip install pypdf` to enable AES; otherwise the module keeps working at RC4-128 and says so in the log.
+
 ## [19.0.1.2.0] - 2026-05-13
 
 ### Added

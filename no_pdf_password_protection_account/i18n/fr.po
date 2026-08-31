@@ -1,0 +1,38 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* no_pdf_password_protection_account
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-31 00:00+0000\n"
+"PO-Revision-Date: 2026-08-31 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: French\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. module: no_pdf_password_protection_account
+#: model:ir.model,name:no_pdf_password_protection_account.model_account_move_send
+msgid "Account Move Send"
+msgstr "Envoi d'écriture comptable"
+
+#. module: no_pdf_password_protection_account
+#: model:ir.model.fields,field_description:no_pdf_password_protection_account.field_account_move_send__display_name
+msgid "Display Name"
+msgstr "Nom affiché"
+
+#. module: no_pdf_password_protection_account
+#: model:ir.model.fields,field_description:no_pdf_password_protection_account.field_account_move_send__id
+msgid "ID"
+msgstr "ID"
+
+#. module: no_pdf_password_protection_account
+#. odoo-python
+#: code:addons/no_pdf_password_protection_account/models/account_move_send.py:0
+msgid "This invoice was sent without password protection: it is a PDF/A e-invoice, and encrypting it would break PDF/A conformance and make the embedded e-invoicing XML unreadable for the recipient."
+msgstr "Cette facture a été envoyée sans protection par mot de passe : il s'agit d'une facture électronique PDF/A, et la chiffrer romprait la conformité PDF/A et rendrait le XML de facturation électronique intégré illisible pour le destinataire."

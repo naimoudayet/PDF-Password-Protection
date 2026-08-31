@@ -1,0 +1,26 @@
+# Copyright 2026 Naim OUDAYET
+# License LGPL-3
+{
+    "name": "PDF Password Protection for Invoices",
+    "summary": "Extend PDF password protection to the accounting Send & Print flow",
+    "description": "Bridge between PDF Password Protection and Accounting. "
+                   "Odoo builds the invoice PDF it emails through a different "
+                   "code path than the Print button, which would otherwise "
+                   "deliver an unencrypted invoice to the customer. This module "
+                   "closes that gap and gives every document its own recipient's "
+                   "password. Installs itself automatically when both PDF "
+                   "Password Protection and Accounting are present.",
+    "version": "19.0.1.0.0",
+    "category": "Extra Tools",
+    "website": "https://www.oudayet.com",
+    "author": "Naim OUDAYET",
+    "maintainers": ["naimoudayet"],
+    "license": "LGPL-3",
+    "application": False,
+    "installable": True,
+    "auto_install": True,
+    "depends": ["no_pdf_password_protection", "account"],
+    "price": 0,
+    "currency": "USD",
+    "support": "contact@oudayet.com",
+}
