@@ -370,7 +370,7 @@
     <!-- SECURITY NOTE -->
     <div style="background-color: #2D2233; padding: 36px 20px; border-radius: 8px;">
         <div class="container">
-            <h2 style="color: #D4B8CF; font-size: 22px; font-weight: 700; margin-bottom: 12px; text-align: center;">&#128737; A Note on PDF Encryption Strength</h2>
+            <h2 style="color: #D4B8CF; font-size: 28px; font-weight: 700; margin-bottom: 12px; text-align: center;">&#128737; A Note on PDF Encryption Strength</h2>
             <p style="color: #BBA8B5; font-size: 14px; line-height: 1.7; margin: 0; max-width: 760px; margin-left: auto; margin-right: auto; text-align: center;">
                 This module encrypts with <strong>AES-256</strong> by default - the same standard Acrobat itself uses, readable by Acrobat 9+ and every modern PDF viewer. That is real encryption: a strong, unguessable password cannot be brute-forced. Its strength is therefore only as good as the password you choose, so prefer a static passphrase over a partner field that a recipient's contacts already know. AES-128 and legacy RC4-128 stay selectable per report for very old readers - RC4 is broken and offered only for compatibility. Encryption protects the file, not the delivery: pair it with TLS email transport, access logs, and short retention windows.
             </p>
