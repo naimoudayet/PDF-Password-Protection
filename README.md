@@ -72,13 +72,13 @@ It is marked `auto_install`, so it installs itself when you install PDF Password
 
 ## Behaviour You Should Know About
 
-**Printing several customers at once is refused when the password is dynamic.** Odoo merges a multi-record print into one PDF, and a PDF carries a single password. That file would open for one recipient and expose the other customers' documents to them, while those customers could not open it at all. The module raises an explanatory error instead. Print one at a time, or use Send & Print, which encrypts each document separately. Batches that resolve to the same password -- one customer, or a static password -- are unaffected.
+**A mixed batch print comes back unlocked.** Odoo merges a multi-record print into one PDF, and a PDF carries a single password. When the selected records do not share one, the merged copy is produced *without* protection and a note is added to each record -- an ordinary bulk print is never interrupted. Print a record on its own, or use Send & Print, to get a protected copy. Batches that resolve to the same password -- one customer, or a static password -- are protected as usual.
 
 **Your own staff are not asked for a password.** The module protects documents that *leave* Odoo -- what you print, email, or publish on the portal. The copy Odoo archives on the record stays readable, so a colleague previewing an invoice from the chatter is not blocked by a password for a record they can already open; Odoo's access rights already govern who sees it. Every route out re-encrypts on the way, so nothing delivered is weakened by this.
 
 Turn on **Also Protect the Copy Kept in Odoo** if you want encryption at rest as well.
 
-**Emailed invoices are the one exception.** Odoo sends the very file it stores, so that copy is always encrypted and previewing it does ask for the password. That is inherent to how Accounting builds the document, not a setting.
+**Emailed invoices follow the same rule.** The companion module locks the invoice as it enters the customer's email and as the portal hands it over, not while it sits on the record -- so a sent invoice still opens for your own team without the customer's password.
 
 **"Send by Post" is left unencrypted on purpose.** Snailmail hands the PDF to a postal printing provider that cannot open an encrypted file, so encryption is skipped for that render and noted in the log.
 

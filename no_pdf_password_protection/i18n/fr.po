@@ -92,14 +92,14 @@ msgid "Password Source"
 msgstr "Source du mot de passe"
 
 #. module: no_pdf_password_protection
+#: model_terms:ir.ui.view,arch_db:no_pdf_password_protection.view_ir_actions_report_form_pdf_password
+msgid "Printing several records together produces one merged file, which can\n                    carry only one password. When the selected records do not share a password\n                    the merged copy is produced without protection and a note is added to each\n                    record. Print a record on its own, or use Send &amp; Print, to get a\n                    protected copy."
+msgstr "Imprimer plusieurs enregistrements ensemble produit un seul fichier fusionné, qui ne peut porter qu'un mot de passe. Lorsque les enregistrements sélectionnés n'ont pas le même mot de passe, la copie fusionnée est produite sans protection et une note est ajoutée à chaque enregistrement. Imprimez un enregistrement seul, ou utilisez Envoyer &amp; Imprimer, pour obtenir une copie protégée."
+
+#. module: no_pdf_password_protection
 #: model:ir.model.fields.selection,name:no_pdf_password_protection.selection__ir_actions_report__x_pdf_encryption_algo__rc4_128
 msgid "RC4-128 (legacy readers only)"
 msgstr "RC4-128 (lecteurs anciens uniquement)"
-
-#. module: no_pdf_password_protection
-#: model_terms:ir.ui.view,arch_db:no_pdf_password_protection.view_ir_actions_report_form_pdf_password
-msgid "Records that resolve to different passwords cannot be printed together:\n                    a merged file carries only one password, so it would open for one recipient\n                    and expose the others' documents to them. Print one at a time, or use\n                    Send &amp; Print, which encrypts each document separately."
-msgstr "Les enregistrements dont le mot de passe diffère ne peuvent pas être imprimés ensemble : un fichier fusionné ne porte qu'un seul mot de passe, il s'ouvrirait donc pour un destinataire en lui exposant les documents des autres. Imprimez-les un par un, ou utilisez Envoyer &amp; Imprimer, qui chiffre chaque document séparément."
 
 #. module: no_pdf_password_protection
 #: model:ir.model,name:no_pdf_password_protection.model_ir_actions_report
@@ -115,8 +115,8 @@ msgstr "Mot de passe statique"
 #. module: no_pdf_password_protection
 #. odoo-python
 #: code:addons/no_pdf_password_protection/models/ir_actions_report.py:0
-msgid "These records do not share the same password.\n\nPrinting them together would merge them into a single file that can carry only one password - it would open for one recipient and expose the other documents to them, while the others could not open it at all.\n\nPrint them one at a time, or use Send & Print, which encrypts each document separately."
-msgstr "Ces enregistrements ne partagent pas le même mot de passe.\n\nLes imprimer ensemble les fusionnerait en un seul fichier ne pouvant porter qu'un seul mot de passe : il s'ouvrirait pour un destinataire en lui exposant les autres documents, tandis que les autres ne pourraient pas l'ouvrir du tout.\n\nImprimez-les un par un, ou utilisez Envoyer & Imprimer, qui chiffre chaque document séparément."
+msgid "This document was printed together with records that use a different password, so the merged file was produced without password protection. Print this record on its own to get a protected copy."
+msgstr "Ce document a été imprimé avec d'autres enregistrements utilisant un mot de passe différent ; le fichier fusionné a donc été produit sans protection par mot de passe. Imprimez cet enregistrement seul pour obtenir une copie protégée."
 
 #. module: no_pdf_password_protection
 #: model_terms:ir.ui.view,arch_db:no_pdf_password_protection.view_ir_actions_report_form_pdf_password

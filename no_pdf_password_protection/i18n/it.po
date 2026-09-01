@@ -92,14 +92,14 @@ msgid "Password Source"
 msgstr "Origine della password"
 
 #. module: no_pdf_password_protection
+#: model_terms:ir.ui.view,arch_db:no_pdf_password_protection.view_ir_actions_report_form_pdf_password
+msgid "Printing several records together produces one merged file, which can\n                    carry only one password. When the selected records do not share a password\n                    the merged copy is produced without protection and a note is added to each\n                    record. Print a record on its own, or use Send &amp; Print, to get a\n                    protected copy."
+msgstr "Stampare più record insieme produce un unico file unito, che può contenere una sola password. Se i record selezionati non condividono la password, la copia unita viene prodotta senza protezione e viene aggiunta una nota a ciascun record. Stampa un record da solo, oppure usa Invia e stampa, per ottenere una copia protetta."
+
+#. module: no_pdf_password_protection
 #: model:ir.model.fields.selection,name:no_pdf_password_protection.selection__ir_actions_report__x_pdf_encryption_algo__rc4_128
 msgid "RC4-128 (legacy readers only)"
 msgstr "RC4-128 (solo lettori datati)"
-
-#. module: no_pdf_password_protection
-#: model_terms:ir.ui.view,arch_db:no_pdf_password_protection.view_ir_actions_report_form_pdf_password
-msgid "Records that resolve to different passwords cannot be printed together:\n                    a merged file carries only one password, so it would open for one recipient\n                    and expose the others' documents to them. Print one at a time, or use\n                    Send &amp; Print, which encrypts each document separately."
-msgstr "I record con password diverse non possono essere stampati insieme: un file unito contiene una sola password, quindi si aprirebbe per un destinatario esponendogli i documenti degli altri. Stampa uno alla volta, oppure usa Invia e stampa, che cifra ogni documento separatamente."
 
 #. module: no_pdf_password_protection
 #: model:ir.model,name:no_pdf_password_protection.model_ir_actions_report
@@ -115,8 +115,8 @@ msgstr "Password statica"
 #. module: no_pdf_password_protection
 #. odoo-python
 #: code:addons/no_pdf_password_protection/models/ir_actions_report.py:0
-msgid "These records do not share the same password.\n\nPrinting them together would merge them into a single file that can carry only one password - it would open for one recipient and expose the other documents to them, while the others could not open it at all.\n\nPrint them one at a time, or use Send & Print, which encrypts each document separately."
-msgstr "Questi record non condividono la stessa password.\n\nStamparli insieme li unirebbe in un unico file che può contenere una sola password: si aprirebbe per un destinatario esponendogli i documenti degli altri, mentre gli altri non potrebbero aprirlo affatto.\n\nStampali uno alla volta, oppure usa Invia e stampa, che cifra ogni documento separatamente."
+msgid "This document was printed together with records that use a different password, so the merged file was produced without password protection. Print this record on its own to get a protected copy."
+msgstr "Questo documento è stato stampato insieme a record che usano una password diversa, quindi il file unito è stato prodotto senza protezione. Stampa questo record da solo per ottenere una copia protetta."
 
 #. module: no_pdf_password_protection
 #: model_terms:ir.ui.view,arch_db:no_pdf_password_protection.view_ir_actions_report_form_pdf_password

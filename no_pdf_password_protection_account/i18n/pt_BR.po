@@ -22,14 +22,21 @@ msgid "Account Move Send"
 msgstr "Envio de Lançamento Contábil"
 
 #. module: no_pdf_password_protection_account
+#: model:ir.model.fields,field_description:no_pdf_password_protection_account.field_account_move__display_name
 #: model:ir.model.fields,field_description:no_pdf_password_protection_account.field_account_move_send__display_name
 msgid "Display Name"
 msgstr "Nome de Exibição"
 
 #. module: no_pdf_password_protection_account
+#: model:ir.model.fields,field_description:no_pdf_password_protection_account.field_account_move__id
 #: model:ir.model.fields,field_description:no_pdf_password_protection_account.field_account_move_send__id
 msgid "ID"
 msgstr "ID"
+
+#. module: no_pdf_password_protection_account
+#: model:ir.model,name:no_pdf_password_protection_account.model_account_move
+msgid "Journal Entry"
+msgstr "Lançamento Contábil"
 
 #. module: no_pdf_password_protection_account
 #. odoo-python

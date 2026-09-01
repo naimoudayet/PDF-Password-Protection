@@ -92,14 +92,14 @@ msgid "Password Source"
 msgstr "密码来源"
 
 #. module: no_pdf_password_protection
+#: model_terms:ir.ui.view,arch_db:no_pdf_password_protection.view_ir_actions_report_form_pdf_password
+msgid "Printing several records together produces one merged file, which can\n                    carry only one password. When the selected records do not share a password\n                    the merged copy is produced without protection and a note is added to each\n                    record. Print a record on its own, or use Send &amp; Print, to get a\n                    protected copy."
+msgstr "将多条单据一起打印会生成一个合并文件，而它只能有一个密码。当所选单据的密码不一致时，合并副本将不启用保护，并在每条单据上添加说明。请单独打印单据，或使用「发送并打印」，以获得受保护的副本。"
+
+#. module: no_pdf_password_protection
 #: model:ir.model.fields.selection,name:no_pdf_password_protection.selection__ir_actions_report__x_pdf_encryption_algo__rc4_128
 msgid "RC4-128 (legacy readers only)"
 msgstr "RC4-128（仅限旧版阅读器）"
-
-#. module: no_pdf_password_protection
-#: model_terms:ir.ui.view,arch_db:no_pdf_password_protection.view_ir_actions_report_form_pdf_password
-msgid "Records that resolve to different passwords cannot be printed together:\n                    a merged file carries only one password, so it would open for one recipient\n                    and expose the others' documents to them. Print one at a time, or use\n                    Send &amp; Print, which encrypts each document separately."
-msgstr "密码不同的记录无法一起打印：合并后的文件只能有一个密码，因此只会为其中一位收件人打开，并向其暴露其他人的文档。请逐个打印，或使用「发送并打印」，它会分别加密每一份文档。"
 
 #. module: no_pdf_password_protection
 #: model:ir.model,name:no_pdf_password_protection.model_ir_actions_report
@@ -115,8 +115,8 @@ msgstr "静态密码"
 #. module: no_pdf_password_protection
 #. odoo-python
 #: code:addons/no_pdf_password_protection/models/ir_actions_report.py:0
-msgid "These records do not share the same password.\n\nPrinting them together would merge them into a single file that can carry only one password - it would open for one recipient and expose the other documents to them, while the others could not open it at all.\n\nPrint them one at a time, or use Send & Print, which encrypts each document separately."
-msgstr "这些记录的密码并不相同。\n\n一起打印会把它们合并为一个文件，而一个文件只能有一个密码：该文件只能被其中一位收件人打开，并会向其暴露其他人的文档，而其他人则完全无法打开。\n\n请逐个打印，或使用「发送并打印」，它会分别加密每一份文档。"
+msgid "This document was printed together with records that use a different password, so the merged file was produced without password protection. Print this record on its own to get a protected copy."
+msgstr "此文档与使用不同密码的其他单据一起打印，因此合并后的文件未启用密码保护。请单独打印此单据以获得受保护的副本。"
 
 #. module: no_pdf_password_protection
 #: model_terms:ir.ui.view,arch_db:no_pdf_password_protection.view_ir_actions_report_form_pdf_password

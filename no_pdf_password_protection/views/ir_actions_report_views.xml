@@ -22,10 +22,11 @@
                 </div>
                 <div class="alert alert-info" role="alert"
                      invisible="not x_pdf_password_enabled or x_pdf_password_method == 'static'">
-                    Records that resolve to different passwords cannot be printed together:
-                    a merged file carries only one password, so it would open for one recipient
-                    and expose the others' documents to them. Print one at a time, or use
-                    Send &amp; Print, which encrypts each document separately.
+                    Printing several records together produces one merged file, which can
+                    carry only one password. When the selected records do not share a password
+                    the merged copy is produced without protection and a note is added to each
+                    record. Print a record on its own, or use Send &amp; Print, to get a
+                    protected copy.
                 </div>
             </xpath>
         </field>

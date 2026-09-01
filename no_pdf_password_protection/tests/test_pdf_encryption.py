@@ -638,13 +638,12 @@ class TestPdfEncryptionAlgorithm(TransactionCase):
         self.assertEqual(reader.decrypt("NotThePassword"), 0)
 
 
-class TestBatchPasswordGuard(TransactionCase):
-    """Cover _check_batch_shares_one_password.
+class TestMixedBatchPrint(TransactionCase):
+    """A merged print of records with different passwords.
 
-    A merged multi-record PDF can carry only one password. With a dynamic
-    source that password comes from the first record, so the file opens for
-    one recipient and exposes every other recipient's document to them, while
-    those recipients cannot open it at all. The module refuses instead.
+    Blocking an ordinary bulk print would be worse than the problem: staff
+    print batches all day. The document comes back unlocked, and each record
+    is told why, so nobody believes they have a protected file when they do not.
     """
 
     @classmethod
@@ -663,28 +662,52 @@ class TestBatchPasswordGuard(TransactionCase):
         self.a = _scrub(pair[0], name="A", vat="VAT-A")
         self.b = _scrub(pair[1], name="B", vat="VAT-B")
 
-    def test_41_batch_with_different_passwords_is_refused(self):
-        with self.assertRaises(UserError):
-            self.report._check_batch_shares_one_password([self.a.id, self.b.id])
+    def _render(self, res_ids):
+        parent = _super_class_of_override(self.report)
+        with patch.object(parent, "_render_qweb_pdf",
+                          return_value=(_blank_pdf(), "pdf")):
+            return self.report._render_qweb_pdf(self.report.id, res_ids=res_ids)[0]
 
-    def test_42_batch_sharing_one_password_is_allowed(self):
+    def test_41_mixed_batch_is_not_blocked(self):
+        self.assertFalse(
+            self.report._batch_shares_one_password([self.a.id, self.b.id])
+        )
+        result = self._render([self.a.id, self.b.id])
+        self.assertNotIn(b"/Encrypt", result, "a mixed batch must come back unlocked")
+
+    def test_42_uniform_batch_is_still_protected(self):
         same = _scrub(_partners(self.env, 3)[2], name="A2", vat="VAT-A")
-        self.report._check_batch_shares_one_password([self.a.id, same.id])
+        self.assertTrue(
+            self.report._batch_shares_one_password([self.a.id, same.id])
+        )
+        self.assertIn(b"/Encrypt", self._render([self.a.id, same.id]))
 
-    def test_43_single_record_is_always_allowed(self):
-        self.report._check_batch_shares_one_password([self.a.id])
+    def test_43_single_record_is_still_protected(self):
+        self.assertIn(b"/Encrypt", self._render([self.a.id]))
 
     def test_44_static_password_batches_are_unaffected(self):
-        self.report.write({
-            "x_pdf_password_method": "static",
-            "x_pdf_static_password": "Shared",
-        })
-        self.report._check_batch_shares_one_password([self.a.id, self.b.id])
+        self.report.write({"x_pdf_password_method": "static",
+                           "x_pdf_static_password": "Shared"})
+        self.assertIn(b"/Encrypt", self._render([self.a.id, self.b.id]))
 
-    def test_45_guard_fires_through_the_render_entry_point(self):
-        """The check must run before rendering, not only when called directly."""
-        with self.assertRaises(UserError):
-            self.report._render_qweb_pdf(self.report.id, res_ids=[self.a.id, self.b.id])
+    def test_45_records_are_told_where_a_chatter_exists(self):
+        """The note is best-effort by design.
+
+        This module depends only on `base`, so Odoo runs its tests before
+        `mail` loads and the target model may have no chatter at all. Posting
+        must never be what breaks a print, so it degrades silently - and where
+        a chatter does exist (invoices, whose module pulls in mail) the note
+        is posted.
+        """
+        records = self.env[self.report.model].browse([self.a.id, self.b.id])
+        if not hasattr(records, "message_post"):
+            # must not raise
+            self.report._log_unencrypted_batch([self.a.id, self.b.id])
+            return
+        before = len(self.a.message_ids)
+        self._render([self.a.id, self.b.id])
+        self.assertGreater(len(self.a.message_ids), before, "no note on the record")
+        self.assertIn("without", self.a.message_ids[0].body)
 
 
 class TestPhoneNormalisation(TransactionCase):

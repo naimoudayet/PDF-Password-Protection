@@ -92,14 +92,14 @@ msgid "Password Source"
 msgstr "Wachtwoordbron"
 
 #. module: no_pdf_password_protection
+#: model_terms:ir.ui.view,arch_db:no_pdf_password_protection.view_ir_actions_report_form_pdf_password
+msgid "Printing several records together produces one merged file, which can\n                    carry only one password. When the selected records do not share a password\n                    the merged copy is produced without protection and a note is added to each\n                    record. Print a record on its own, or use Send &amp; Print, to get a\n                    protected copy."
+msgstr "Meerdere records samen afdrukken levert één samengevoegd bestand op, dat maar één wachtwoord kan dragen. Delen de gekozen records geen wachtwoord, dan wordt de samengevoegde kopie zonder beveiliging gemaakt en krijgt elk record een notitie. Druk een record afzonderlijk af, of gebruik Verzenden en afdrukken, voor een beveiligde kopie."
+
+#. module: no_pdf_password_protection
 #: model:ir.model.fields.selection,name:no_pdf_password_protection.selection__ir_actions_report__x_pdf_encryption_algo__rc4_128
 msgid "RC4-128 (legacy readers only)"
 msgstr "RC4-128 (alleen oude lezers)"
-
-#. module: no_pdf_password_protection
-#: model_terms:ir.ui.view,arch_db:no_pdf_password_protection.view_ir_actions_report_form_pdf_password
-msgid "Records that resolve to different passwords cannot be printed together:\n                    a merged file carries only one password, so it would open for one recipient\n                    and expose the others' documents to them. Print one at a time, or use\n                    Send &amp; Print, which encrypts each document separately."
-msgstr "Records met verschillende wachtwoorden kunnen niet samen worden afgedrukt: een samengevoegd bestand draagt maar één wachtwoord en zou opengaan voor één ontvanger, die dan de documenten van de anderen ziet. Druk één voor één af, of gebruik Verzenden en afdrukken, dat elk document afzonderlijk versleutelt."
 
 #. module: no_pdf_password_protection
 #: model:ir.model,name:no_pdf_password_protection.model_ir_actions_report
@@ -115,8 +115,8 @@ msgstr "Statisch wachtwoord"
 #. module: no_pdf_password_protection
 #. odoo-python
 #: code:addons/no_pdf_password_protection/models/ir_actions_report.py:0
-msgid "These records do not share the same password.\n\nPrinting them together would merge them into a single file that can carry only one password - it would open for one recipient and expose the other documents to them, while the others could not open it at all.\n\nPrint them one at a time, or use Send & Print, which encrypts each document separately."
-msgstr "Deze records delen niet hetzelfde wachtwoord.\n\nSamen afdrukken zou ze samenvoegen tot één bestand dat maar één wachtwoord kan dragen: het zou opengaan voor één ontvanger en die de documenten van de anderen tonen, terwijl de anderen het helemaal niet kunnen openen.\n\nDruk ze één voor één af, of gebruik Verzenden en afdrukken, dat elk document afzonderlijk versleutelt."
+msgid "This document was printed together with records that use a different password, so the merged file was produced without password protection. Print this record on its own to get a protected copy."
+msgstr "Dit document is samen met records met een ander wachtwoord afgedrukt, dus het samengevoegde bestand is zonder wachtwoordbeveiliging gemaakt. Druk dit record afzonderlijk af voor een beveiligde kopie."
 
 #. module: no_pdf_password_protection
 #: model_terms:ir.ui.view,arch_db:no_pdf_password_protection.view_ir_actions_report_form_pdf_password

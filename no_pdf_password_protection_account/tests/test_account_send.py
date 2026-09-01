@@ -1,4 +1,5 @@
 import io
+from unittest.mock import patch
 
 from odoo import fields
 from odoo.tests.common import TransactionCase
@@ -24,13 +25,22 @@ def _blank_pdf(pages=1):
     return buf.getvalue()
 
 
-class TestAccountSendEncryption(TransactionCase):
-    """Cover _link_invoice_documents - the last step of the send pipeline.
+def _super_target(record, method):
+    """The class our override's super() call resolves to."""
+    mro = type(record).__mro__
+    idx = next(
+        i for i, c in enumerate(mro)
+        if "no_pdf_password_protection_account" in (getattr(c, "__module__", "") or "")
+    )
+    return next(c for c in mro[idx + 1:] if method in c.__dict__)
 
-    Driving this method directly (rather than _generate_and_send_invoices) is
-    deliberate: in test mode `_pre_render_qweb_pdf` falls back to HTML, so a
-    full send would never produce a PDF to encrypt. Feeding the pipeline its
-    own data structure exercises exactly the code that runs in production.
+
+class TestOutgoingInvoice(TransactionCase):
+    """The invoice is protected on its way out, not while it sits on the record.
+
+    Core hands the mailer `(name, bytes)` tuples - a copy of the stored file -
+    so encrypting there leaves invoice_pdf_report_id readable. That is what
+    lets an accountant open a sent invoice without looking up a VAT number.
     """
 
     @classmethod
@@ -55,236 +65,150 @@ class TestAccountSendEncryption(TransactionCase):
             "partner_id": partner.id,
         })
 
-    def _payload(self, invoice, pdf):
-        return {
-            invoice: {
-                "pdf_report": self.report,
-                "pdf_attachment_values": {
-                    "name": "%s.pdf" % invoice.id,
-                    "raw": pdf,
-                    "mimetype": "application/pdf",
-                    "res_model": "account.move",
-                    "res_id": invoice.id,
-                    "res_field": "invoice_pdf_report_file",
-                },
-            }
-        }
+    def _mail_params(self, move, attachments):
+        parent = _super_target(self.Send, "_get_mail_params")
+        with patch.object(parent, "_get_mail_params",
+                          return_value={"attachments": list(attachments)}):
+            return self.Send._get_mail_params(move, {"pdf_report": self.report})
 
-    def test_01_mailed_pdf_is_encrypted(self):
+    # ------------------------------------------------------------ the email
+
+    def test_01_emailed_invoice_is_encrypted(self):
         """The regression this module exists for."""
+        move = self._move_for("Acme", "ACME-VAT")
         source = _blank_pdf()
-        move = self._move_for("Acme", "ACME-VAT")
-        data = self._payload(move, source)
-        self.Send._link_invoice_documents(data)
-        raw = data[move]["pdf_attachment_values"]["raw"]
-        self.assertNotEqual(raw, source, "Send and Print delivered a plaintext PDF")
-        self.assertTrue(PdfReader(io.BytesIO(raw)).is_encrypted)
+        out = self._mail_params(move, [("INV.pdf", source)])["attachments"]
+        self.assertNotEqual(out[0][1], source, "the customer was emailed a plain PDF")
+        self.assertTrue(PdfReader(io.BytesIO(out[0][1])).is_encrypted)
 
-    def test_02_stored_attachment_carries_the_encrypted_bytes(self):
-        """What is persisted - and therefore mailed - must be the ciphertext."""
+    def test_02_emailed_invoice_opens_with_the_configured_password(self):
         move = self._move_for("Acme", "ACME-VAT")
-        self.Send._link_invoice_documents(self._payload(move, _blank_pdf()))
-        move.invalidate_recordset()
-        attachment = move.invoice_pdf_report_id
-        self.assertTrue(attachment, "no attachment was created")
-        reader = PdfReader(io.BytesIO(attachment.raw))
-        self.assertTrue(reader.is_encrypted)
-        self.assertTrue(reader.decrypt("Secret123"))
+        out = self._mail_params(move, [("INV.pdf", _blank_pdf())])["attachments"]
+        self.assertTrue(PdfReader(io.BytesIO(out[0][1])).decrypt("Secret123"))
 
     def test_03_each_invoice_uses_its_own_partner_password(self):
-        """The reason this hook beats the merged print path."""
         self.report.x_pdf_password_method = "vat"
         a = self._move_for("Alpha", "VAT-ALPHA")
         b = self._move_for("Beta", "VAT-BETA")
-        data = {}
-        data.update(self._payload(a, _blank_pdf()))
-        data.update(self._payload(b, _blank_pdf()))
-        self.Send._link_invoice_documents(data)
-        raw_a = data[a]["pdf_attachment_values"]["raw"]
-        raw_b = data[b]["pdf_attachment_values"]["raw"]
+        raw_a = self._mail_params(a, [("a.pdf", _blank_pdf())])["attachments"][0][1]
+        raw_b = self._mail_params(b, [("b.pdf", _blank_pdf())])["attachments"][0][1]
         self.assertTrue(PdfReader(io.BytesIO(raw_a)).decrypt("VAT-ALPHA"))
         self.assertTrue(PdfReader(io.BytesIO(raw_b)).decrypt("VAT-BETA"))
         self.assertEqual(PdfReader(io.BytesIO(raw_a)).decrypt("VAT-BETA"), 0)
-        self.assertEqual(PdfReader(io.BytesIO(raw_b)).decrypt("VAT-ALPHA"), 0)
 
-    def test_04_respects_the_configured_algorithm(self):
-        self.report.x_pdf_encryption_algo = "rc4_128"
+    def test_04_filename_is_preserved(self):
         move = self._move_for("Acme", "ACME-VAT")
-        data = self._payload(move, _blank_pdf())
-        self.Send._link_invoice_documents(data)
-        raw = data[move]["pdf_attachment_values"]["raw"]
-        self.assertIn(b"/Encrypt", raw)
-        self.assertNotIn(b"AESV3", raw)
+        out = self._mail_params(move, [("INV_2026_0001.pdf", _blank_pdf())])["attachments"]
+        self.assertEqual(out[0][0], "INV_2026_0001.pdf")
 
-    def test_05_disabled_report_passes_through_untouched(self):
+    def test_05_the_einvoicing_xml_is_not_touched(self):
+        """It travels beside the PDF and the recipient's software must read it."""
+        move = self._move_for("Acme", "ACME-VAT")
+        xml = b"<?xml version='1.0'?><Invoice/>"
+        out = self._mail_params(move, [("factur-x.xml", xml)])["attachments"]
+        self.assertEqual(out[0][1], xml)
+
+    def test_06_disabled_report_sends_plain(self):
         self.report.x_pdf_password_enabled = False
-        source = _blank_pdf()
         move = self._move_for("Acme", "ACME-VAT")
-        data = self._payload(move, source)
-        self.Send._link_invoice_documents(data)
-        self.assertEqual(data[move]["pdf_attachment_values"]["raw"], source)
-
-    def test_06_unresolvable_password_leaves_bytes_intact(self):
-        """Never corrupt a PDF we could not encrypt - send it as-is."""
-        self.report.write({
-            "x_pdf_password_method": "vat",
-            "x_pdf_static_password": False,
-        })
         source = _blank_pdf()
+        out = self._mail_params(move, [("INV.pdf", source)])["attachments"]
+        self.assertEqual(out[0][1], source)
+
+    def test_07_unresolvable_password_sends_the_file_intact(self):
+        """Never corrupt a document we could not protect."""
+        self.report.write({"x_pdf_password_method": "vat",
+                           "x_pdf_static_password": False})
         move = self._move_for("NoVat", False)
-        data = self._payload(move, source)
-        self.Send._link_invoice_documents(data)
-        self.assertEqual(data[move]["pdf_attachment_values"]["raw"], source)
-
-    def test_07_missing_pdf_report_key_does_not_crash(self):
         source = _blank_pdf()
-        move = self._move_for("Acme", "ACME-VAT")
-        data = self._payload(move, source)
-        del data[move]["pdf_report"]
-        self.Send._link_invoice_documents(data)
-        self.assertEqual(data[move]["pdf_attachment_values"]["raw"], source)
+        out = self._mail_params(move, [("INV.pdf", source)])["attachments"]
+        self.assertEqual(out[0][1], source)
 
-    def test_08_missing_attachment_values_does_not_crash(self):
+    def test_08_no_attachments_does_not_crash(self):
         move = self._move_for("Acme", "ACME-VAT")
-        data = {move: {"pdf_report": self.report}}
-        self.Send._link_invoice_documents(data)  # must not raise
+        self.assertEqual(self._mail_params(move, [])["attachments"], [])
 
     def test_09_page_count_preserved(self):
         move = self._move_for("Acme", "ACME-VAT")
-        data = self._payload(move, _blank_pdf(pages=3))
-        self.Send._link_invoice_documents(data)
-        reader = PdfReader(io.BytesIO(data[move]["pdf_attachment_values"]["raw"]))
+        out = self._mail_params(move, [("INV.pdf", _blank_pdf(pages=3))])["attachments"]
+        reader = PdfReader(io.BytesIO(out[0][1]))
         reader.decrypt("Secret123")
         self.assertEqual(len(reader.pages), 3)
 
-    def test_10_post_processing_hooks_still_see_plaintext(self):
-        """Guard the ordering bug that broke the first implementation.
+    # ------------------------------------------------- the copy that stays
 
-        account_edi_ubl_cii embeds the Factur-X XML in
-        `_hook_invoice_document_after_pdf_report_render`, reading the PDF via
-        odoo.tools.pdf (PyPDF2), which cannot open an AES file. Encrypting in
-        `_link_invoice_documents` guarantees that hook already ran, so the
-        bytes it received must still be plaintext.
+    def test_10_the_stored_copy_is_left_readable(self):
+        """The whole point: staff open a sent invoice without a password.
+
+        The mailer receives a copy of the bytes, so protecting the outgoing
+        attachment must not reach back and lock the record's own file.
         """
         move = self._move_for("Acme", "ACME-VAT")
-        data = self._payload(move, _blank_pdf())
+        source = _blank_pdf()
+        attachment = self.env["ir.attachment"].create({
+            "name": "INV.pdf", "raw": source, "mimetype": "application/pdf",
+            "res_model": "account.move", "res_id": move.id,
+        })
+        self._mail_params(move, [(attachment.name, attachment.raw)])
+        attachment.invalidate_recordset()
+        self.assertEqual(attachment.raw, source, "the archived copy was locked")
 
-        # Whatever the EDI hook sees must be readable.
-        values = data[move]["pdf_attachment_values"]
-        self.assertNotIn(b"/Encrypt", values["raw"])
-        self.Send._hook_invoice_document_after_pdf_report_render(move, data[move])
-        self.assertNotIn(
-            b"/Encrypt",
-            data[move]["pdf_attachment_values"]["raw"],
-            "post-processing hooks must still see plaintext",
+    # ---------------------------------------------------- the portal / zip
+
+    def test_11_portal_download_is_encrypted(self):
+        move = self._move_for("Acme", "ACME-VAT")
+        source = _blank_pdf()
+        doc = move._protect_legal_document(
+            {"filename": "INV.pdf", "filetype": "pdf", "content": source}
         )
+        self.assertNotEqual(doc["content"], source)
+        self.assertTrue(PdfReader(io.BytesIO(doc["content"])).decrypt("Secret123"))
 
-        # ...and only the final link step turns it into ciphertext.
-        self.Send._link_invoice_documents(data)
-        self.assertIn(b"/Encrypt", data[move]["pdf_attachment_values"]["raw"])
+    def test_12_portal_download_of_a_non_pdf_is_untouched(self):
+        move = self._move_for("Acme", "ACME-VAT")
+        xml = b"<?xml version='1.0'?><Invoice/>"
+        doc = move._protect_legal_document(
+            {"filename": "f.xml", "filetype": "xml", "content": xml}
+        )
+        self.assertEqual(doc["content"], xml)
 
-    def test_11_pdfa_einvoice_is_left_unencrypted(self):
-        """ISO 19005 forbids encryption; a Factur-X PDF/A must pass through.
+    def test_13_portal_download_when_disabled(self):
+        self.report.x_pdf_password_enabled = False
+        move = self._move_for("Acme", "ACME-VAT")
+        source = _blank_pdf()
+        doc = move._protect_legal_document(
+            {"filename": "INV.pdf", "filetype": "pdf", "content": source}
+        )
+        self.assertEqual(doc["content"], source)
 
-        Encrypting one would strip its conformance and hide the embedded
-        e-invoicing XML from the recipient's AP system.
-        """
+    # ------------------------------------------------------------- PDF/A
+
+    def test_14_pdfa_einvoice_is_left_readable(self):
+        """ISO 19005 forbids encryption; locking one breaks the e-invoice."""
+        move = self._move_for("FrenchCo", "FR-VAT")
         source = _blank_pdf() + b"<?xpacket><pdfaid:part>3</pdfaid:part></xpacket>"
-        move = self._move_for("FrenchCo", "FR-VAT")
-        data = self._payload(move, source)
-        self.Send._link_invoice_documents(data)
-        self.assertEqual(
-            data[move]["pdf_attachment_values"]["raw"],
-            source,
-            "a PDF/A e-invoice must not be encrypted",
-        )
+        out = self._mail_params(move, [("INV.pdf", source)])["attachments"]
+        self.assertEqual(out[0][1], source)
 
-    def test_12_pdfa_skip_is_announced_in_the_chatter(self):
-        """Silently not protecting a document would be the worst outcome."""
-        source = _blank_pdf() + b"<pdfaid:conformance>A</pdfaid:conformance>"
+    def test_15_pdfa_skip_is_announced_in_the_chatter(self):
         move = self._move_for("FrenchCo", "FR-VAT")
+        source = _blank_pdf() + b"<pdfaid:conformance>A</pdfaid:conformance>"
         before = len(move.message_ids)
-        self.Send._link_invoice_documents(self._payload(move, source))
-        self.assertGreater(len(move.message_ids), before, "no chatter note posted")
+        self._mail_params(move, [("INV.pdf", source)])
+        self.assertGreater(len(move.message_ids), before)
         self.assertIn("PDF/A", move.message_ids[0].body)
 
-    def test_13_ordinary_invoice_with_embedded_xml_is_still_encrypted(self):
-        """account_edi_ubl_cii embeds factur-x.xml in *every* invoice.
-
-        Keying the skip on the XML rather than the PDF/A claim would therefore
-        disable the module entirely; guard against that regression.
-        """
-        source = _blank_pdf() + b"factur-x.xml"
-        move = self._move_for("Acme", "ACME-VAT")
-        data = self._payload(move, source)
-        self.Send._link_invoice_documents(data)
-        self.assertIn(b"/Encrypt", data[move]["pdf_attachment_values"]["raw"])
-
-
-    def test_14_pdfa_marker_matches_odoo_own_metadata(self):
-        """Tie PDFA_MARKER to Odoo's PDF/A metadata rather than to a guess.
-
-        The guard keys on the conformance claim in the document's XMP. That
-        claim is written by account_edi_ubl_cii from the QWeb template below,
-        so if Odoo ever changes its shape this test fails and tells us the
-        detector needs updating - instead of the module silently starting to
-        encrypt e-invoices again.
-
-        Verified once by hand against a real document: rendering an invoice,
-        embedding factur-x.xml and running Odoo's own convert_to_pdfa() +
-        add_file_metadata() produced a 44 KB PDF/A-3 that this guard detected,
-        left byte-identical, and announced in the chatter.
-        """
+    def test_16_pdfa_marker_matches_odoo_own_metadata(self):
+        """Tie PDFA_MARKER to Odoo's PDF/A metadata rather than to a guess."""
         template = "account_edi_ubl_cii.account_invoice_pdfa_3_facturx_metadata"
         if not self.env.ref(template, raise_if_not_found=False):
             self.skipTest("account_edi_ubl_cii not installed")
         rendered = self.env["ir.qweb"]._render(
             template, {"title": "T", "date": fields.Date.context_today(self.env.user)}
         )
-        self.assertIn(
-            mod.PDFA_MARKER.decode(),
-            rendered,
-            "Odoo's PDF/A metadata no longer carries the marker this guard "
-            "looks for; PDF/A e-invoices would start being encrypted.",
-        )
+        self.assertIn(mod.PDFA_MARKER.decode(), rendered)
 
-    def test_15_marker_is_absent_from_an_ordinary_pdf(self):
-        """Guard against a marker so generic it matches every document."""
+    def test_17_marker_is_absent_from_an_ordinary_pdf(self):
         self.assertFalse(self.Send._pdf_declares_pdfa(_blank_pdf()))
         self.assertFalse(self.Send._pdf_declares_pdfa(b""))
         self.assertFalse(self.Send._pdf_declares_pdfa(None))
-
-    def test_16_fallback_proforma_is_encrypted(self):
-        """The one document in the send flow account creates by hand.
-
-        When the invoice PDF fails to render, Odoo falls back to a pro-forma
-        and creates that attachment directly instead of routing it through
-        _link_invoice_documents - so it would otherwise reach the customer
-        unprotected while every other document in the same flow was locked.
-        """
-        move = self._move_for("Acme", "ACME-VAT")
-        att = self.env["ir.attachment"].create({
-            "name": "proforma.pdf",
-            "raw": _blank_pdf(),
-            "mimetype": "application/pdf",
-            "res_model": "account.move",
-            "res_id": move.id,
-        })
-        data = {move: {"pdf_report": self.report, "proforma_pdf_attachment": att}}
-        self.Send._generate_invoice_fallback_documents(data)
-        att.invalidate_recordset()
-        self.assertIn(b"/Encrypt", att.raw, "fallback pro-forma went out in the clear")
-        self.assertTrue(PdfReader(io.BytesIO(att.raw)).decrypt("Secret123"))
-
-    def test_17_fallback_proforma_untouched_when_disabled(self):
-        self.report.x_pdf_password_enabled = False
-        move = self._move_for("Acme", "ACME-VAT")
-        source = _blank_pdf()
-        att = self.env["ir.attachment"].create({
-            "name": "proforma.pdf", "raw": source, "mimetype": "application/pdf",
-            "res_model": "account.move", "res_id": move.id,
-        })
-        data = {move: {"pdf_report": self.report, "proforma_pdf_attachment": att}}
-        self.Send._generate_invoice_fallback_documents(data)
-        att.invalidate_recordset()
-        self.assertEqual(att.raw, source)

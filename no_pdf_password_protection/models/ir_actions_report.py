@@ -5,7 +5,6 @@ import io
 import logging
 
 from odoo import api, fields, models
-from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -121,11 +120,6 @@ class IrActionsReport(models.Model):
         """Encrypt the generated PDF when password protection is enabled."""
         report = self._get_report(report_ref)
 
-        # Checked before rendering so a mistaken batch fails instantly rather
-        # than after wkhtmltopdf has done the expensive work.
-        if report.x_pdf_password_enabled and not self._pdf_encryption_suppressed():
-            report._check_batch_shares_one_password(res_ids)
-
         result = super()._render_qweb_pdf(report_ref, res_ids=res_ids, data=data)
 
         if PdfWriter is None or not report.x_pdf_password_enabled:
@@ -135,6 +129,15 @@ class IrActionsReport(models.Model):
 
         pdf_content, content_type = result
         if content_type != "pdf":
+            return result
+
+        # A merged file can carry only one password. Rather than block a
+        # perfectly ordinary bulk print, hand the document back unlocked and
+        # note it on each record: the person printing is staff, and a file
+        # locked to whichever customer happened to be first would be worse
+        # than an honest unlocked one.
+        if not report._batch_shares_one_password(res_ids):
+            report._log_unencrypted_batch(res_ids)
             return result
 
         encrypted = report._encrypt_pdf(pdf_content, res_ids)
@@ -195,34 +198,45 @@ class IrActionsReport(models.Model):
     # Encryption
     # ------------------------------------------------------------------
 
-    def _check_batch_shares_one_password(self, res_ids):
-        """Refuse to merge records that would resolve to different passwords.
+    def _batch_shares_one_password(self, res_ids):
+        """True when every record in this print resolves to the same password.
 
         Core merges a multi-record print into a single PDF, which can carry
         only one password. With a dynamic source that password comes from the
-        first record - so the file would open for one customer and expose
-        every other customer's document inside it, while those customers could
-        not open it at all.
+        first record, so a mixed batch cannot be locked correctly for anybody.
         """
         self.ensure_one()
         if self.x_pdf_password_method == "static":
-            return
+            return True
         if not res_ids or len(res_ids) < 2:
-            return
+            return True
+        return len({self._get_pdf_password(self, [i]) for i in res_ids}) == 1
 
-        passwords = {self._get_pdf_password(self, [res_id]) for res_id in res_ids}
-        if len(passwords) > 1:
-            raise UserError(
-                self.env._(
-                    "These records do not share the same password.\n\n"
-                    "Printing them together would merge them into a single "
-                    "file that can carry only one password - it would open "
-                    "for one recipient and expose the other documents to "
-                    "them, while the others could not open it at all.\n\n"
-                    "Print them one at a time, or use Send & Print, which "
-                    "encrypts each document separately."
-                )
-            )
+    def _log_unencrypted_batch(self, res_ids):
+        """Leave a trace on each record that this copy went out unlocked."""
+        self.ensure_one()
+        _logger.info(
+            "%r printed %d records together; they resolve to different "
+            "passwords, so the merged file was produced without protection.",
+            self.name,
+            len(res_ids or []),
+        )
+        if not self.model or self.model not in self.env:
+            return
+        records = self.env[self.model].browse(res_ids or [])
+        if not hasattr(records, "message_post"):
+            return
+        body = self.env._(
+            "This document was printed together with records that use a "
+            "different password, so the merged file was produced without "
+            "password protection. Print this record on its own to get a "
+            "protected copy."
+        )
+        for record in records.exists():
+            try:
+                record.message_post(body=body)
+            except Exception:  # chatter must never break a print
+                _logger.debug("Could not note the unlocked batch on %s", record)
 
     def _encrypt_pdf(self, pdf_content, res_ids=None):
         """Return ``pdf_content`` encrypted, or None when it must pass through.
