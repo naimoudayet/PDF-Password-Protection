@@ -78,6 +78,22 @@ It is marked `auto_install`, so it installs itself when you install PDF Password
 
 **After uninstalling**, PDFs that were already encrypted stay encrypted -- the module is not needed to open them, but nothing can recover a password derived from partner data that has since changed.
 
+## Screenshots
+
+| | |
+|---|---|
+| ![Password protection settings on an invoice report](no_pdf_password_protection/static/description/screenshots/screenshot_1.png) | ![The four password sources](no_pdf_password_protection/static/description/screenshots/screenshot_2.png) |
+| Turn it on per report, pick the cipher, pick where the password comes from. | Static, or a different password per recipient from their VAT number, phone or email. |
+| ![Two customers selected for one print job, refused](no_pdf_password_protection/static/description/screenshots/screenshot_3.png) | ![The recipient opening the document](no_pdf_password_protection/static/description/screenshots/screenshot_4.png) |
+| A merged file carries one password, so a mixed batch is stopped and explained. | The delivered file asks for the password in any modern PDF reader. |
+
+Companion module (`no_pdf_password_protection_account`):
+
+| | |
+|---|---|
+| ![Sending a customer invoice by email](no_pdf_password_protection_account/static/description/screenshots/screenshot_1.png) | ![The sent invoice asking for a password](no_pdf_password_protection_account/static/description/screenshots/screenshot_2.png) |
+| Send the invoice as usual - no extra step. | The document that went out is locked; even Odoo's own preview asks for the password. |
+
 ## Installation
 
 1. Place the `no_pdf_password_protection` folder in your Odoo addons directory.

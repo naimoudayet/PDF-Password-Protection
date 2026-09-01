@@ -137,18 +137,31 @@
         </div>
     </div>
 
+    <!-- SCREENSHOTS -->
+    <div class="container py-5">
+        <h2 style="color: #714B67; font-size: 28px; font-weight: 700; margin-bottom: 8px; text-align: center;">See It In Odoo</h2>
+        <p style="color: #475569; font-size: 16px; margin-bottom: 32px; text-align: center;">Real screens from a running Odoo 19 database.</p>
+        <img src="screenshots/screenshot_1.png" alt="Password protection settings on an invoice report" style="width: 100%; max-width: 880px; display: block; margin: 0 auto; border: 1px solid #E8DDE5; border-radius: 8px;">
+        <p style="color: #475569; font-size: 14px; margin: 10px 0 34px; text-align: center;">Turn it on per report, pick the cipher, pick where the password comes from. Nothing else in Odoo changes.</p>
+        <img src="screenshots/screenshot_2.png" alt="The four password sources" style="width: 100%; max-width: 880px; display: block; margin: 0 auto; border: 1px solid #E8DDE5; border-radius: 8px;">
+        <p style="color: #475569; font-size: 14px; margin: 10px 0 34px; text-align: center;">One fixed password for everyone, or a different one per recipient taken from their VAT number, phone or email address &mdash; something they already know.</p>
+        <img src="screenshots/screenshot_3.png" alt="Two customers selected for one print job, refused" style="width: 100%; max-width: 880px; display: block; margin: 0 auto; border: 1px solid #E8DDE5; border-radius: 8px;">
+        <p style="color: #475569; font-size: 14px; margin: 10px 0 34px; text-align: center;">A merged file can carry only one password. Rather than hand one customer a file containing another customer's invoice, the print is stopped and explained.</p>
+        <img src="screenshots/screenshot_4.png" alt="The recipient opening the document" style="width: 100%; max-width: 880px; display: block; margin: 0 auto; border: 1px solid #E8DDE5; border-radius: 8px;">
+        <p style="color: #475569; font-size: 14px; margin: 10px 0 34px; text-align: center;">The delivered file asks for the password before it shows anything &mdash; in any modern PDF reader, with no software for your customer to install.</p>
+    </div>
     <!-- INSTALLATION -->
     <div class="container py-5">
         <h2 style="color: #714B67; font-size: 28px; font-weight: 700; margin-bottom: 16px; text-align: center;">Installation</h2>
-        <p style="color: #475569; font-size: 16px; margin-bottom: 32px; text-align: center;">One step in Odoo. The PDF library (PyPDF2 or pypdf) ships with Odoo by default - the module picks up whichever is installed, no extra setup needed.</p>
+        <p style="color: #475569; font-size: 16px; margin-bottom: 32px; text-align: center;">One step in Odoo. The PDF engine ships with Odoo by default, so there is nothing extra to install.</p>
 
         <div class="row">
             <div class="col-md-6 col-12 mb-4">
                 <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 10px; padding: 24px; height: 100%;">
                     <p style="font-size: 13px; font-weight: 600; color: #94A3B8; margin: 0 0 8px; text-transform: uppercase;">Step 1 - dependency</p>
                     <strong style="color: #714B67;">Bundled with Odoo</strong>
-                    <p style="font-size: 14px; color: #475569; margin-top: 12px;">Odoo 16-19 already ship a PDF library: <em>PyPDF2</em> on Python &lt;= 3.12, or <em>pypdf</em> on Python &gt;= 3.13. The module uses whichever is available - no manual <em>pip install</em> needed in the typical case.</p>
-                    <p style="font-size: 13px; color: #94A3B8; margin-top: 8px;">If you see an <em>ImportError</em> in your logs, your Python environment is non-standard; run <em>pip install pypdf</em> on the Odoo server.</p>
+                    <p style="font-size: 14px; color: #475569; margin-top: 12px;">Odoo 16 to 19 already include everything this module needs. The module uses whichever is available - no manual <em>pip install</em> needed in the typical case.</p>
+                    <p style="font-size: 13px; color: #94A3B8; margin-top: 8px;">On an unusual Python setup where it is missing, your administrator can add it in one command: <em>pip install pypdf</em>. This is also how you switch a server from the legacy encryption strength to AES.</p>
                 </div>
             </div>
             <div class="col-md-6 col-12 mb-4">
@@ -164,7 +177,7 @@
     <!-- WORKS WITH -->
     <div style="background-color: #F8F5F7; padding: 48px 32px; border-radius: 8px;">
         <div class="container" style="text-align: center;">
-            <h2 style="color: #714B67; font-size: 28px; font-weight: 700; margin-bottom: 8px;">Works With Every QWeb PDF Report</h2>
+            <h2 style="color: #714B67; font-size: 28px; font-weight: 700; margin-bottom: 8px;">Works With Every PDF Report</h2>
             <p style="color: #475569; font-size: 15px; margin-bottom: 32px;">Invoices, quotations, delivery slips, payslips, and any custom report you've built yourself.</p>
 
             <div class="row">
@@ -326,7 +339,7 @@
                 <div style="background-color: #FFF3CD; border: 1px solid #FFEEBA; border-radius: 8px; padding: 16px 20px;">
                     <strong style="color: #856404;">&#9888;</strong>&nbsp;
                     <strong>PDF library required (bundled with Odoo)</strong>
-                    <p style="font-size: 13px; color: #856404; margin: 6px 0 0;">Odoo already ships one of the two libraries this module uses, so there is nothing to install. AES needs the newer <em>pypdf</em>; on a server that only has the older PyPDF2, the module keeps working at RC4-128 and writes a warning to the log telling you how to enable AES.</p>
+                    <p style="font-size: 13px; color: #856404; margin: 6px 0 0;">Odoo already ships what this module needs, so there is nothing to install. The strongest encryption needs an up-to-date PDF engine; on an older server the module keeps working at the legacy strength and says so plainly on the report settings screen.</p>
                 </div>
             </div>
         </div>
@@ -365,7 +378,7 @@
             </div>
             <div style="border-bottom: 1px solid #E8DDE5; padding: 16px 0;">
                 <strong style="color: #714B67;">Will this break when Odoo updates?</strong>
-                <p style="color: #475569; font-size: 14px; margin: 8px 0 0;">The module overrides <em>_render_qweb_pdf</em>, which is stable Odoo API. Every version branch (16.0 / 17.0 / 18.0 / 19.0) ships tests that verify the integration end-to-end on that specific version.</p>
+                <p style="color: #475569; font-size: 14px; margin: 8px 0 0;">The module hooks into the standard Odoo printing path, which has been stable for years. Every version branch (16.0 / 17.0 / 18.0 / 19.0) ships tests that verify the integration end-to-end on that specific version.</p>
             </div>
             <div style="padding: 16px 0;">
                 <strong style="color: #714B67;">Does it work on Odoo.sh / Odoo Online?</strong>
@@ -393,7 +406,7 @@
                 </div>
                 <div class="row" style="border-bottom: 1px solid #E8DDE5; padding: 10px 0;">
                     <div class="col-md-5 col-12" style="text-align: left;"><strong style="color: #714B67;">Python dep</strong></div>
-                    <div class="col-md-7 col-12" style="text-align: left;">Bundled with Odoo (PyPDF2 / pypdf)</div>
+                    <div class="col-md-7 col-12" style="text-align: left;">None - uses the PDF engine already bundled with Odoo</div>
                 </div>
                 <div class="row" style="border-bottom: 1px solid #E8DDE5; padding: 10px 0;">
                     <div class="col-md-5 col-12" style="text-align: left;"><strong style="color: #714B67;">Languages</strong></div>
@@ -404,8 +417,8 @@
                     <div class="col-md-7 col-12" style="text-align: left;">LGPL-3 (Free / Open Source)</div>
                 </div>
                 <div class="row" style="border-bottom: 1px solid #E8DDE5; padding: 10px 0;">
-                    <div class="col-md-5 col-12" style="text-align: left;"><strong style="color: #714B67;">Mechanism</strong></div>
-                    <div class="col-md-7 col-12" style="text-align: left;">Overrides <em>_render_qweb_pdf</em> on <em>ir.actions.report</em></div>
+                    <div class="col-md-5 col-12" style="text-align: left;"><strong style="color: #714B67;">Applies to</strong></div>
+                    <div class="col-md-7 col-12" style="text-align: left;">Any PDF report in Odoo, configured one report at a time</div>
                 </div>
                 <div class="row" style="padding: 10px 0;">
                     <div class="col-md-5 col-12" style="text-align: left;"><strong style="color: #714B67;">Test coverage</strong></div>

@@ -37,6 +37,13 @@ Versions use Odoo's `<odoo_version>.<module_major>.<module_minor>.<module_patch>
 - The test suite imports `pypdf` before `PyPDF2`, matching the module. PyPDF2 2.x cannot verify a `/V 5` encryption dictionary, so reading AES-256 output back with it failed on the library, not the module.
 - Translations regenerated for all 9 languages via `odoo i18n export`. The `model:ir.module.module,summary|shortdesc|description` entries carried by earlier `.po` files were dropped: `module_meta_information` no longer exists anywhere in Odoo 19, so those entries translated nothing.
 
+### Storefront
+
+- **Screenshots added for the first time.** The listing had none: the App Store does not auto-discover files under `static/description/`, they must be referenced from `index.html`, and none were. Four now show the settings screen, the password sources, the refused mixed batch, and the delivered document asking for its password. The companion module gets its own two.
+- The companion module gets a full listing page and banner of its own, so it can be published or shared on its own terms rather than only as a folder in this repository.
+- **Banner corrected**: it advertised `AES-128`, which was never what the module produced (it was RC4-128, and is now AES-256).
+- Buyer-facing copy de-leaked: internal method and library names removed from the description page in favour of what the module actually does for the reader.
+
 ### Upgrade notes
 
 - **Default cipher changes on upgrade.** Reports with no explicit algorithm set (including every report configured before this release) will produce AES-256 from now on. Set **Encryption Algorithm** to *RC4-128 (legacy readers only)* on a per-report basis if you must keep serving readers older than Acrobat 9 (2008).

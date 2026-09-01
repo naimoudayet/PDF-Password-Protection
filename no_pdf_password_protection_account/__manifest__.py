@@ -20,6 +20,7 @@
     "installable": True,
     "auto_install": True,
     "depends": ["no_pdf_password_protection", "account"],
+    "images": ["static/description/banner.png"],
     "price": 0,
     "currency": "USD",
     "support": "contact@oudayet.com",
