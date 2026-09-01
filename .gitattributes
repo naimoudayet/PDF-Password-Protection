@@ -1,0 +1,12 @@
+# Line-ending policy — ODOO_GUIDELINES §15.5.
+# This repo stores LF blobs (verified via `git cat-file -p`). Keep LF end-to-end
+# so black / isort / prettier / eslint never fight the working-tree EOL.
+* text=auto eol=lf
+
+# Binary assets — never touch bytes / never diff.
+*.png  binary
+*.ico  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.pdf  binary
