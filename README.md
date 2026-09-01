@@ -1,6 +1,17 @@
 # PDF Password Protection
 
-Encrypt every Odoo PDF report with a password — static or dynamic from partner data (VAT, phone, email). Per-report toggle, AES-128 encryption, GDPR-friendly, available in 9 languages.
+Encrypt Odoo PDF reports with a password - static, or taken from the recipient's own data (VAT number, phone, email). Per-report toggle, **AES-256** encryption, GDPR-friendly, available in 9 languages.
+
+## Two Modules
+
+| Module | Covers | Needs |
+|---|---|---|
+| **`no_pdf_password_protection`** - *PDF Password Protection* | Every PDF report you print or attach to an email template | Nothing but Odoo |
+| **`no_pdf_password_protection_account`** - *PDF Password Protection for Invoices* | The invoice Odoo **emails**, which Accounting builds by a different route | The module above, plus Accounting |
+
+The first works on its own. The second is an add-on with no settings of its own, and installs itself once both that module and Accounting are present. Both are free and published separately on the Odoo Apps store.
+
+The guiding rule: **encrypted when it leaves Odoo, readable when it stays.** Your own team is never asked for a password to review its own records.
 
 ## Choose Your Odoo Version
 
@@ -13,7 +24,7 @@ Each Odoo major version lives on its own branch. Pick the one matching your serv
 | 17.0 | [`17.0`](../../tree/17.0) | [`17.0.dev`](../../tree/17.0.dev) |
 | 16.0 | [`16.0`](../../tree/16.0) | [`16.0.dev`](../../tree/16.0.dev) |
 
-The technical module name is **`no_pdf_password_protection`** on every version branch.
+Both modules live on every version branch.
 
 ## What It Does
 
