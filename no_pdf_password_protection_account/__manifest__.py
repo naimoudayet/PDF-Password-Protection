@@ -8,8 +8,11 @@
                    "code path than the Print button, which would otherwise "
                    "deliver an unencrypted invoice to the customer. This module "
                    "closes that gap and gives every document its own recipient's "
-                   "password. Installs itself automatically when both PDF "
-                   "Password Protection and Accounting are present.",
+                   "password. Requires the free module 'PDF Password "
+                   "Protection', which is where the password source and "
+                   "encryption strength are configured; install that one first "
+                   "and this add-on installs itself automatically once "
+                   "Accounting is present. It has no settings of its own.",
     "version": "19.0.1.0.0",
     "category": "Extra Tools",
     "website": "https://www.oudayet.com",

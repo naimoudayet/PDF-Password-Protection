@@ -7,7 +7,10 @@
     "description": "PDF Password Protection - encrypt any Odoo PDF report with passwords. "
                    "AES-256 by default (AES-128 and legacy RC4-128 also selectable). "
                    "Static password or dynamic from partner fields (VAT, phone, email). "
-                   "GDPR-friendly. Works with all QWeb PDF reports.",
+                   "GDPR-friendly. Works with all QWeb PDF reports. "
+                   "If you also email invoices, add the free companion module "
+                   "'PDF Password Protection for Invoices', which extends the "
+                   "same settings to the copy Accounting sends out.",
     "version": "19.0.2.0.0",
     "category": "Extra Tools",
     "website": "https://www.oudayet.com",

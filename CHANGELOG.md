@@ -40,7 +40,7 @@ Versions use Odoo's `<odoo_version>.<module_major>.<module_minor>.<module_patch>
 ### Storefront
 
 - **Screenshots added for the first time.** The listing had none: the App Store does not auto-discover files under `static/description/`, they must be referenced from `index.html`, and none were. Four now show the settings screen, the password sources, the refused mixed batch, and the delivered document asking for its password. The companion module gets its own two.
-- The companion module gets a full listing page and banner of its own, so it can be published or shared on its own terms rather than only as a folder in this repository.
+- The companion module gets a full listing page and banner of its own and is published as a **separate free app**, not bundled into this one. Each listing now points at the other: this module explains when you would want the companion, and the companion states plainly that it needs this module and has no settings of its own. Both manifests and the README carry the same relationship, so it is clear from any entry point that the base module stands alone and the add-on does not.
 - **Banner corrected**: it advertised `AES-128`, which was never what the module produced (it was RC4-128, and is now AES-256).
 - Buyer-facing copy de-leaked: internal method and library names removed from the description page in favour of what the module actually does for the reader.
 
