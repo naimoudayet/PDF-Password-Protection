@@ -1,3 +1,5 @@
+# Copyright 2026 Naim OUDAYET
+# License LGPL-3
 import io
 from unittest.mock import patch
 
