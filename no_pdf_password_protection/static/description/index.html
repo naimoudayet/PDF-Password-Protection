@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6 col-12 mb-4">
-                    <div style="background-color: #FFFFFF; border: 2px solid #E8DDE5; border-top: 4px solid #DC3545; border-radius: 10px; padding: 20px; text-align: center; height: 100%;">
+                    <div style="background-color: #FFFFFF; border: 2px solid #E8DDE5; border-top: 4px solid #5A3A52; border-radius: 10px; padding: 20px; text-align: center; height: 100%;">
                         <div style="font-size: 28px; margin-bottom: 8px;">&#128222;</div>
                         <strong style="font-size: 15px;">Partner Phone</strong>
                         <p style="font-size: 13px; color: #475569; margin-top: 8px;">Password = partner's phone number, digits only. Fits payslips and personal documents - tell the recipient "your number, digits only" and it always matches.</p>
@@ -151,7 +151,7 @@
         <p style="color: #475569; font-size: 14px; margin: 10px 0 34px; text-align: center;">The delivered file asks for the password before it shows anything &mdash; in any modern PDF reader, with no software for your customer to install.</p>
     </div>
     <!-- COMPANION -->
-    <div style="background-color: #F8F4F7; padding: 44px 20px;">
+    <div style="background-color: #F8F5F7; padding: 48px 32px; border-radius: 8px;">
         <div class="container">
             <h2 style="color: #714B67; font-size: 28px; font-weight: 700; margin-bottom: 8px; text-align: center;">Do You Email Invoices?</h2>
             <p style="color: #475569; font-size: 16px; margin-bottom: 28px; text-align: center;">Then add the free companion module as well.</p>
@@ -305,71 +305,63 @@
 
     <!-- LIMITATIONS / HONEST SCOPE -->
     <div class="container py-5">
-        <h2 style="color: #714B67; font-size: 28px; font-weight: 700; margin-bottom: 16px; text-align: center;">What This Module Doesn't Do</h2>
-        <p style="color: #475569; font-size: 15px; margin-bottom: 32px; text-align: center;">Honest scope matters. Here's exactly what's out of reach.</p>
-
+        <h2 style="color: #714B67; font-size: 28px; font-weight: 700; margin-bottom: 8px; text-align: center;">What This Module Doesn't Do</h2>
+        <p style="color: #475569; font-size: 16px; margin-bottom: 32px; text-align: center;">Worth knowing before you install.</p>
         <div class="row">
             <div class="col-md-6 col-12 mb-3">
-                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px 20px;">
-                    <strong style="color: #DC3545;">&#10007;</strong>&nbsp;
-                    <strong>Non-PDF reports</strong>
-                    <p style="font-size: 13px; color: #475569; margin: 6px 0 0;">XLSX, CSV, HTML, and text reports are not encrypted. The override returns them unchanged.</p>
-                </div>
-            </div>
-            <div class="col-md-6 col-12 mb-3">
-                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px 20px;">
-                    <strong style="color: #DC3545;">&#10007;</strong>&nbsp;
-                    <strong>Your own team is not locked out</strong>
-                    <p style="font-size: 13px; color: #475569; margin: 6px 0 0;">Protection applies to documents that leave Odoo - printed, emailed, or downloaded from the portal. The copy kept on the record stays readable, so a colleague reviewing a document is never asked for a password to see something they can already open. A setting turns that on if you want it.</p>
-                </div>
-            </div>
-            <div class="col-md-6 col-12 mb-3">
-                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px 20px;">
-                    <strong style="color: #DC3545;">&#10007;</strong>&nbsp;
-                    <strong>Email body / attachments</strong>
-                    <p style="font-size: 13px; color: #475569; margin: 6px 0 0;">Only the report PDF itself is encrypted. The email body isn't, and neither are other attachments you add manually. Invoices sent with <strong>Send &amp; Print</strong> are covered when you also install the free companion module for Accounting.</p>
-                </div>
-            </div>
-            <div class="col-md-6 col-12 mb-3">
-                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px 20px;">
-                    <strong style="color: #DC3545;">&#10007;</strong>&nbsp;
-                    <strong>Automatic password hints</strong>
-                    <p style="font-size: 13px; color: #475569; margin: 6px 0 0;">The module doesn't tell the recipient their password. Add a hint ("this is your VAT") to your email template yourself.</p>
-                </div>
-            </div>
-            <div class="col-md-6 col-12 mb-3">
-                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px 20px;">
-                    <strong style="color: #DC3545;">&#10007;</strong>&nbsp;
-                    <strong>Per-record override</strong>
-                    <p style="font-size: 13px; color: #475569; margin: 6px 0 0;">Configuration lives on the report action, not on each record. You can't configure "different password for this one invoice".</p>
-                </div>
-            </div>
-            <div class="col-md-6 col-12 mb-3">
-                <div style="background-color: #FFF3CD; border: 1px solid #FFEEBA; border-radius: 8px; padding: 16px 20px;">
+                <div style="background-color: #FFF3CD; border: 1px solid #FFEEBA; border-radius: 8px; padding: 16px 20px; height: 100%;">
                     <strong style="color: #856404;">&#9888;</strong>&nbsp;
-                    <strong>Silent graceful fallback</strong>
-                    <p style="font-size: 13px; color: #856404; margin: 6px 0 0;">If no password can be resolved (empty partner field AND no static fallback), the PDF is returned unencrypted. Set a static fallback password if you want a hard guarantee.</p>
+                    <strong>Your own team is not locked out</strong>
+                    <p style="font-size: 13px; color: #856404; margin: 6px 0 0;">Protection applies to documents that leave Odoo - printed, emailed, or downloaded from the portal. The copy kept on the record stays readable, so a colleague reviewing a document is never asked for a password to see something they can already open. A setting turns that on if you want it.</p>
                 </div>
             </div>
             <div class="col-md-6 col-12 mb-3">
-                <div style="background-color: #FFF3CD; border: 1px solid #FFEEBA; border-radius: 8px; padding: 16px 20px;">
+                <div style="background-color: #FFF3CD; border: 1px solid #FFEEBA; border-radius: 8px; padding: 16px 20px; height: 100%;">
                     <strong style="color: #856404;">&#9888;</strong>&nbsp;
                     <strong>A mixed batch print comes back unlocked</strong>
                     <p style="font-size: 13px; color: #856404; margin: 6px 0 0;">Odoo merges a multi-record print into one file, and a file carries one password. When the records do not share a password the merged copy is produced without protection and a note is added to each record, rather than interrupting an ordinary bulk print. Print a record on its own, or use Send &amp; Print, to get a protected copy.</p>
                 </div>
             </div>
             <div class="col-md-6 col-12 mb-3">
-                <div style="background-color: #FFF3CD; border: 1px solid #FFEEBA; border-radius: 8px; padding: 16px 20px;">
+                <div style="background-color: #FFF3CD; border: 1px solid #FFEEBA; border-radius: 8px; padding: 16px 20px; height: 100%;">
                     <strong style="color: #856404;">&#9888;</strong>&nbsp;
                     <strong>Send by Post is left readable</strong>
                     <p style="font-size: 13px; color: #856404; margin: 6px 0 0;">Odoo's postal-mail service hands your document to a printing provider that cannot open an encrypted file, so that route is deliberately skipped.</p>
                 </div>
             </div>
             <div class="col-md-6 col-12 mb-3">
-                <div style="background-color: #FFF3CD; border: 1px solid #FFEEBA; border-radius: 8px; padding: 16px 20px;">
+                <div style="background-color: #FFF3CD; border: 1px solid #FFEEBA; border-radius: 8px; padding: 16px 20px; height: 100%;">
+                    <strong style="color: #856404;">&#9888;</strong>&nbsp;
+                    <strong>Silent graceful fallback</strong>
+                    <p style="font-size: 13px; color: #856404; margin: 6px 0 0;">If no password can be resolved (empty partner field AND no static fallback), the PDF is returned unencrypted. Set a static fallback password if you want a hard guarantee.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+                <div style="background-color: #FFF3CD; border: 1px solid #FFEEBA; border-radius: 8px; padding: 16px 20px; height: 100%;">
                     <strong style="color: #856404;">&#9888;</strong>&nbsp;
                     <strong>PDF library required (bundled with Odoo)</strong>
                     <p style="font-size: 13px; color: #856404; margin: 6px 0 0;">Odoo already ships what this module needs, so there is nothing to install. The strongest encryption needs an up-to-date PDF engine; on an older server the module keeps working at the legacy strength and says so plainly on the report settings screen.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px 20px; height: 100%;">
+                    <strong style="color: #DC3545;">&#10007;</strong>&nbsp;
+                    <strong>Non-PDF reports</strong>
+                    <p style="font-size: 13px; color: #475569; margin: 6px 0 0;">XLSX, CSV, HTML, and text reports are not encrypted. The override returns them unchanged.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px 20px; height: 100%;">
+                    <strong style="color: #DC3545;">&#10007;</strong>&nbsp;
+                    <strong>Email body and other attachments</strong>
+                    <p style="font-size: 13px; color: #475569; margin: 6px 0 0;">Only the report itself is protected - not the message it travels in, and not files you attach by hand. For invoices, the free companion module covers the emailed copy and can add a short notice explaining the password.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px 20px; height: 100%;">
+                    <strong style="color: #DC3545;">&#10007;</strong>&nbsp;
+                    <strong>Per-record override</strong>
+                    <p style="font-size: 13px; color: #475569; margin: 6px 0 0;">Configuration lives on the report action, not on each record. You can't configure "different password for this one invoice".</p>
                 </div>
             </div>
         </div>
