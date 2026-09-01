@@ -1,5 +1,9 @@
 # PDF Password Protection
 
+![License](https://img.shields.io/badge/license-LGPL--3-blue)
+![Odoo](https://img.shields.io/badge/Odoo-19.0-blueviolet)
+![Languages](https://img.shields.io/badge/languages-9-orange)
+
 Encrypt Odoo PDF reports with a password - static, or taken from the recipient's own data (VAT number, phone, email). Per-report toggle, **AES-256** encryption, GDPR-friendly, available in 9 languages.
 
 ## Two Modules
