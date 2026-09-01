@@ -57,6 +57,7 @@ Encryption strength is set per report via **Encryption Algorithm**. AES-256 is t
 | `x_pdf_password_method`    | Selection | Password source (static/vat/phone/email) |
 | `x_pdf_static_password`    | Char      | Static password value                    |
 | `x_pdf_encryption_algo`    | Selection | Cipher: `aes256` (default), `aes128`, `rc4_128` |
+| `x_pdf_protect_stored_copy`| Boolean   | Encrypt the archived copy too (default off, see above) |
 | `x_pdf_aes_unavailable`    | Boolean   | Computed; true when the server's PDF library cannot do AES |
 
 ## Invoice Emails (Send & Print)
@@ -73,7 +74,11 @@ It is marked `auto_install`, so it installs itself when you install PDF Password
 
 **Printing several customers at once is refused when the password is dynamic.** Odoo merges a multi-record print into one PDF, and a PDF carries a single password. That file would open for one recipient and expose the other customers' documents to them, while those customers could not open it at all. The module raises an explanatory error instead. Print one at a time, or use Send & Print, which encrypts each document separately. Batches that resolve to the same password -- one customer, or a static password -- are unaffected.
 
-**The archived copy is encrypted too.** On a report with an `attachment` expression, the copy Odoo keeps on the record is encrypted with the same password, so the chatter copy and anything a mail template attaches are protected rather than only the download.
+**Your own staff are not asked for a password.** The module protects documents that *leave* Odoo -- what you print, email, or publish on the portal. The copy Odoo archives on the record stays readable, so a colleague previewing an invoice from the chatter is not blocked by a password for a record they can already open; Odoo's access rights already govern who sees it. Every route out re-encrypts on the way, so nothing delivered is weakened by this.
+
+Turn on **Also Protect the Copy Kept in Odoo** if you want encryption at rest as well.
+
+**Emailed invoices are the one exception.** Odoo sends the very file it stores, so that copy is always encrypted and previewing it does ask for the password. That is inherent to how Accounting builds the document, not a setting.
 
 **"Send by Post" is left unencrypted on purpose.** Snailmail hands the PDF to a postal printing provider that cannot open an encrypted file, so encryption is skipped for that render and noted in the log.
 

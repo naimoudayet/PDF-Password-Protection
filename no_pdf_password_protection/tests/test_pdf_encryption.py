@@ -785,6 +785,7 @@ class TestArchivedAttachment(TransactionCase):
             "x_pdf_password_method": "static",
             "x_pdf_static_password": "Secret123",
             "attachment": "'archived.pdf'",
+            "x_pdf_protect_stored_copy": True,
         })
 
     def _streams_for(self, partners):
@@ -828,6 +829,31 @@ class TestArchivedAttachment(TransactionCase):
         )
         for v in vals:
             self.assertNotIn(b"/Encrypt", v["raw"])
+
+    def test_57_archive_is_readable_by_default(self):
+        """Staff preview the archived copy from the chatter.
+
+        Every route that leaves Odoo re-encrypts on the way out, so encrypting
+        the copy at rest buys no delivered protection while costing a colleague
+        a password prompt on a record they can already open. Off by default.
+        """
+        self.report.x_pdf_protect_stored_copy = False
+        p = _scrub(_partners(self.env), name="Preview", vat="V3")
+        vals = self.report._prepare_pdf_report_attachment_vals_list(
+            self.report, self._streams_for(p)
+        )
+        self.assertTrue(vals)
+        for v in vals:
+            self.assertNotIn(b"/Encrypt", v["raw"])
+
+    def test_58_delivery_is_encrypted_even_with_a_readable_archive(self):
+        """The point of the default: nothing that leaves is weakened."""
+        self.report.x_pdf_protect_stored_copy = False
+        parent = _super_class_of_override(self.report)
+        source = _blank_pdf()
+        with patch.object(parent, "_render_qweb_pdf", return_value=(source, "pdf")):
+            delivered, _ = self.report._render_qweb_pdf(self.report.id)
+        self.assertIn(b"/Encrypt", delivered)
 
 
 class TestPasswordLimits(TransactionCase):

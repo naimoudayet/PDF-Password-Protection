@@ -37,6 +37,16 @@ msgid "AES-256 is the current standard and is readable by Acrobat 9+ and every m
 msgstr "AES-256 ist der aktuelle Standard und kann mit Acrobat 9+ und jedem modernen PDF-Reader gelesen werden. RC4-128 bleibt nur für sehr alte Reader erhalten; es gilt als kryptografisch gebrochen und sollte nicht für vertrauliche Dokumente verwendet werden."
 
 #. module: no_pdf_password_protection
+#: model:ir.model.fields,field_description:no_pdf_password_protection.field_ir_actions_report__x_pdf_protect_stored_copy
+msgid "Also Protect the Copy Kept in Odoo"
+msgstr "Auch die in Odoo gespeicherte Kopie schützen"
+
+#. module: no_pdf_password_protection
+#: model:ir.model.fields,help:no_pdf_password_protection.field_ir_actions_report__x_pdf_protect_stored_copy
+msgid "By default only documents that leave Odoo are encrypted - what you print, email, or publish on the portal. The copy Odoo archives on the record stays readable so your own staff can preview it without typing a password; it is already covered by Odoo's access rights. Turn this on to encrypt that archived copy too. Emailed invoices are an exception: Odoo sends the very file it stores, so that copy is always encrypted whatever this is set to."
+msgstr "Standardmäßig werden nur Dokumente verschlüsselt, die Odoo verlassen: was Sie drucken, per E-Mail senden oder im Portal veröffentlichen. Die von Odoo am Datensatz archivierte Kopie bleibt lesbar, damit Ihre Mitarbeiter sie ohne Passwort ansehen können; sie ist bereits durch die Zugriffsrechte geschützt. Aktivieren Sie dies, um auch diese Kopie zu verschlüsseln. Per E-Mail versandte Rechnungen sind eine Ausnahme: Odoo versendet genau die gespeicherte Datei, diese Kopie ist daher immer verschlüsselt."
+
+#. module: no_pdf_password_protection
 #: model:ir.model.fields,field_description:no_pdf_password_protection.field_ir_actions_report__display_name
 msgid "Display Name"
 msgstr "Anzeigename"

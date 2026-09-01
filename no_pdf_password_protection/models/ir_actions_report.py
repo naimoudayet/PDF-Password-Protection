@@ -89,6 +89,17 @@ class IrActionsReport(models.Model):
         "readers; it is cryptographically broken and should not be used for "
         "confidential documents.",
     )
+    x_pdf_protect_stored_copy = fields.Boolean(
+        string="Also Protect the Copy Kept in Odoo",
+        default=False,
+        help="By default only documents that leave Odoo are encrypted - what "
+        "you print, email, or publish on the portal. The copy Odoo archives on "
+        "the record stays readable so your own staff can preview it without "
+        "typing a password; it is already covered by Odoo's access rights. "
+        "Turn this on to encrypt that archived copy too. "
+        "Emailed invoices are an exception: Odoo sends the very file it "
+        "stores, so that copy is always encrypted whatever this is set to.",
+    )
     x_pdf_aes_unavailable = fields.Boolean(
         string="AES Unavailable On This Server",
         compute="_compute_x_pdf_aes_unavailable",
@@ -139,10 +150,19 @@ class IrActionsReport(models.Model):
 
         The vals are keyed per res_id, so each archived document gets its own
         partner's password rather than the first record's.
+
+        Off by default: see x_pdf_protect_stored_copy.
         """
         vals_list = super()._prepare_pdf_report_attachment_vals_list(report, streams)
 
         if PdfWriter is None or not report.x_pdf_password_enabled:
+            return vals_list
+        if not report.x_pdf_protect_stored_copy:
+            # The archived copy is what staff preview from the chatter. Every
+            # route that leaves Odoo re-encrypts on the way out, so leaving it
+            # readable costs nothing in delivered protection and saves an
+            # authorised colleague from typing a password to look at a document
+            # they can already open the record for.
             return vals_list
         if self._pdf_encryption_suppressed():
             return vals_list
