@@ -58,6 +58,7 @@ Encryption strength is set per report via **Encryption Algorithm**. AES-256 is t
 | `x_pdf_static_password`    | Char      | Static password value                    |
 | `x_pdf_encryption_algo`    | Selection | Cipher: `aes256` (default), `aes128`, `rc4_128` |
 | `x_pdf_protect_stored_copy`| Boolean   | Encrypt the archived copy too (default off, see above) |
+| `x_pdf_email_notice`       | Html      | Editable, translatable notice added above the email (companion module) |
 | `x_pdf_aes_unavailable`    | Boolean   | Computed; true when the server's PDF library cannot do AES |
 
 ## Invoice Emails (Send & Print)
@@ -72,7 +73,9 @@ It is marked `auto_install`, so it installs itself when you install PDF Password
 
 ## Behaviour You Should Know About
 
-**A mixed batch print comes back unlocked.** Odoo merges a multi-record print into one PDF, and a PDF carries a single password. When the selected records do not share one, the merged copy is produced *without* protection and a note is added to each record -- an ordinary bulk print is never interrupted. Print a record on its own, or use Send & Print, to get a protected copy. Batches that resolve to the same password -- one customer, or a static password -- are protected as usual.
+**A mixed batch print comes back unlocked.** Odoo merges a multi-record print into one PDF, and a PDF carries a single password. When the selected records do not share one, the merged copy is produced *without* protection -- an ordinary bulk print is never interrupted, and it is recorded in the log rather than on every record, since printing many documents at once is a list action. Print a record on its own, or use Send & Print, to get a protected copy. Batches that resolve to the same password -- one customer, or a static password -- are protected as usual.
+
+**The email can explain the password.** The Send dialog carries an option, on by default and shown only when that invoice report has protection enabled, which puts a short notice above your message so the customer is not left with a file that will not open. The wording is a translatable field on the report: edit it in the UI, in your own words, per language. It is added only when the document really was protected -- never after a PDF/A skip or an unresolved password. The batch send has no such option; it always includes the notice.
 
 **Your own staff are not asked for a password.** The module protects documents that *leave* Odoo -- what you print, email, or publish on the portal. The copy Odoo archives on the record stays readable, so a colleague previewing an invoice from the chatter is not blocked by a password for a record they can already open; Odoo's access rights already govern who sees it. Every route out re-encrypts on the way, so nothing delivered is weakened by this.
 

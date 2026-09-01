@@ -284,6 +284,17 @@ class TestOutgoingInvoice(TransactionCase):
             self.skipTest("fr_FR not active on this database")
         self.assertNotEqual(english, french, "the standard sentence did not translate")
 
+    def test_22c_the_notice_is_html_not_escaped_text(self):
+        """Concatenating as plain strings makes Odoo escape the whole body,
+        so the customer sees markup instead of a sentence."""
+        from markupsafe import Markup
+        self.report.x_pdf_email_notice = "<p>NOTICE-TEXT</p>"
+        move = self._move_for("Acme", "ACME-VAT")
+        body = self._body_after_send(move, [("INV.pdf", _blank_pdf())])
+        self.assertIsInstance(body, Markup, "body must stay markup-safe")
+        self.assertIn("<p>NOTICE-TEXT</p>", body)
+        self.assertNotIn("&lt;p&gt;", body)
+
     def test_23_the_wording_comes_from_the_record_not_the_code(self):
         """Users must be able to reword it without touching the module."""
         self.report.x_pdf_email_notice = "<p>Completely custom wording.</p>"

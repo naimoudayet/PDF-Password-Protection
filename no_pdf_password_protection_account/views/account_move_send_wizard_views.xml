@@ -5,11 +5,16 @@
         <field name="model">account.move.send.wizard</field>
         <field name="inherit_id" ref="account.account_move_send_wizard_form"/>
         <field name="arch" type="xml">
-            <!-- 'body' is the only node of its name in this form; the two
-                 mail_attachments_widget nodes make that a poor anchor. -->
+            <!-- 'body' is the only node of its name here; the two
+                 mail_attachments_widget nodes make that a poor anchor.
+                 The field sits outside a <group>, so it needs an explicit
+                 label or Odoo renders a bare checkbox with no caption. -->
             <xpath expr="//field[@name='body']" position="before">
                 <field name="x_pdf_password_active" invisible="1"/>
-                <field name="x_pdf_notice_in_email" invisible="not x_pdf_password_active"/>
+                <div class="o_row mb-2" invisible="not x_pdf_password_active">
+                    <field name="x_pdf_notice_in_email" nolabel="1"/>
+                    <label for="x_pdf_notice_in_email" class="ms-2"/>
+                </div>
             </xpath>
         </field>
     </record>

@@ -2,6 +2,8 @@
 # License LGPL-3
 import logging
 
+from markupsafe import Markup
+
 from odoo import api, models
 
 _logger = logging.getLogger(__name__)
@@ -91,7 +93,10 @@ class AccountMoveSend(models.AbstractModel):
         notice = report._pdf_email_notice_html()
         if not notice:
             return body
-        return "%s%s" % (notice, body or "")
+        # Both halves are already HTML. Concatenating them as plain strings
+        # produces a str, which Odoo then escapes on the way into the message -
+        # the customer would see the markup instead of the sentence.
+        return Markup(notice) + Markup(body or "")
 
     @api.model
     def _protect_outgoing(self, move, report, name, raw):

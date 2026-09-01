@@ -93,8 +93,8 @@ msgstr "Origine della password"
 
 #. module: no_pdf_password_protection
 #: model_terms:ir.ui.view,arch_db:no_pdf_password_protection.view_ir_actions_report_form_pdf_password
-msgid "Printing several records together produces one merged file, which can\n                    carry only one password. When the selected records do not share a password\n                    the merged copy is produced without protection and a note is added to each\n                    record. Print a record on its own, or use Send &amp; Print, to get a\n                    protected copy."
-msgstr "Stampare più record insieme produce un unico file unito, che può contenere una sola password. Se i record selezionati non condividono la password, la copia unita viene prodotta senza protezione e viene aggiunta una nota a ciascun record. Stampa un record da solo, oppure usa Invia e stampa, per ottenere una copia protetta."
+msgid "Printing several records together produces one merged file, which can\n                    carry only one password. When the selected records do not share a password\n                    the merged copy is produced without protection. Print a record on its own,\n                    or use Send &amp; Print, to get a protected copy."
+msgstr "Stampare più record insieme produce un unico file unito, che può contenere una sola password. Se i record selezionati non condividono la password, la copia unita viene prodotta senza protezione. Stampa un record da solo, oppure usa Invia e stampa, per ottenere una copia protetta."
 
 #. module: no_pdf_password_protection
 #: model:ir.model.fields.selection,name:no_pdf_password_protection.selection__ir_actions_report__x_pdf_encryption_algo__rc4_128
@@ -111,12 +111,6 @@ msgstr "Azione report"
 #: model:ir.model.fields.selection,name:no_pdf_password_protection.selection__ir_actions_report__x_pdf_password_method__static
 msgid "Static Password"
 msgstr "Password statica"
-
-#. module: no_pdf_password_protection
-#. odoo-python
-#: code:addons/no_pdf_password_protection/models/ir_actions_report.py:0
-msgid "This document was printed together with records that use a different password, so the merged file was produced without password protection. Print this record on its own to get a protected copy."
-msgstr "Questo documento è stato stampato insieme a record che usano una password diversa, quindi il file unito è stato prodotto senza protezione. Stampa questo record da solo per ottenere una copia protetta."
 
 #. module: no_pdf_password_protection
 #: model_terms:ir.ui.view,arch_db:no_pdf_password_protection.view_ir_actions_report_form_pdf_password

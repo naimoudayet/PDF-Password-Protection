@@ -24,9 +24,8 @@
                      invisible="not x_pdf_password_enabled or x_pdf_password_method == 'static'">
                     Printing several records together produces one merged file, which can
                     carry only one password. When the selected records do not share a password
-                    the merged copy is produced without protection and a note is added to each
-                    record. Print a record on its own, or use Send &amp; Print, to get a
-                    protected copy.
+                    the merged copy is produced without protection. Print a record on its own,
+                    or use Send &amp; Print, to get a protected copy.
                 </div>
             </xpath>
         </field>

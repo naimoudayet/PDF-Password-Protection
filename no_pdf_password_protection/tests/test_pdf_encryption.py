@@ -690,24 +690,16 @@ class TestMixedBatchPrint(TransactionCase):
                            "x_pdf_static_password": "Shared"})
         self.assertIn(b"/Encrypt", self._render([self.a.id, self.b.id]))
 
-    def test_45_records_are_told_where_a_chatter_exists(self):
-        """The note is best-effort by design.
-
-        This module depends only on `base`, so Odoo runs its tests before
-        `mail` loads and the target model may have no chatter at all. Posting
-        must never be what breaks a print, so it degrades silently - and where
-        a chatter does exist (invoices, whose module pulls in mail) the note
-        is posted.
-        """
-        records = self.env[self.report.model].browse([self.a.id, self.b.id])
-        if not hasattr(records, "message_post"):
-            # must not raise
-            self.report._log_unencrypted_batch([self.a.id, self.b.id])
-            return
-        before = len(self.a.message_ids)
+    def test_45_logging_the_unlocked_batch_never_breaks_the_print(self):
+        """Log only - a bulk print is a list action, notes on every record
+        would bury the chatter for something done deliberately."""
+        self.report._log_unencrypted_batch([self.a.id, self.b.id])  # must not raise
+        before = len(self.a.message_ids) if hasattr(self.a, "message_ids") else 0
         self._render([self.a.id, self.b.id])
-        self.assertGreater(len(self.a.message_ids), before, "no note on the record")
-        self.assertIn("without", self.a.message_ids[0].body)
+        if hasattr(self.a, "message_ids"):
+            self.a.invalidate_recordset()
+            self.assertEqual(len(self.a.message_ids), before,
+                             "the batch path must not post to the chatter")
 
 
 class TestPhoneNormalisation(TransactionCase):

@@ -213,7 +213,12 @@ class IrActionsReport(models.Model):
         return len({self._get_pdf_password(self, [i]) for i in res_ids}) == 1
 
     def _log_unencrypted_batch(self, res_ids):
-        """Leave a trace on each record that this copy went out unlocked."""
+        """Record that a merged print went out unlocked.
+
+        Log only: printing many documents at once is a list action, so posting
+        a note on every record would bury the chatter under noise for something
+        the person is doing deliberately.
+        """
         self.ensure_one()
         _logger.info(
             "%r printed %d records together; they resolve to different "
@@ -221,22 +226,6 @@ class IrActionsReport(models.Model):
             self.name,
             len(res_ids or []),
         )
-        if not self.model or self.model not in self.env:
-            return
-        records = self.env[self.model].browse(res_ids or [])
-        if not hasattr(records, "message_post"):
-            return
-        body = self.env._(
-            "This document was printed together with records that use a "
-            "different password, so the merged file was produced without "
-            "password protection. Print this record on its own to get a "
-            "protected copy."
-        )
-        for record in records.exists():
-            try:
-                record.message_post(body=body)
-            except Exception:  # chatter must never break a print
-                _logger.debug("Could not note the unlocked batch on %s", record)
 
     def _encrypt_pdf(self, pdf_content, res_ids=None):
         """Return ``pdf_content`` encrypted, or None when it must pass through.
