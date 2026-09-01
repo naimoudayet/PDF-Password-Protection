@@ -67,6 +67,46 @@ class AccountMoveSend(models.AbstractModel):
         return super()._link_invoice_documents(invoices_data)
 
     @api.model
+    def _generate_invoice_fallback_documents(self, invoices_data):
+        """Encrypt the proforma Odoo falls back to when the invoice PDF fails.
+
+        `account` creates that attachment directly rather than routing it
+        through `_link_invoice_documents`, so it would otherwise be the one
+        document in the whole send flow that reaches the customer unprotected.
+        It carries the same customer data as the invoice it stands in for.
+
+        The values do not exist until super() has prepared them, so the
+        attachment is encrypted in place once it has been created.
+        """
+        res = super()._generate_invoice_fallback_documents(invoices_data)
+
+        for invoice, invoice_data in invoices_data.items():
+            attachment = invoice_data.get("proforma_pdf_attachment")
+            if not attachment or not attachment.raw:
+                continue
+
+            report = invoice_data.get("pdf_report")
+            if not report or not report.x_pdf_password_enabled:
+                continue
+
+            if self._pdf_declares_pdfa(attachment.raw):
+                self._skip_pdfa_invoice(invoice, report)
+                continue
+
+            encrypted = report._encrypt_pdf(attachment.raw, [invoice.id])
+            if encrypted:
+                attachment.write({"raw": encrypted})
+            else:
+                _logger.warning(
+                    "Password protection is enabled on %r but no password could "
+                    "be resolved for the pro-forma standing in for %s; it will "
+                    "be sent unencrypted.",
+                    report.name,
+                    invoice.display_name,
+                )
+        return res
+
+    @api.model
     def _pdf_declares_pdfa(self, raw):
         """True when the rendered PDF identifies itself as PDF/A.
 

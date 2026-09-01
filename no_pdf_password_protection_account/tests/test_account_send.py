@@ -253,3 +253,38 @@ class TestAccountSendEncryption(TransactionCase):
         self.assertFalse(self.Send._pdf_declares_pdfa(_blank_pdf()))
         self.assertFalse(self.Send._pdf_declares_pdfa(b""))
         self.assertFalse(self.Send._pdf_declares_pdfa(None))
+
+    def test_16_fallback_proforma_is_encrypted(self):
+        """The one document in the send flow account creates by hand.
+
+        When the invoice PDF fails to render, Odoo falls back to a pro-forma
+        and creates that attachment directly instead of routing it through
+        _link_invoice_documents - so it would otherwise reach the customer
+        unprotected while every other document in the same flow was locked.
+        """
+        move = self._move_for("Acme", "ACME-VAT")
+        att = self.env["ir.attachment"].create({
+            "name": "proforma.pdf",
+            "raw": _blank_pdf(),
+            "mimetype": "application/pdf",
+            "res_model": "account.move",
+            "res_id": move.id,
+        })
+        data = {move: {"pdf_report": self.report, "proforma_pdf_attachment": att}}
+        self.Send._generate_invoice_fallback_documents(data)
+        att.invalidate_recordset()
+        self.assertIn(b"/Encrypt", att.raw, "fallback pro-forma went out in the clear")
+        self.assertTrue(PdfReader(io.BytesIO(att.raw)).decrypt("Secret123"))
+
+    def test_17_fallback_proforma_untouched_when_disabled(self):
+        self.report.x_pdf_password_enabled = False
+        move = self._move_for("Acme", "ACME-VAT")
+        source = _blank_pdf()
+        att = self.env["ir.attachment"].create({
+            "name": "proforma.pdf", "raw": source, "mimetype": "application/pdf",
+            "res_model": "account.move", "res_id": move.id,
+        })
+        data = {move: {"pdf_report": self.report, "proforma_pdf_attachment": att}}
+        self.Send._generate_invoice_fallback_documents(data)
+        att.invalidate_recordset()
+        self.assertEqual(att.raw, source)
