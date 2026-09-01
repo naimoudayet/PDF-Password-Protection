@@ -23,6 +23,10 @@
     "installable": True,
     "auto_install": True,
     "depends": ["no_pdf_password_protection", "account"],
+    "data": [
+        "views/ir_actions_report_views.xml",
+        "views/account_move_send_wizard_views.xml",
+    ],
     "images": ["static/description/banner.png"],
     "price": 0,
     "currency": "USD",

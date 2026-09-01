@@ -23,6 +23,22 @@ class AccountMoveSend(models.AbstractModel):
     # Outgoing email
     # ------------------------------------------------------------------
 
+    def _get_default_sending_settings(self, move, from_cron=False, **custom_settings):
+        """Default the notice on for the paths that never show a wizard.
+
+        The single-invoice wizard passes its checkbox through account's own
+        custom-settings channel; batch sends and the cron have no wizard, so
+        they fall back to on here.
+        """
+        settings = super()._get_default_sending_settings(
+            move, from_cron=from_cron, **custom_settings
+        )
+        if "pdf_notice_in_email" in custom_settings:
+            settings["pdf_notice_in_email"] = custom_settings["pdf_notice_in_email"]
+        else:
+            settings.setdefault("pdf_notice_in_email", True)
+        return settings
+
     @api.model
     def _get_mail_params(self, move, move_data):
         """Encrypt the invoice on its way into the customer's email.
@@ -50,10 +66,32 @@ class AccountMoveSend(models.AbstractModel):
             return params
 
         protected = []
+        any_encrypted = False
         for name, raw in attachments:
-            protected.append((name, self._protect_outgoing(move, report, name, raw)))
+            out = self._protect_outgoing(move, report, name, raw)
+            any_encrypted = any_encrypted or out is not raw
+            protected.append((name, out))
         params["attachments"] = protected
+
+        # Only once something actually came out locked. A PDF/A e-invoice is
+        # skipped and an unresolved password passes through, and a notice on
+        # either would promise the reader a protection they did not get.
+        if any_encrypted and move_data.get("pdf_notice_in_email", True):
+            params["body"] = self._prefix_password_notice(params.get("body"), report)
         return params
+
+    @api.model
+    def _prefix_password_notice(self, body, report):
+        """Put the report's own notice above the email body.
+
+        The wording lives on the report as an editable, translatable field, so
+        this never composes a sentence of its own - and in particular never
+        writes a password into the message carrying the document.
+        """
+        notice = report._pdf_email_notice_html()
+        if not notice:
+            return body
+        return "%s%s" % (notice, body or "")
 
     @api.model
     def _protect_outgoing(self, move, report, name, raw):

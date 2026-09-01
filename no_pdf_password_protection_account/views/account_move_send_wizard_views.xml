@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_account_move_send_wizard_form_pdf_notice" model="ir.ui.view">
+        <field name="name">account.move.send.wizard.form.pdf.notice</field>
+        <field name="model">account.move.send.wizard</field>
+        <field name="inherit_id" ref="account.account_move_send_wizard_form"/>
+        <field name="arch" type="xml">
+            <!-- 'body' is the only node of its name in this form; the two
+                 mail_attachments_widget nodes make that a poor anchor. -->
+            <xpath expr="//field[@name='body']" position="before">
+                <field name="x_pdf_password_active" invisible="1"/>
+                <field name="x_pdf_notice_in_email" invisible="not x_pdf_password_active"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

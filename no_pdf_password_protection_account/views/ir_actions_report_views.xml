@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_ir_actions_report_form_pdf_notice" model="ir.ui.view">
+        <field name="name">ir.actions.report.form.pdf.notice</field>
+        <field name="model">ir.actions.report</field>
+        <field name="inherit_id" ref="no_pdf_password_protection.view_ir_actions_report_form_pdf_password"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='x_pdf_protect_stored_copy']" position="after">
+                <field name="x_pdf_email_notice"
+                       invisible="not x_pdf_password_enabled"
+                       placeholder="Leave empty to use the standard sentence, already translated into every supported language."/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

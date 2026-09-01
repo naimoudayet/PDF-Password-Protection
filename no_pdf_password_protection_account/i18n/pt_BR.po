@@ -17,19 +17,44 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #. module: no_pdf_password_protection_account
+#. odoo-python
+#: code:addons/no_pdf_password_protection_account/models/ir_actions_report.py:0
+msgid "<p>The attached document is password protected. Please open it with the password we have shared with you.</p>"
+msgstr "<p>O documento anexo está protegido por senha. Abra-o com a senha que compartilhamos com você.</p>"
+
+#. module: no_pdf_password_protection_account
 #: model:ir.model,name:no_pdf_password_protection_account.model_account_move_send
 msgid "Account Move Send"
 msgstr "Envio de Lançamento Contábil"
 
 #. module: no_pdf_password_protection_account
+#: model:ir.model,name:no_pdf_password_protection_account.model_account_move_send_wizard
+msgid "Account Move Send Wizard"
+msgstr "Assistente de Envio de Lançamento"
+
+#. module: no_pdf_password_protection_account
+#: model:ir.model.fields,help:no_pdf_password_protection_account.field_account_move_send_wizard__x_pdf_notice_in_email
+msgid "Adds the notice configured on the invoice report above the message, so the customer is not left with a file that will not open. It is only added when the document really was protected."
+msgstr "Adiciona acima da mensagem o aviso configurado no relatório de fatura, para que o cliente não receba um arquivo que não abre. Só é adicionado se o documento realmente foi protegido."
+
+#. module: no_pdf_password_protection_account
 #: model:ir.model.fields,field_description:no_pdf_password_protection_account.field_account_move__display_name
 #: model:ir.model.fields,field_description:no_pdf_password_protection_account.field_account_move_send__display_name
+#: model:ir.model.fields,field_description:no_pdf_password_protection_account.field_account_move_send_wizard__display_name
+#: model:ir.model.fields,field_description:no_pdf_password_protection_account.field_ir_actions_report__display_name
 msgid "Display Name"
 msgstr "Nome de Exibição"
 
 #. module: no_pdf_password_protection_account
+#: model:ir.model.fields,field_description:no_pdf_password_protection_account.field_account_move_send_wizard__x_pdf_notice_in_email
+msgid "Explain the password in the email"
+msgstr "Explicar a senha no e-mail"
+
+#. module: no_pdf_password_protection_account
 #: model:ir.model.fields,field_description:no_pdf_password_protection_account.field_account_move__id
 #: model:ir.model.fields,field_description:no_pdf_password_protection_account.field_account_move_send__id
+#: model:ir.model.fields,field_description:no_pdf_password_protection_account.field_account_move_send_wizard__id
+#: model:ir.model.fields,field_description:no_pdf_password_protection_account.field_ir_actions_report__id
 msgid "ID"
 msgstr "ID"
 
@@ -39,7 +64,37 @@ msgid "Journal Entry"
 msgstr "Lançamento Contábil"
 
 #. module: no_pdf_password_protection_account
+#: model_terms:ir.ui.view,arch_db:no_pdf_password_protection_account.view_ir_actions_report_form_pdf_notice
+msgid "Leave empty to use the standard sentence, already translated into every supported language."
+msgstr "Deixe vazio para usar a frase padrão, já traduzida para todos os idiomas suportados."
+
+#. module: no_pdf_password_protection_account
+#: model:ir.model.fields,field_description:no_pdf_password_protection_account.field_ir_actions_report__x_pdf_email_notice
+msgid "Password Notice for Emails"
+msgstr "Aviso de senha para e-mails"
+
+#. module: no_pdf_password_protection_account
+#: model:ir.model.fields,field_description:no_pdf_password_protection_account.field_account_move_send_wizard__x_pdf_password_active
+msgid "Password Protection Active"
+msgstr "Proteção por senha ativa"
+
+#. module: no_pdf_password_protection_account
+#: model:ir.model.fields,help:no_pdf_password_protection_account.field_ir_actions_report__x_pdf_email_notice
+msgid "Put above the message when a protected invoice is emailed, so the customer is not left with a file that will not open. Leave it empty to use the standard sentence, which is already translated into every language this module supports. Write your own here to replace it - and never put the password itself in this text if you use a fixed password, since it would travel in the same message."
+msgstr "Colocado acima da mensagem quando uma fatura protegida é enviada por e-mail, para que o cliente não receba um arquivo que não abre. Deixe vazio para usar a frase padrão, já traduzida para todos os idiomas suportados por este módulo. Escreva a sua aqui para substituí-la - e nunca coloque a própria senha neste texto se você usa uma senha fixa, pois ela viajaria na mesma mensagem."
+
+#. module: no_pdf_password_protection_account
+#: model:ir.model,name:no_pdf_password_protection_account.model_ir_actions_report
+msgid "Report Action"
+msgstr "Ação de Relatório"
+
+#. module: no_pdf_password_protection_account
 #. odoo-python
 #: code:addons/no_pdf_password_protection_account/models/account_move_send.py:0
 msgid "This invoice was sent without password protection: it is a PDF/A e-invoice, and encrypting it would break PDF/A conformance and make the embedded e-invoicing XML unreadable for the recipient."
 msgstr "Esta fatura foi enviada sem proteção por senha: trata-se de uma nota fiscal eletrônica PDF/A, e criptografá-la quebraria a conformidade PDF/A e tornaria o XML de faturamento eletrônico incorporado ilegível para o destinatário."
+
+#. module: no_pdf_password_protection_account
+#: model:ir.model.fields,help:no_pdf_password_protection_account.field_account_move_send_wizard__x_pdf_password_active
+msgid "Whether the selected invoice report has password protection on; used to keep the option out of the way for everyone else."
+msgstr "Indica se o relatório de fatura selecionado tem a proteção por senha ativada; serve para ocultar a opção dos demais."

@@ -65,6 +65,18 @@ class TestOutgoingInvoice(TransactionCase):
             "partner_id": partner.id,
         })
 
+    def _posted_move_for(self, name, vat=False):
+        """The send wizard refuses a draft, so this one carries a line."""
+        partner = self.env["res.partner"].create({"name": name, "vat": vat})
+        move = self.env["account.move"].create({
+            "move_type": "out_invoice",
+            "partner_id": partner.id,
+            "invoice_line_ids": [(0, 0, {"name": "Item", "quantity": 1,
+                                         "price_unit": 100.0})],
+        })
+        move.action_post()
+        return move
+
     def _mail_params(self, move, attachments):
         parent = _super_target(self.Send, "_get_mail_params")
         with patch.object(parent, "_get_mail_params",
@@ -212,3 +224,100 @@ class TestOutgoingInvoice(TransactionCase):
         self.assertFalse(self.Send._pdf_declares_pdfa(_blank_pdf()))
         self.assertFalse(self.Send._pdf_declares_pdfa(b""))
         self.assertFalse(self.Send._pdf_declares_pdfa(None))
+
+    # -------------------------------------------------------- the notice
+
+    def _body_after_send(self, move, attachments, notice_on=True):
+        parent = _super_target(self.Send, "_get_mail_params")
+        with patch.object(parent, "_get_mail_params",
+                          return_value={"attachments": list(attachments),
+                                        "body": "<p>Dear customer,</p>"}):
+            return self.Send._get_mail_params(
+                move, {"pdf_report": self.report, "pdf_notice_in_email": notice_on}
+            )["body"]
+
+    def test_18_notice_is_prefixed_when_the_file_was_protected(self):
+        self.report.x_pdf_email_notice = "<p>NOTICE-TEXT</p>"
+        move = self._move_for("Acme", "ACME-VAT")
+        body = self._body_after_send(move, [("INV.pdf", _blank_pdf())])
+        self.assertIn("NOTICE-TEXT", body)
+        self.assertTrue(body.index("NOTICE-TEXT") < body.index("Dear customer"),
+                        "the notice must come first")
+
+    def test_19_no_notice_when_nothing_was_protected(self):
+        """A PDF/A e-invoice is skipped; promising protection would be a lie."""
+        self.report.x_pdf_email_notice = "<p>NOTICE-TEXT</p>"
+        move = self._move_for("FrenchCo", "FR-VAT")
+        pdfa = _blank_pdf() + b"<pdfaid:part>3</pdfaid:part>"
+        self.assertNotIn("NOTICE-TEXT", self._body_after_send(move, [("INV.pdf", pdfa)]))
+
+    def test_20_no_notice_when_no_password_resolved(self):
+        self.report.write({"x_pdf_email_notice": "<p>NOTICE-TEXT</p>",
+                           "x_pdf_password_method": "vat",
+                           "x_pdf_static_password": False})
+        move = self._move_for("NoVat", False)
+        self.assertNotIn("NOTICE-TEXT",
+                         self._body_after_send(move, [("INV.pdf", _blank_pdf())]))
+
+    def test_21_checkbox_off_suppresses_the_notice(self):
+        self.report.x_pdf_email_notice = "<p>NOTICE-TEXT</p>"
+        move = self._move_for("Acme", "ACME-VAT")
+        body = self._body_after_send(move, [("INV.pdf", _blank_pdf())], notice_on=False)
+        self.assertNotIn("NOTICE-TEXT", body)
+        self.assertIn("Dear customer", body)
+
+    def test_22_empty_notice_falls_back_to_the_standard_sentence(self):
+        """Nobody has to write copy to get a sensible email."""
+        self.report.x_pdf_email_notice = False
+        move = self._move_for("Acme", "ACME-VAT")
+        body = self._body_after_send(move, [("INV.pdf", _blank_pdf())])
+        self.assertIn("password protected", body)
+        self.assertIn("Dear customer", body)
+
+    def test_22b_the_standard_sentence_is_translated(self):
+        """A default stored on a translatable field would have been English
+        for everyone; resolving it at send time gives the recipient's language."""
+        self.report.x_pdf_email_notice = False
+        english = self.report._pdf_email_notice_html()
+        french = self.report.with_context(lang="fr_FR")._pdf_email_notice_html()
+        if not self.env["res.lang"].search_count([("code", "=", "fr_FR")]):
+            self.skipTest("fr_FR not active on this database")
+        self.assertNotEqual(english, french, "the standard sentence did not translate")
+
+    def test_23_the_wording_comes_from_the_record_not_the_code(self):
+        """Users must be able to reword it without touching the module."""
+        self.report.x_pdf_email_notice = "<p>Completely custom wording.</p>"
+        move = self._move_for("Acme", "ACME-VAT")
+        self.assertIn("Completely custom wording.",
+                      self._body_after_send(move, [("INV.pdf", _blank_pdf())]))
+
+    def test_24_notice_field_is_translatable(self):
+        """It is edited per language through the UI, not through a .po file."""
+        self.assertTrue(
+            self.env["ir.actions.report"]._fields["x_pdf_email_notice"].translate
+        )
+
+    def test_25_wizard_only_offers_it_when_protection_is_on(self):
+        move = self._posted_move_for("Acme", "ACME-VAT")
+        wiz = self.env["account.move.send.wizard"].create({
+            "move_id": move.id, "pdf_report_id": self.report.id,
+        })
+        self.assertTrue(wiz.x_pdf_password_active)
+        self.assertTrue(wiz.x_pdf_notice_in_email, "should default on")
+        self.report.x_pdf_password_enabled = False
+        wiz.invalidate_recordset()
+        self.assertFalse(wiz.x_pdf_password_active)
+
+    def test_26_wizard_choice_reaches_the_send_settings(self):
+        move = self._posted_move_for("Acme", "ACME-VAT")
+        wiz = self.env["account.move.send.wizard"].create({
+            "move_id": move.id, "pdf_report_id": self.report.id,
+            "x_pdf_notice_in_email": False,
+        })
+        self.assertIs(wiz._get_sending_settings()["pdf_notice_in_email"], False)
+
+    def test_27_paths_without_a_wizard_default_to_on(self):
+        """Batch sends and the cron never show a checkbox."""
+        move = self._move_for("Acme", "ACME-VAT")
+        settings = self.Send._get_default_sending_settings(move)
+        self.assertTrue(settings["pdf_notice_in_email"])
