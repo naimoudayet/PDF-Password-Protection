@@ -5,15 +5,34 @@
         <field name="model">ir.actions.report</field>
         <field name="inherit_id" ref="base.act_report_xml_view"/>
         <field name="arch" type="xml">
+            <!-- Odoo 16 still uses attrs domains; the bare invisible="<expr>"
+                 form only arrives in 17.0, where attrs was removed. -->
             <xpath expr="//group" position="after">
                 <group string="PDF Password Protection">
+                    <field name="x_pdf_aes_unavailable" invisible="1"/>
                     <field name="x_pdf_password_enabled"/>
+                    <field name="x_pdf_encryption_algo"
+                           attrs="{'invisible': [('x_pdf_password_enabled', '=', False)]}"/>
                     <field name="x_pdf_password_method"
                            attrs="{'invisible': [('x_pdf_password_enabled', '=', False)]}"/>
-                    <field name="x_pdf_static_password"
-                           attrs="{'invisible': ['|', ('x_pdf_password_enabled', '=', False), ('x_pdf_password_method', '!=', 'static')]}"
-                           password="True"/>
+                    <field name="x_pdf_static_password" password="True"
+                           attrs="{'invisible': ['|', ('x_pdf_password_enabled', '=', False), ('x_pdf_password_method', '!=', 'static')]}"/>
+                    <field name="x_pdf_protect_stored_copy"
+                           attrs="{'invisible': [('x_pdf_password_enabled', '=', False)]}"/>
                 </group>
+                <div class="alert alert-warning" role="alert"
+                     attrs="{'invisible': ['|', '|', ('x_pdf_password_enabled', '=', False), ('x_pdf_aes_unavailable', '=', False), ('x_pdf_encryption_algo', '=', 'rc4_128')]}">
+                    This server only has the older PyPDF2 library, which cannot produce AES.
+                    Documents will be encrypted with RC4-128 whatever is selected above.
+                    Install <b>pypdf</b> on the server to enable AES.
+                </div>
+                <div class="alert alert-info" role="alert"
+                     attrs="{'invisible': ['|', ('x_pdf_password_enabled', '=', False), ('x_pdf_password_method', '=', 'static')]}">
+                    Printing several records together produces one merged file, which can
+                    carry only one password. When the selected records do not share a password
+                    the merged copy is produced without protection. Print a record on its own,
+                    or use Send &amp; Print, to get a protected copy.
+                </div>
             </xpath>
         </field>
     </record>
