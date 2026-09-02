@@ -1,0 +1,13 @@
+[flake8]
+max-line-length = 88
+max-complexity = 16
+# B = bugbear, B9 = bugbear opinionated (B950), C = mccabe,
+# E/W = pycodestyle, F = pyflakes
+select = B,B9,C,E,F,W
+# E203 + W503 are black-incompatible; E501 handled by B950
+ignore = E203,E501,W503
+per-file-ignores =
+    __init__.py: F401
+    # __manifest__.py is a bare dict literal (B018) with a long single-line
+    # summary string (B950/E501) — both are Odoo-manifest conventions, not bugs.
+    __manifest__.py: B018,B950,E501

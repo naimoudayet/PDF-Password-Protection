@@ -1,0 +1,69 @@
+# OCA-derived FULL pylint-odoo rule set (advisory) — ODOO_GUIDELINES §15.
+# Calibrated for pylint-odoo 10.x. Superset of .pylintrc-mandatory; run
+# manually for a deeper pass. Same portfolio reconciliations as the mandatory
+# file (author=Naim, OPL-1 allowed, description kept, missing-readme off).
+[MASTER]
+load-plugins=pylint_odoo
+score=n
+
+[ODOOLINT]
+manifest-required-authors=Naim OUDAYET
+manifest-required-keys=license
+manifest-deprecated-keys=
+license-allowed=AGPL-3,GPL-2,GPL-3,LGPL-3,OEEL-1,OPL-1,Other proprietary
+valid-odoo-versions=16.0
+
+[MESSAGES CONTROL]
+disable=all
+enable=manifest-required-author,
+    manifest-required-key,
+    manifest-required-key-app,
+    manifest-version-format,
+    manifest-author-string,
+    manifest-maintainers-list,
+    manifest-external-assets,
+    license-allowed,
+    invalid-commit,
+    sql-injection,
+    external-request-timeout,
+    test-folder-imported,
+    no-write-in-compute,
+    no-raise-unlink,
+    no-search-all,
+    deprecated-name-get,
+    deprecated-inselect-operator,
+    deprecated-odoo-model-method,
+    method-compute,
+    method-search,
+    method-inverse,
+    method-required-super,
+    prohibited-method-override,
+    super-method-mismatch,
+    attribute-deprecated,
+    attribute-string-redundant,
+    renamed-field-parameter,
+    missing-return,
+    consider-merging-classes-inherited,
+    bad-builtin-groupby,
+    context-overridden,
+    prefer-env-translation,
+    translation-required,
+    translation-field,
+    translation-not-lazy,
+    translation-contains-variable,
+    translation-positional-used,
+    translation-format-interpolation,
+    translation-fstring-interpolation,
+    translation-unsupported-format,
+    translation-format-truncated,
+    translation-too-many-args,
+    translation-too-few-args,
+    resource-not-exist,
+    odoo-exception-warning,
+    print-used,
+    except-pass,
+    odoo-addons-relative-import,
+    website-manifest-key-not-valid-uri,
+    invalid-email,
+    use-vim-comment,
+    manifest-data-duplicated

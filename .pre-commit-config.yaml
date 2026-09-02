@@ -1,0 +1,74 @@
+# OCA-derived pre-commit pipeline — ODOO_GUIDELINES §15.
+# Code-quality only: the hand-authored storefront (static/description/) is
+# EXCLUDED from every formatter (§15.1), and there is no oca-gen-addon-readme
+# hook (the custom README/index.html is authoritative).
+# `rev:` pins should be synced to the OCA tool branch for the 16.0 series.
+exclude: |
+  (?x)
+  # Hand-authored App Store listing — never reformat (breaks §2.0 sanitizer rules)
+  /static/description/|
+  # gettext template
+  ^.*\.pot$
+default_language_version:
+  python: python3
+  node: "18.17.1"
+repos:
+  - repo: https://github.com/oca/maintainer-tools
+    rev: 1a4316c
+    hooks:
+      - id: oca-fix-manifest-website
+        args: ["https://www.oudayet.com"]
+      # oca-gen-addon-readme INTENTIONALLY OMITTED — custom README (§5 / §15.1)
+  - repo: https://github.com/OCA/odoo-pre-commit-hooks
+    rev: v0.0.33
+    hooks:
+      - id: oca-checks-odoo-module
+      - id: oca-checks-po
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: /static/description/
+      - id: end-of-file-fixer
+        exclude: /static/description/
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: check-added-large-files
+        args: ["--maxkb=300"]
+      - id: mixed-line-ending
+        args: ["--fix=lf"]            # LF repo (§15.5) — match existing blobs
+  - repo: https://github.com/psf/black
+    rev: 24.4.2
+    hooks:
+      - id: black
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        name: isort
+  - repo: https://github.com/PyCQA/flake8
+    rev: 7.1.0
+    hooks:
+      - id: flake8
+        additional_dependencies: ["flake8-bugbear==24.4.26"]
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.16.0
+    hooks:
+      - id: pyupgrade
+        args: ["--py310-plus"]
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.3.3
+    hooks:
+      - id: prettier
+        additional_dependencies:
+          - "prettier@3.3.3"
+          - "@prettier/plugin-xml@3.4.1"
+        exclude: /static/description/
+  - repo: local
+    hooks:
+      - id: pylint-odoo
+        name: pylint-odoo
+        entry: pylint
+        language: system
+        files: \.py$
+        args: ["--rcfile=.pylintrc-mandatory", "--load-plugins=pylint_odoo"]
