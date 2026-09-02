@@ -21,14 +21,15 @@ The guiding rule: **encrypted when it leaves Odoo, readable when it stays.** You
 
 Each Odoo major version lives on its own branch. Pick the one matching your server.
 
-| Odoo Version | Stable | Development |
-|---|---|---|
-| 19.0 | [`19.0`](../../tree/19.0) | [`19.0.dev`](../../tree/19.0.dev) |
-| 18.0 | [`18.0`](../../tree/18.0) | [`18.0.dev`](../../tree/18.0.dev) |
-| 17.0 | [`17.0`](../../tree/17.0) | [`17.0.dev`](../../tree/17.0.dev) |
-| 16.0 | [`16.0`](../../tree/16.0) | [`16.0.dev`](../../tree/16.0.dev) |
+| Odoo Version | Stable | Development | Modules |
+|---|---|---|---|
+| 19.0 | [`19.0`](../../tree/19.0) | [`19.0.dev`](../../tree/19.0.dev) | both |
+| 18.0 | [`18.0`](../../tree/18.0) | [`18.0.dev`](../../tree/18.0.dev) | both |
+| 17.0 | [`17.0`](../../tree/17.0) | [`17.0.dev`](../../tree/17.0.dev) | base only |
+| 16.0 | [`16.0`](../../tree/16.0) | [`16.0.dev`](../../tree/16.0.dev) | base only |
 
-Both modules live on every version branch.
+`PDF Password Protection` is on every branch. The invoice companion is on
+19.0 and 18.0 so far; the 17.0 and 16.0 branches carry the base module only.
 
 ## What It Does
 
