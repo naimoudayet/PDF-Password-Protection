@@ -6,7 +6,7 @@
         <p style="font-size: 20px; color: #FFFFFF; margin: 0 0 20px;">Encrypt any Odoo PDF report with a password - per report action, per recipient</p>
         <span style="display: inline-block; background-color: #5A3A52; border: 1px solid #8A6A80; border-radius: 20px; padding: 5px 16px; font-size: 14px; color: #FFFFFF; margin: 0 4px;">Odoo 17</span>
         <span style="display: inline-block; background-color: #00A09D; border-radius: 20px; padding: 5px 16px; font-size: 14px; color: #FFFFFF; margin: 0 4px;">FREE</span>
-        <span style="display: inline-block; background-color: #FF7F4F; border-radius: 20px; padding: 5px 16px; font-size: 14px; color: #1A1A1A; margin: 0 4px;">GDPR Ready</span>
+        <span style="display: inline-block; background-color: #FF7F4F; border-radius: 20px; padding: 5px 16px; font-size: 14px; color: #FFFFFF; margin: 0 4px;">GDPR Ready</span>
         <span style="display: inline-block; background-color: #2E86AB; border-radius: 20px; padding: 5px 16px; font-size: 14px; color: #FFFFFF; margin: 0 4px;">9 Languages</span>
     </div>
 
@@ -55,10 +55,10 @@
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6 col-12 mb-4">
-                    <div style="background-color: #FFFFFF; border: 2px solid #E8DDE5; border-top: 4px solid #DC3545; border-radius: 10px; padding: 20px; text-align: center; height: 100%;">
+                    <div style="background-color: #FFFFFF; border: 2px solid #E8DDE5; border-top: 4px solid #5A3A52; border-radius: 10px; padding: 20px; text-align: center; height: 100%;">
                         <div style="font-size: 28px; margin-bottom: 8px;">&#128222;</div>
                         <strong style="font-size: 15px;">Partner Phone</strong>
-                        <p style="font-size: 13px; color: #475569; margin-top: 8px;">Password = partner's phone number (spaces stripped). Fits payslips and personal documents.</p>
+                        <p style="font-size: 13px; color: #475569; margin-top: 8px;">Password = partner's phone number, digits only. Fits payslips and personal documents - tell the recipient "your number, digits only" and it always matches.</p>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6 col-12 mb-4">
@@ -137,18 +137,54 @@
         </div>
     </div>
 
+    <!-- SCREENSHOTS -->
+    <div class="container py-5">
+        <h2 style="color: #714B67; font-size: 28px; font-weight: 700; margin-bottom: 8px; text-align: center;">See It In Odoo</h2>
+        <p style="color: #475569; font-size: 16px; margin-bottom: 32px; text-align: center;">Real screens from a running Odoo 17 database.</p>
+        <img src="screenshots/screenshot_1.png" alt="Password protection settings on an invoice report" style="width: 100%; max-width: 880px; display: block; margin: 0 auto; border: 1px solid #E8DDE5; border-radius: 8px;">
+        <p style="color: #475569; font-size: 14px; margin: 10px 0 34px; text-align: center;">Turn it on per report, choose the strength, and choose where the password comes from. Nothing else in Odoo changes.</p>
+        <img src="screenshots/screenshot_2.png" alt="The four password sources" style="width: 100%; max-width: 880px; display: block; margin: 0 auto; border: 1px solid #E8DDE5; border-radius: 8px;">
+        <p style="color: #475569; font-size: 14px; margin: 10px 0 34px; text-align: center;">One fixed password for everyone, or a different one per recipient taken from their VAT number, phone or email address &mdash; something they already know.</p>
+        <img src="screenshots/screenshot_3.png" alt="Choosing the encryption strength" style="width: 100%; max-width: 880px; display: block; margin: 0 auto; border: 1px solid #E8DDE5; border-radius: 8px;">
+        <p style="color: #475569; font-size: 14px; margin: 10px 0 34px; text-align: center;">AES-256 by default &mdash; the same standard Acrobat itself uses. AES-128 and legacy RC4-128 stay available for very old readers.</p>
+        <img src="screenshots/screenshot_4.png" alt="The recipient opening the document" style="width: 100%; max-width: 880px; display: block; margin: 0 auto; border: 1px solid #E8DDE5; border-radius: 8px;">
+        <p style="color: #475569; font-size: 14px; margin: 10px 0 34px; text-align: center;">The delivered file asks for the password before it shows anything &mdash; in any modern PDF reader, with no software for your customer to install.</p>
+    </div>
+    <!-- COMPANION -->
+    <div style="background-color: #F8F5F7; padding: 48px 32px; border-radius: 8px;">
+        <div class="container">
+            <h2 style="color: #714B67; font-size: 28px; font-weight: 700; margin-bottom: 8px; text-align: center;">Do You Email Invoices?</h2>
+            <p style="color: #475569; font-size: 16px; margin-bottom: 28px; text-align: center;">Then add the free companion module as well.</p>
+            <div class="row">
+                <div class="col-md-6 col-12 mb-3">
+                    <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 20px; height: 100%;">
+                        <strong style="color: #714B67; font-size: 16px;">This module, on its own</strong>
+                        <p style="font-size: 14px; color: #475569; margin: 8px 0 0;">Protects every PDF report you print or attach to an email template &mdash; quotations, delivery slips, payslips, purchase orders and any custom report. Complete and useful by itself; nothing else is required.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <div style="background-color: #FFFFFF; border: 1px solid #00A09D; border-radius: 8px; padding: 20px; height: 100%;">
+                        <strong style="color: #00A09D; font-size: 16px;">Plus &quot;PDF Password Protection for Invoices&quot;</strong>
+                        <p style="font-size: 14px; color: #475569; margin: 8px 0 0;">Accounting builds the invoice it emails by a different route than the Print button. The free companion covers that route too, giving each customer's copy that customer's own password. Search the Apps store for <strong>PDF Password Protection for Invoices</strong>.</p>
+                    </div>
+                </div>
+            </div>
+            <p style="color: #94A3B8; font-size: 13px; margin: 8px 0 0; text-align: center;">The companion needs this module to work; this module does not need the companion.</p>
+        </div>
+    </div>
+
     <!-- INSTALLATION -->
     <div class="container py-5">
         <h2 style="color: #714B67; font-size: 28px; font-weight: 700; margin-bottom: 16px; text-align: center;">Installation</h2>
-        <p style="color: #475569; font-size: 16px; margin-bottom: 32px; text-align: center;">One step in Odoo. The PDF library (PyPDF2 or pypdf) ships with Odoo by default - the module picks up whichever is installed, no extra setup needed.</p>
+        <p style="color: #475569; font-size: 16px; margin-bottom: 32px; text-align: center;">Two steps: one Python package, then the module itself.</p>
 
         <div class="row">
             <div class="col-md-6 col-12 mb-4">
                 <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 10px; padding: 24px; height: 100%;">
                     <p style="font-size: 13px; font-weight: 600; color: #94A3B8; margin: 0 0 8px; text-transform: uppercase;">Step 1 - dependency</p>
-                    <strong style="color: #714B67;">Bundled with Odoo</strong>
-                    <p style="font-size: 14px; color: #475569; margin-top: 12px;">Odoo 16-19 already ship a PDF library: <em>PyPDF2</em> on Python &lt;= 3.12, or <em>pypdf</em> on Python &gt;= 3.13. The module uses whichever is available - no manual <em>pip install</em> needed in the typical case.</p>
-                    <p style="font-size: 13px; color: #94A3B8; margin-top: 8px;">If you see an <em>ImportError</em> in your logs, your Python environment is non-standard; run <em>pip install pypdf</em> on the Odoo server.</p>
+                    <strong style="color: #714B67;">Install <strong>pypdf</strong></strong>
+                    <p style="font-size: 14px; color: #475569; margin-top: 12px;">Odoo 17 ships an older PDF library that cannot produce AES, so the modern one is needed on the server that renders your reports.</p>
+                    <p style="font-size: 13px; color: #94A3B8; margin-top: 8px;">On an unusual Python setup where it is missing, your administrator can add it in one command: <em>pip install pypdf</em>. This is also how you switch a server from the legacy encryption strength to AES.</p>
                 </div>
             </div>
             <div class="col-md-6 col-12 mb-4">
@@ -164,37 +200,37 @@
     <!-- WORKS WITH -->
     <div style="background-color: #F8F5F7; padding: 48px 32px; border-radius: 8px;">
         <div class="container" style="text-align: center;">
-            <h2 style="color: #714B67; font-size: 28px; font-weight: 700; margin-bottom: 8px;">Works With Every QWeb PDF Report</h2>
+            <h2 style="color: #714B67; font-size: 28px; font-weight: 700; margin-bottom: 8px;">Works With Every PDF Report</h2>
             <p style="color: #475569; font-size: 15px; margin-bottom: 32px;">Invoices, quotations, delivery slips, payslips, and any custom report you've built yourself.</p>
 
             <div class="row">
                 <div class="col-md-4 col-sm-6 col-12 mb-4">
-                    <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px; text-align: center;">
+                    <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px; text-align: center; height: 100%;">
                         <strong style="color: #714B67;">Invoices</strong>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6 col-12 mb-4">
-                    <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px; text-align: center;">
+                    <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px; text-align: center; height: 100%;">
                         <strong style="color: #714B67;">Quotations</strong>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6 col-12 mb-4">
-                    <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px; text-align: center;">
+                    <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px; text-align: center; height: 100%;">
                         <strong style="color: #714B67;">Purchase Orders</strong>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6 col-12 mb-4">
-                    <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px; text-align: center;">
+                    <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px; text-align: center; height: 100%;">
                         <strong style="color: #714B67;">Delivery Slips</strong>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6 col-12 mb-4">
-                    <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px; text-align: center;">
+                    <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px; text-align: center; height: 100%;">
                         <strong style="color: #714B67;">Payslips</strong>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6 col-12 mb-4">
-                    <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px; text-align: center;">
+                    <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px; text-align: center; height: 100%;">
                         <strong style="color: #714B67;">Any Custom Report</strong>
                     </div>
                 </div>
@@ -210,56 +246,56 @@
         <p style="color: #475569; font-size: 15px; margin-bottom: 32px; text-align: center;">Field labels, selection options, and the Apps Store summary are translated. Each user sees the configuration form in their own Odoo language setting - no extra setup.</p>
 
         <div class="row">
-            <div class="col-md-4 col-sm-6 col-12 mb-3">
-                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 14px; text-align: center;">
+            <div class="col-4 mb-3">
+                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 14px; text-align: center; height: 100%;">
                     <img width="32" height="22" alt="us" src="flags/us.png" style="display: block; margin: 0 auto 6px; border-radius: 2px;">
                     <strong style="color: #714B67;">English (en_US)</strong>
                 </div>
             </div>
-            <div class="col-md-4 col-sm-6 col-12 mb-3">
-                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 14px; text-align: center;">
+            <div class="col-4 mb-3">
+                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 14px; text-align: center; height: 100%;">
                     <img width="32" height="22" alt="fr" src="flags/fr.png" style="display: block; margin: 0 auto 6px; border-radius: 2px;">
                     <strong style="color: #714B67;">Fran&ccedil;ais (fr)</strong>
                 </div>
             </div>
-            <div class="col-md-4 col-sm-6 col-12 mb-3">
-                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 14px; text-align: center;">
+            <div class="col-4 mb-3">
+                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 14px; text-align: center; height: 100%;">
                     <img width="32" height="22" alt="es" src="flags/es.png" style="display: block; margin: 0 auto 6px; border-radius: 2px;">
                     <strong style="color: #714B67;">Espa&ntilde;ol (es)</strong>
                 </div>
             </div>
-            <div class="col-md-4 col-sm-6 col-12 mb-3">
-                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 14px; text-align: center;">
+            <div class="col-4 mb-3">
+                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 14px; text-align: center; height: 100%;">
                     <img width="32" height="22" alt="de" src="flags/de.png" style="display: block; margin: 0 auto 6px; border-radius: 2px;">
                     <strong style="color: #714B67;">Deutsch (de)</strong>
                 </div>
             </div>
-            <div class="col-md-4 col-sm-6 col-12 mb-3">
-                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 14px; text-align: center;">
+            <div class="col-4 mb-3">
+                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 14px; text-align: center; height: 100%;">
                     <img width="32" height="22" alt="nl" src="flags/nl.png" style="display: block; margin: 0 auto 6px; border-radius: 2px;">
                     <strong style="color: #714B67;">Nederlands (nl)</strong>
                 </div>
             </div>
-            <div class="col-md-4 col-sm-6 col-12 mb-3">
-                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 14px; text-align: center;">
+            <div class="col-4 mb-3">
+                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 14px; text-align: center; height: 100%;">
                     <img width="32" height="22" alt="br" src="flags/br.png" style="display: block; margin: 0 auto 6px; border-radius: 2px;">
                     <strong style="color: #714B67;">Portugu&ecirc;s (pt_BR)</strong>
                 </div>
             </div>
-            <div class="col-md-4 col-sm-6 col-12 mb-3">
-                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 14px; text-align: center;">
+            <div class="col-4 mb-3">
+                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 14px; text-align: center; height: 100%;">
                     <img width="32" height="22" alt="it" src="flags/it.png" style="display: block; margin: 0 auto 6px; border-radius: 2px;">
                     <strong style="color: #714B67;">Italiano (it)</strong>
                 </div>
             </div>
-            <div class="col-md-4 col-sm-6 col-12 mb-3">
-                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 14px; text-align: center;">
+            <div class="col-4 mb-3">
+                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 14px; text-align: center; height: 100%;">
                     <img width="32" height="22" alt="cn" src="flags/cn.png" style="display: block; margin: 0 auto 6px; border-radius: 2px;">
                     <strong style="color: #714B67;">&#20013;&#25991; (zh_CN)</strong>
                 </div>
             </div>
-            <div class="col-md-4 col-sm-6 col-12 mb-3">
-                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 14px; text-align: center;">
+            <div class="col-4 mb-3">
+                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 14px; text-align: center; height: 100%;">
                     <img width="32" height="22" alt="ar" src="flags/ar.png" style="display: block; margin: 0 auto 6px; border-radius: 2px;">
                     <strong style="color: #714B67;">&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577; (ar)</strong>
                 </div>
@@ -269,50 +305,63 @@
 
     <!-- LIMITATIONS / HONEST SCOPE -->
     <div class="container py-5">
-        <h2 style="color: #714B67; font-size: 28px; font-weight: 700; margin-bottom: 16px; text-align: center;">What This Module Doesn't Do</h2>
-        <p style="color: #475569; font-size: 15px; margin-bottom: 32px; text-align: center;">Honest scope matters. Here's exactly what's out of reach.</p>
-
+        <h2 style="color: #714B67; font-size: 28px; font-weight: 700; margin-bottom: 8px; text-align: center;">What This Module Doesn't Do</h2>
+        <p style="color: #475569; font-size: 16px; margin-bottom: 32px; text-align: center;">Worth knowing before you install.</p>
         <div class="row">
             <div class="col-md-6 col-12 mb-3">
-                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px 20px;">
-                    <strong style="color: #DC3545;">&#10007;</strong>&nbsp;
-                    <strong>Non-PDF reports</strong>
-                    <p style="font-size: 13px; color: #475569; margin: 6px 0 0;">XLSX, CSV, HTML, and text reports are not encrypted. The override returns them unchanged.</p>
+                <div style="background-color: #FFF3CD; border: 1px solid #FFEEBA; border-radius: 8px; padding: 16px 20px; height: 100%;">
+                    <strong style="color: #856404;">&#9888;</strong>&nbsp;
+                    <strong>Your own team is not locked out</strong>
+                    <p style="font-size: 13px; color: #856404; margin: 6px 0 0;">Protection applies to documents that leave Odoo - printed, emailed, or downloaded from the portal. The copy kept on the record stays readable, so a colleague reviewing a document is never asked for a password to see something they can already open. A setting turns that on if you want it.</p>
                 </div>
             </div>
             <div class="col-md-6 col-12 mb-3">
-                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px 20px;">
-                    <strong style="color: #DC3545;">&#10007;</strong>&nbsp;
-                    <strong>Email body / attachments</strong>
-                    <p style="font-size: 13px; color: #475569; margin: 6px 0 0;">Only the report PDF itself is encrypted. The email body isn't, and neither are other attachments you add manually.</p>
+                <div style="background-color: #FFF3CD; border: 1px solid #FFEEBA; border-radius: 8px; padding: 16px 20px; height: 100%;">
+                    <strong style="color: #856404;">&#9888;</strong>&nbsp;
+                    <strong>A mixed batch print comes back unlocked</strong>
+                    <p style="font-size: 13px; color: #856404; margin: 6px 0 0;">Odoo merges a multi-record print into one file, and a file carries one password. When the records do not share a password the merged copy is produced without protection and a note is added to each record, rather than interrupting an ordinary bulk print. Print a record on its own, or use Send &amp; Print, to get a protected copy.</p>
                 </div>
             </div>
             <div class="col-md-6 col-12 mb-3">
-                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px 20px;">
-                    <strong style="color: #DC3545;">&#10007;</strong>&nbsp;
-                    <strong>Automatic password hints</strong>
-                    <p style="font-size: 13px; color: #475569; margin: 6px 0 0;">The module doesn't tell the recipient their password. Add a hint ("this is your VAT") to your email template yourself.</p>
+                <div style="background-color: #FFF3CD; border: 1px solid #FFEEBA; border-radius: 8px; padding: 16px 20px; height: 100%;">
+                    <strong style="color: #856404;">&#9888;</strong>&nbsp;
+                    <strong>Send by Post is left readable</strong>
+                    <p style="font-size: 13px; color: #856404; margin: 6px 0 0;">Odoo's postal-mail service hands your document to a printing provider that cannot open an encrypted file, so that route is deliberately skipped.</p>
                 </div>
             </div>
             <div class="col-md-6 col-12 mb-3">
-                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px 20px;">
-                    <strong style="color: #DC3545;">&#10007;</strong>&nbsp;
-                    <strong>Per-record override</strong>
-                    <p style="font-size: 13px; color: #475569; margin: 6px 0 0;">Configuration lives on the report action, not on each record. You can't configure "different password for this one invoice".</p>
-                </div>
-            </div>
-            <div class="col-md-6 col-12 mb-3">
-                <div style="background-color: #FFF3CD; border: 1px solid #FFEEBA; border-radius: 8px; padding: 16px 20px;">
+                <div style="background-color: #FFF3CD; border: 1px solid #FFEEBA; border-radius: 8px; padding: 16px 20px; height: 100%;">
                     <strong style="color: #856404;">&#9888;</strong>&nbsp;
                     <strong>Silent graceful fallback</strong>
                     <p style="font-size: 13px; color: #856404; margin: 6px 0 0;">If no password can be resolved (empty partner field AND no static fallback), the PDF is returned unencrypted. Set a static fallback password if you want a hard guarantee.</p>
                 </div>
             </div>
             <div class="col-md-6 col-12 mb-3">
-                <div style="background-color: #FFF3CD; border: 1px solid #FFEEBA; border-radius: 8px; padding: 16px 20px;">
+                <div style="background-color: #FFF3CD; border: 1px solid #FFEEBA; border-radius: 8px; padding: 16px 20px; height: 100%;">
                     <strong style="color: #856404;">&#9888;</strong>&nbsp;
-                    <strong>PDF library required (bundled with Odoo)</strong>
-                    <p style="font-size: 13px; color: #856404; margin: 6px 0 0;">Odoo ships PyPDF2 (Python &lt;= 3.12) or pypdf (Python &gt;= 3.13). On non-standard Python environments where neither is present, the module loads but encryption is silently a no-op - a warning appears in the log on startup.</p>
+                    <strong>A Python package is required</strong>
+                    <p style="font-size: 13px; color: #856404; margin: 6px 0 0;">This module needs <strong>pypdf</strong> on the server that renders reports. Odoo 17's own PDF library is too old to produce AES, so the package is declared as a dependency and Odoo will not install the module without it.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px 20px; height: 100%;">
+                    <strong style="color: #DC3545;">&#10007;</strong>&nbsp;
+                    <strong>Non-PDF reports</strong>
+                    <p style="font-size: 13px; color: #475569; margin: 6px 0 0;">XLSX, CSV, HTML, and text reports are not encrypted. The override returns them unchanged.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px 20px; height: 100%;">
+                    <strong style="color: #DC3545;">&#10007;</strong>&nbsp;
+                    <strong>Email body and other attachments</strong>
+                    <p style="font-size: 13px; color: #475569; margin: 6px 0 0;">Only the report itself is protected - not the message it travels in, and not files you attach by hand. For invoices, the free companion module covers the emailed copy and can add a short notice explaining the password.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+                <div style="background-color: #FFFFFF; border: 1px solid #E8DDE5; border-radius: 8px; padding: 16px 20px; height: 100%;">
+                    <strong style="color: #DC3545;">&#10007;</strong>&nbsp;
+                    <strong>Per-record override</strong>
+                    <p style="font-size: 13px; color: #475569; margin: 6px 0 0;">Configuration lives on the report action, not on each record. You can't configure "different password for this one invoice".</p>
                 </div>
             </div>
         </div>
@@ -321,9 +370,9 @@
     <!-- SECURITY NOTE -->
     <div style="background-color: #2D2233; padding: 36px 20px; border-radius: 8px;">
         <div class="container">
-            <h2 style="color: #D4B8CF; font-size: 22px; font-weight: 700; margin-bottom: 12px; text-align: center;">&#128737; A Note on PDF Encryption Strength</h2>
+            <h2 style="color: #D4B8CF; font-size: 28px; font-weight: 700; margin-bottom: 12px; text-align: center;">&#128737; A Note on PDF Encryption Strength</h2>
             <p style="color: #BBA8B5; font-size: 14px; line-height: 1.7; margin: 0; max-width: 760px; margin-left: auto; margin-right: auto; text-align: center;">
-                PDF password protection is <strong>convenience crypto</strong>, not TLS-grade encryption. It stops a casual viewer with Adobe Reader. It does <em>not</em> stop a determined attacker with time and open-source tools. Use it as a meaningful deterrent and a compliance checkbox (HIPAA, GDPR), not as your only defence. For truly sensitive data, pair it with TLS email transport, access logs, and short retention windows. PyPDF2 uses RC4 / AES-128 depending on the PDF version.
+                This module encrypts with <strong>AES-256</strong> by default - the same standard Acrobat itself uses, readable by Acrobat 9+ and every modern PDF viewer. That is real encryption: a strong, unguessable password cannot be brute-forced. Its strength is therefore only as good as the password you choose, so prefer a static passphrase over a partner field that a recipient's contacts already know. AES-128 and legacy RC4-128 stay selectable per report for very old readers - RC4 is broken and offered only for compatibility. Encryption protects the file, not the delivery: pair it with TLS email transport, access logs, and short retention windows.
             </p>
         </div>
     </div>
@@ -335,7 +384,7 @@
         <div style="max-width: 760px; margin: 0 auto;">
             <div style="border-bottom: 1px solid #E8DDE5; padding: 16px 0;">
                 <strong style="color: #714B67;">What if a partner's VAT has spaces or special characters?</strong>
-                <p style="color: #475569; font-size: 14px; margin: 8px 0 0;">The VAT value is used verbatim. Phone numbers get spaces stripped; everything else passes through unchanged.</p>
+                <p style="color: #475569; font-size: 14px; margin: 8px 0 0;">The VAT value and the email address are used verbatim. Phone numbers are reduced to digits, so a number stored as "+216 71 123 456", "(216) 71-123-456" or "216.71.123.456" all give the same password - the recipient never has to guess the punctuation.</p>
             </div>
             <div style="border-bottom: 1px solid #E8DDE5; padding: 16px 0;">
                 <strong style="color: #714B67;">Does encryption slow down PDF generation?</strong>
@@ -351,11 +400,11 @@
             </div>
             <div style="border-bottom: 1px solid #E8DDE5; padding: 16px 0;">
                 <strong style="color: #714B67;">Will this break when Odoo updates?</strong>
-                <p style="color: #475569; font-size: 14px; margin: 8px 0 0;">The module overrides <em>_render_qweb_pdf</em>, which is stable Odoo API. Every version branch (16.0 / 17.0 / 18.0 / 19.0) ships tests that verify the integration end-to-end on that specific version.</p>
+                <p style="color: #475569; font-size: 14px; margin: 8px 0 0;">The module hooks into the standard Odoo printing path, which has been stable for years. Every version branch (16.0 / 17.0 / 18.0 / 19.0) ships tests that verify the integration end-to-end on that specific version.</p>
             </div>
             <div style="padding: 16px 0;">
                 <strong style="color: #714B67;">Does it work on Odoo.sh / Odoo Online?</strong>
-                <p style="color: #475569; font-size: 14px; margin: 8px 0 0;">On Odoo.sh yes (you control <em>requirements.txt</em>). On Odoo Online / SaaS, custom Python packages cannot be installed, so this module won't encrypt - use self-hosted or Odoo.sh.</p>
+                <p style="color: #475569; font-size: 14px; margin: 8px 0 0;">Yes. The module no longer requires any Python package you'd have to install yourself - it uses the PDF library Odoo already ships. On Odoo.sh and self-hosted you can add <em>pypdf</em> to unlock AES-256; where only the older library is available, encryption still works at RC4-128.</p>
             </div>
         </div>
     </div>
@@ -371,7 +420,7 @@
                 </div>
                 <div class="row" style="border-bottom: 1px solid #E8DDE5; padding: 10px 0;">
                     <div class="col-md-5 col-12" style="text-align: left;"><strong style="color: #714B67;">Version</strong></div>
-                    <div class="col-md-7 col-12" style="text-align: left;">17.0.1.2.0</div>
+                    <div class="col-md-7 col-12" style="text-align: left;">17.0.2.0.0</div>
                 </div>
                 <div class="row" style="border-bottom: 1px solid #E8DDE5; padding: 10px 0;">
                     <div class="col-md-5 col-12" style="text-align: left;"><strong style="color: #714B67;">Depends on</strong></div>
@@ -379,7 +428,7 @@
                 </div>
                 <div class="row" style="border-bottom: 1px solid #E8DDE5; padding: 10px 0;">
                     <div class="col-md-5 col-12" style="text-align: left;"><strong style="color: #714B67;">Python dep</strong></div>
-                    <div class="col-md-7 col-12" style="text-align: left;">Bundled with Odoo (PyPDF2 / pypdf)</div>
+                    <div class="col-md-7 col-12" style="text-align: left;">pypdf (declared in the manifest; Odoo 17's bundled library cannot do AES)</div>
                 </div>
                 <div class="row" style="border-bottom: 1px solid #E8DDE5; padding: 10px 0;">
                     <div class="col-md-5 col-12" style="text-align: left;"><strong style="color: #714B67;">Languages</strong></div>
@@ -390,12 +439,12 @@
                     <div class="col-md-7 col-12" style="text-align: left;">LGPL-3 (Free / Open Source)</div>
                 </div>
                 <div class="row" style="border-bottom: 1px solid #E8DDE5; padding: 10px 0;">
-                    <div class="col-md-5 col-12" style="text-align: left;"><strong style="color: #714B67;">Mechanism</strong></div>
-                    <div class="col-md-7 col-12" style="text-align: left;">Overrides <em>_render_qweb_pdf</em> on <em>ir.actions.report</em></div>
+                    <div class="col-md-5 col-12" style="text-align: left;"><strong style="color: #714B67;">Applies to</strong></div>
+                    <div class="col-md-7 col-12" style="text-align: left;">Any PDF report in Odoo, configured one report at a time</div>
                 </div>
                 <div class="row" style="padding: 10px 0;">
                     <div class="col-md-5 col-12" style="text-align: left;"><strong style="color: #714B67;">Test coverage</strong></div>
-                    <div class="col-md-7 col-12" style="text-align: left;">32 unit tests (resolver + encryption, edge cases)</div>
+                    <div class="col-md-7 col-12" style="text-align: left;">88 unit tests (resolver, cipher per algorithm, batch behaviour, archived copy, invoice email path, edge cases)</div>
                 </div>
             </div>
         </div>
@@ -403,10 +452,8 @@
 
     <!-- FOOTER -->
     <div style="text-align: center; padding: 36px 0; font-size: 14px; color: #94A3B8;">
-        <p style="margin: 0;">
-            <strong style="color: #714B67;">PDF Password Protection</strong> - Free, open source, Odoo 17<br/>
-            &copy; <strong style="color: #714B67;">Naim OUDAYET</strong> - LGPL-3 License
-        </p>
+        <strong style="color: #714B67;">PDF Password Protection</strong> &mdash; Free, Odoo 17<br/>
+        &copy; <strong style="color: #714B67;">Naim OUDAYET</strong> &mdash; <a href="https://www.oudayet.com" style="color: #714B67;">oudayet.com</a> &mdash; LGPL-3 license
     </div>
 
 </section>

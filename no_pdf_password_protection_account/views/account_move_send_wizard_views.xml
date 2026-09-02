@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_account_move_send_wizard_form_pdf_notice" model="ir.ui.view">
+        <field name="name">account.move.send.form.pdf.notice</field>
+        <field name="model">account.move.send</field>
+        <field name="inherit_id" ref="account.account_move_send_form"/>
+        <field name="arch" type="xml">
+            <!-- On 17.0 the send wizard is account.move.send itself; the
+                 wizard/batch.wizard split and the rename of this field to
+                 'body' both arrive in 18.0. The field sits outside a <group>,
+                 so it needs an explicit label or Odoo renders a bare checkbox
+                 with no caption. -->
+            <xpath expr="//field[@name='mail_body']" position="before">
+                <field name="x_pdf_password_active" invisible="1"/>
+                <div class="o_row mb-2" invisible="not x_pdf_password_active">
+                    <field name="x_pdf_notice_in_email" nolabel="1"/>
+                    <label for="x_pdf_notice_in_email" class="ms-2"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
