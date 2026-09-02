@@ -40,4 +40,3 @@ class AccountMoveSendWizard(models.TransientModel):
         settings = super()._get_sending_settings()
         settings["pdf_notice_in_email"] = self.x_pdf_notice_in_email
         return settings
-

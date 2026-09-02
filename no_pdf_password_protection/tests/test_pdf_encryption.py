@@ -3,7 +3,6 @@
 import io
 from unittest.mock import patch
 
-from odoo.exceptions import UserError
 from odoo.tests.common import TransactionCase
 
 # Mirror the module's own import order (pypdf first). The module emits
@@ -65,12 +64,14 @@ def _make_report(env, model="res.partner"):
     install. Creating the record keeps every assertion running on any database
     and any Odoo series.
     """
-    return env["ir.actions.report"].create({
-        "name": "Test PDF Password Report",
-        "model": model,
-        "report_type": "qweb-pdf",
-        "report_name": "no_pdf_password_protection.test_report",
-    })
+    return env["ir.actions.report"].create(
+        {
+            "name": "Test PDF Password Report",
+            "model": model,
+            "report_type": "qweb-pdf",
+            "report_name": "no_pdf_password_protection.test_report",
+        }
+    )
 
 
 def _super_class_of_override(report):
@@ -81,7 +82,8 @@ def _super_class_of_override(report):
     """
     mro = type(report).__mro__
     our_idx = next(
-        i for i, c in enumerate(mro)
+        i
+        for i, c in enumerate(mro)
         if "no_pdf_password_protection" in (getattr(c, "__module__", "") or "")
     )
     return mro[our_idx + 1]
@@ -128,32 +130,36 @@ class TestPdfPasswordResolver(TransactionCase):
     # ------------------------------------------------------------------ static
 
     def test_04_static_password_returns_configured_value(self):
-        self.any_report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "static",
-            "x_pdf_static_password": "abc123",
-        })
+        self.any_report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "static",
+                "x_pdf_static_password": "abc123",
+            }
+        )
         self.assertEqual(
             self.any_report._get_pdf_password(self.any_report, None), "abc123"
         )
 
     def test_05_static_method_with_empty_password_returns_falsy(self):
-        self.any_report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "static",
-            "x_pdf_static_password": False,
-        })
-        self.assertFalse(
-            self.any_report._get_pdf_password(self.any_report, None)
+        self.any_report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "static",
+                "x_pdf_static_password": False,
+            }
         )
+        self.assertFalse(self.any_report._get_pdf_password(self.any_report, None))
 
     def test_06_static_method_ignores_res_ids(self):
         # static doesn't need records — res_ids can be None, [], or anything
-        self.any_report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "static",
-            "x_pdf_static_password": "same",
-        })
+        self.any_report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "static",
+                "x_pdf_static_password": "same",
+            }
+        )
         for res_ids in (None, [], [1], [1, 2, 3]):
             self.assertEqual(
                 self.any_report._get_pdf_password(self.any_report, res_ids),
@@ -165,10 +171,12 @@ class TestPdfPasswordResolver(TransactionCase):
     def test_07_vat_returns_partner_vat(self):
         self._need_partner_report()
         p = self._partner(vat="BE0123456789")
-        self.partner_report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "vat",
-        })
+        self.partner_report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "vat",
+            }
+        )
         self.assertEqual(
             self.partner_report._get_pdf_password(self.partner_report, [p.id]),
             "BE0123456789",
@@ -177,11 +185,13 @@ class TestPdfPasswordResolver(TransactionCase):
     def test_08_vat_empty_falls_back_to_static(self):
         self._need_partner_report()
         p = self._partner()
-        self.partner_report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "vat",
-            "x_pdf_static_password": "FBK",
-        })
+        self.partner_report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "vat",
+                "x_pdf_static_password": "FBK",
+            }
+        )
         self.assertEqual(
             self.partner_report._get_pdf_password(self.partner_report, [p.id]),
             "FBK",
@@ -190,11 +200,13 @@ class TestPdfPasswordResolver(TransactionCase):
     def test_09_vat_empty_no_static_returns_falsy(self):
         self._need_partner_report()
         p = self._partner()
-        self.partner_report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "vat",
-            "x_pdf_static_password": False,
-        })
+        self.partner_report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "vat",
+                "x_pdf_static_password": False,
+            }
+        )
         # falsy value -> encryption branch in _render_qweb_pdf skips encrypt
         self.assertFalse(
             self.partner_report._get_pdf_password(self.partner_report, [p.id])
@@ -208,10 +220,12 @@ class TestPdfPasswordResolver(TransactionCase):
         # stored with a +, brackets, dots or dashes.
         self._need_partner_report()
         p = self._partner(phone="+216 12 345 678")
-        self.partner_report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "phone",
-        })
+        self.partner_report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "phone",
+            }
+        )
         self.assertEqual(
             self.partner_report._get_pdf_password(self.partner_report, [p.id]),
             "21612345678",
@@ -223,10 +237,12 @@ class TestPdfPasswordResolver(TransactionCase):
             self.skipTest("res.partner.mobile not present (Odoo 19+)")
         self._need_partner_report()
         p = self._partner(phone="MAINPHONE", mobile="MOBILE")
-        self.partner_report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "phone",
-        })
+        self.partner_report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "phone",
+            }
+        )
         self.assertEqual(
             self.partner_report._get_pdf_password(self.partner_report, [p.id]),
             "MAINPHONE",
@@ -237,10 +253,12 @@ class TestPdfPasswordResolver(TransactionCase):
             self.skipTest("res.partner.mobile not present (Odoo 19+)")
         self._need_partner_report()
         p = self._partner(mobile="+1 555 1234")
-        self.partner_report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "phone",
-        })
+        self.partner_report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "phone",
+            }
+        )
         self.assertEqual(
             self.partner_report._get_pdf_password(self.partner_report, [p.id]),
             "+15551234",
@@ -249,11 +267,13 @@ class TestPdfPasswordResolver(TransactionCase):
     def test_13_phone_both_empty_falls_back_to_static(self):
         self._need_partner_report()
         p = self._partner()
-        self.partner_report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "phone",
-            "x_pdf_static_password": "S",
-        })
+        self.partner_report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "phone",
+                "x_pdf_static_password": "S",
+            }
+        )
         self.assertEqual(
             self.partner_report._get_pdf_password(self.partner_report, [p.id]),
             "S",
@@ -264,11 +284,13 @@ class TestPdfPasswordResolver(TransactionCase):
         # on Odoo 19 because mobile was dropped. getattr fix ensures no-op.
         self._need_partner_report()
         p = self._partner()  # no phone, no mobile
-        self.partner_report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "phone",
-            "x_pdf_static_password": "OK",
-        })
+        self.partner_report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "phone",
+                "x_pdf_static_password": "OK",
+            }
+        )
         # must not raise
         self.assertEqual(
             self.partner_report._get_pdf_password(self.partner_report, [p.id]),
@@ -280,10 +302,12 @@ class TestPdfPasswordResolver(TransactionCase):
     def test_15_email_returned(self):
         self._need_partner_report()
         p = self._partner(email="a@b.com")
-        self.partner_report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "email",
-        })
+        self.partner_report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "email",
+            }
+        )
         self.assertEqual(
             self.partner_report._get_pdf_password(self.partner_report, [p.id]),
             "a@b.com",
@@ -292,11 +316,13 @@ class TestPdfPasswordResolver(TransactionCase):
     def test_16_email_empty_falls_back_to_static(self):
         self._need_partner_report()
         p = self._partner()
-        self.partner_report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "email",
-            "x_pdf_static_password": "S",
-        })
+        self.partner_report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "email",
+                "x_pdf_static_password": "S",
+            }
+        )
         self.assertEqual(
             self.partner_report._get_pdf_password(self.partner_report, [p.id]),
             "S",
@@ -306,11 +332,13 @@ class TestPdfPasswordResolver(TransactionCase):
 
     def test_17_none_res_ids_on_dynamic_falls_back_to_static(self):
         self._need_partner_report()
-        self.partner_report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "vat",
-            "x_pdf_static_password": "S",
-        })
+        self.partner_report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "vat",
+                "x_pdf_static_password": "S",
+            }
+        )
         self.assertEqual(
             self.partner_report._get_pdf_password(self.partner_report, None),
             "S",
@@ -318,11 +346,13 @@ class TestPdfPasswordResolver(TransactionCase):
 
     def test_18_empty_res_ids_on_dynamic_falls_back_to_static(self):
         self._need_partner_report()
-        self.partner_report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "vat",
-            "x_pdf_static_password": "S",
-        })
+        self.partner_report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "vat",
+                "x_pdf_static_password": "S",
+            }
+        )
         self.assertEqual(
             self.partner_report._get_pdf_password(self.partner_report, []),
             "S",
@@ -330,11 +360,13 @@ class TestPdfPasswordResolver(TransactionCase):
 
     def test_19_none_res_ids_no_static_returns_falsy(self):
         self._need_partner_report()
-        self.partner_report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "vat",
-            "x_pdf_static_password": False,
-        })
+        self.partner_report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "vat",
+                "x_pdf_static_password": False,
+            }
+        )
         self.assertFalse(
             self.partner_report._get_pdf_password(self.partner_report, None)
         )
@@ -342,10 +374,12 @@ class TestPdfPasswordResolver(TransactionCase):
     def test_20_record_is_partner_itself(self):
         self._need_partner_report()
         p = self._partner(email="self@p.com")
-        self.partner_report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "email",
-        })
+        self.partner_report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "email",
+            }
+        )
         self.assertEqual(
             self.partner_report._get_pdf_password(self.partner_report, [p.id]),
             "self@p.com",
@@ -359,11 +393,13 @@ class TestPdfPasswordResolver(TransactionCase):
         if not module_report:
             self.skipTest("no ir.module.module report")
         module_rec = self.env["ir.module.module"].search([], limit=1)
-        module_report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "vat",
-            "x_pdf_static_password": "FBK",
-        })
+        module_report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "vat",
+                "x_pdf_static_password": "FBK",
+            }
+        )
         self.assertEqual(
             module_report._get_pdf_password(module_report, [module_rec.id]),
             "FBK",
@@ -388,18 +424,21 @@ class TestPdfEncryption(TransactionCase):
     def _stub_super(self, content, content_type="pdf"):
         parent = _super_class_of_override(self.report)
         return patch.object(
-            parent, "_render_qweb_pdf",
+            parent,
+            "_render_qweb_pdf",
             return_value=(content, content_type),
         )
 
     # ------------------------------------------------------------------ happy path
 
     def test_22_enabled_static_produces_encrypted_pdf(self):
-        self.report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "static",
-            "x_pdf_static_password": "topsecret",
-        })
+        self.report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "static",
+                "x_pdf_static_password": "topsecret",
+            }
+        )
         with self._stub_super(_blank_pdf()):
             result, ctype = self.report._render_qweb_pdf(self.report.id)
         self.assertEqual(ctype, "pdf")
@@ -407,11 +446,13 @@ class TestPdfEncryption(TransactionCase):
         self.assertTrue(reader.is_encrypted)
 
     def test_23_correct_password_decrypts(self):
-        self.report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "static",
-            "x_pdf_static_password": "correct",
-        })
+        self.report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "static",
+                "x_pdf_static_password": "correct",
+            }
+        )
         with self._stub_super(_blank_pdf()):
             result, _ = self.report._render_qweb_pdf(self.report.id)
         reader = PdfReader(io.BytesIO(result))
@@ -419,11 +460,13 @@ class TestPdfEncryption(TransactionCase):
         self.assertTrue(reader.decrypt("correct"))
 
     def test_24_wrong_password_fails_decrypt(self):
-        self.report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "static",
-            "x_pdf_static_password": "correct",
-        })
+        self.report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "static",
+                "x_pdf_static_password": "correct",
+            }
+        )
         with self._stub_super(_blank_pdf()):
             result, _ = self.report._render_qweb_pdf(self.report.id)
         reader = PdfReader(io.BytesIO(result))
@@ -431,11 +474,13 @@ class TestPdfEncryption(TransactionCase):
         self.assertEqual(reader.decrypt("wrong"), 0)
 
     def test_25_page_count_preserved(self):
-        self.report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "static",
-            "x_pdf_static_password": "pw",
-        })
+        self.report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "static",
+                "x_pdf_static_password": "pw",
+            }
+        )
         with self._stub_super(_blank_pdf(pages=5)):
             result, _ = self.report._render_qweb_pdf(self.report.id)
         reader = PdfReader(io.BytesIO(result))
@@ -446,11 +491,13 @@ class TestPdfEncryption(TransactionCase):
 
     def test_26_non_pdf_content_type_unchanged(self):
         payload = b"not a pdf"
-        self.report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "static",
-            "x_pdf_static_password": "pw",
-        })
+        self.report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "static",
+                "x_pdf_static_password": "pw",
+            }
+        )
         with self._stub_super(payload, content_type="text"):
             result, ctype = self.report._render_qweb_pdf(self.report.id)
         self.assertEqual(ctype, "text")
@@ -458,11 +505,13 @@ class TestPdfEncryption(TransactionCase):
 
     def test_27_disabled_flag_returns_original_bytes(self):
         source = _blank_pdf()
-        self.report.write({
-            "x_pdf_password_enabled": False,
-            "x_pdf_password_method": "static",
-            "x_pdf_static_password": "pw",
-        })
+        self.report.write(
+            {
+                "x_pdf_password_enabled": False,
+                "x_pdf_password_method": "static",
+                "x_pdf_static_password": "pw",
+            }
+        )
         with self._stub_super(source):
             result, _ = self.report._render_qweb_pdf(self.report.id)
         self.assertEqual(result, source)
@@ -470,11 +519,13 @@ class TestPdfEncryption(TransactionCase):
 
     def test_28_no_password_resolved_returns_original_bytes(self):
         source = _blank_pdf()
-        self.report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "static",
-            "x_pdf_static_password": False,  # no password resolvable
-        })
+        self.report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "static",
+                "x_pdf_static_password": False,  # no password resolvable
+            }
+        )
         with self._stub_super(source):
             result, _ = self.report._render_qweb_pdf(self.report.id)
         self.assertEqual(result, source)
@@ -482,46 +533,56 @@ class TestPdfEncryption(TransactionCase):
 
     def test_29_pypdf_unavailable_no_op(self):
         source = _blank_pdf()
-        self.report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "static",
-            "x_pdf_static_password": "pw",
-        })
+        self.report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "static",
+                "x_pdf_static_password": "pw",
+            }
+        )
         with self._stub_super(source), patch.object(mod, "PdfWriter", None):
             result, _ = self.report._render_qweb_pdf(self.report.id)
         self.assertEqual(result, source)
 
     def test_30_encryption_exception_falls_back_to_original(self):
         source = _blank_pdf()
-        self.report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "static",
-            "x_pdf_static_password": "pw",
-        })
+        self.report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "static",
+                "x_pdf_static_password": "pw",
+            }
+        )
         broken = mod.PdfWriter
+
         # wrap the real writer, make encrypt raise
         class Broken(broken):
             def encrypt(self, *a, **kw):
                 raise RuntimeError("boom")
-        with self._stub_super(source), \
-             patch.object(mod, "PdfWriter", Broken), \
-             self.assertLogs("odoo.addons.no_pdf_password_protection", level="ERROR"):
+
+        with self._stub_super(source), patch.object(
+            mod, "PdfWriter", Broken
+        ), self.assertLogs("odoo.addons.no_pdf_password_protection", level="ERROR"):
             result, _ = self.report._render_qweb_pdf(self.report.id)
         self.assertEqual(result, source)
 
     def test_31_password_does_not_leak_into_error_logs(self):
-        self.report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "static",
-            "x_pdf_static_password": "Sensitive!2026",
-        })
+        self.report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "static",
+                "x_pdf_static_password": "Sensitive!2026",
+            }
+        )
         # garbage bytes -> PdfReader raises -> error branch runs
-        with self._stub_super(b"not-a-valid-pdf"), \
-             self.assertLogs("odoo.addons.no_pdf_password_protection", level="ERROR") as cm:
+        with self._stub_super(b"not-a-valid-pdf"), self.assertLogs(
+            "odoo.addons.no_pdf_password_protection", level="ERROR"
+        ) as cm:
             self.report._render_qweb_pdf(self.report.id)
         joined = "\n".join(cm.output)
         self.assertNotIn(
-            "Sensitive!2026", joined,
+            "Sensitive!2026",
+            joined,
             "password must never appear in log output",
         )
 
@@ -529,17 +590,17 @@ class TestPdfEncryption(TransactionCase):
         # prove the resolver picks up the partner's VAT and the encryption
         # uses THAT password, not a stale static fallback
         partner_report = _make_report(self.env)
-        partner = _scrub(_partners(self.env), name="VATCarrier",
-                         vat="PARTNER-VAT")
-        partner_report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "vat",
-            "x_pdf_static_password": "SHOULD-NOT-USE",
-        })
+        partner = _scrub(_partners(self.env), name="VATCarrier", vat="PARTNER-VAT")
+        partner_report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "vat",
+                "x_pdf_static_password": "SHOULD-NOT-USE",
+            }
+        )
         parent = _super_class_of_override(partner_report)
         source = _blank_pdf()
-        with patch.object(parent, "_render_qweb_pdf",
-                          return_value=(source, "pdf")):
+        with patch.object(parent, "_render_qweb_pdf", return_value=(source, "pdf")):
             result, _ = partner_report._render_qweb_pdf(
                 partner_report.id, res_ids=[partner.id]
             )
@@ -569,11 +630,13 @@ class TestPdfEncryptionAlgorithm(TransactionCase):
         super().setUp()
         if not self.report:
             self.skipTest("no qweb-pdf report available")
-        self.report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "static",
-            "x_pdf_static_password": "Secret123",
-        })
+        self.report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "static",
+                "x_pdf_static_password": "Secret123",
+            }
+        )
 
     def _render_with(self, algo):
         if algo is not None:
@@ -586,9 +649,7 @@ class TestPdfEncryptionAlgorithm(TransactionCase):
 
     def _require_aes(self):
         if not mod.backend_supports_aes():
-            self.skipTest(
-                f"backend {mod.PDF_BACKEND} has no encrypt(algorithm=...)"
-            )
+            self.skipTest(f"backend {mod.PDF_BACKEND} has no encrypt(algorithm=...)")
 
     def test_33_default_is_aes256(self):
         fresh = self.env["ir.actions.report"].new({})
@@ -655,41 +716,41 @@ class TestMixedBatchPrint(TransactionCase):
 
     def setUp(self):
         super().setUp()
-        self.report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "vat",
-            "x_pdf_static_password": False,
-        })
+        self.report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "vat",
+                "x_pdf_static_password": False,
+            }
+        )
         pair = _partners(self.env, 2)
         self.a = _scrub(pair[0], name="A", vat="VAT-A")
         self.b = _scrub(pair[1], name="B", vat="VAT-B")
 
     def _render(self, res_ids):
         parent = _super_class_of_override(self.report)
-        with patch.object(parent, "_render_qweb_pdf",
-                          return_value=(_blank_pdf(), "pdf")):
+        with patch.object(
+            parent, "_render_qweb_pdf", return_value=(_blank_pdf(), "pdf")
+        ):
             return self.report._render_qweb_pdf(self.report.id, res_ids=res_ids)[0]
 
     def test_41_mixed_batch_is_not_blocked(self):
-        self.assertFalse(
-            self.report._batch_shares_one_password([self.a.id, self.b.id])
-        )
+        self.assertFalse(self.report._batch_shares_one_password([self.a.id, self.b.id]))
         result = self._render([self.a.id, self.b.id])
         self.assertNotIn(b"/Encrypt", result, "a mixed batch must come back unlocked")
 
     def test_42_uniform_batch_is_still_protected(self):
         same = _scrub(_partners(self.env, 3)[2], name="A2", vat="VAT-A")
-        self.assertTrue(
-            self.report._batch_shares_one_password([self.a.id, same.id])
-        )
+        self.assertTrue(self.report._batch_shares_one_password([self.a.id, same.id]))
         self.assertIn(b"/Encrypt", self._render([self.a.id, same.id]))
 
     def test_43_single_record_is_still_protected(self):
         self.assertIn(b"/Encrypt", self._render([self.a.id]))
 
     def test_44_static_password_batches_are_unaffected(self):
-        self.report.write({"x_pdf_password_method": "static",
-                           "x_pdf_static_password": "Shared"})
+        self.report.write(
+            {"x_pdf_password_method": "static", "x_pdf_static_password": "Shared"}
+        )
         self.assertIn(b"/Encrypt", self._render([self.a.id, self.b.id]))
 
     def test_45_logging_the_unlocked_batch_never_breaks_the_print(self):
@@ -700,8 +761,11 @@ class TestMixedBatchPrint(TransactionCase):
         self._render([self.a.id, self.b.id])
         if hasattr(self.a, "message_ids"):
             self.a.invalidate_recordset()
-            self.assertEqual(len(self.a.message_ids), before,
-                             "the batch path must not post to the chatter")
+            self.assertEqual(
+                len(self.a.message_ids),
+                before,
+                "the batch path must not post to the chatter",
+            )
 
 
 class TestPhoneNormalisation(TransactionCase):
@@ -714,21 +778,28 @@ class TestPhoneNormalisation(TransactionCase):
 
     def setUp(self):
         super().setUp()
-        self.report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "phone",
-            "x_pdf_static_password": False,
-        })
+        self.report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "phone",
+                "x_pdf_static_password": False,
+            }
+        )
 
     def _password_for(self, phone):
         partner = _scrub(_partners(self.env), name="P", phone=phone)
         return self.report._get_pdf_password(self.report, [partner.id])
 
     def test_46_every_punctuation_style_yields_the_same_digits(self):
-        for raw in ["+216 71 123 456", "(216) 71-123-456",
-                    "216.71.123.456", "216 71 123 456"]:
+        for raw in [
+            "+216 71 123 456",
+            "(216) 71-123-456",
+            "216.71.123.456",
+            "216 71 123 456",
+        ]:
             self.assertEqual(
-                self._password_for(raw), "21671123456",
+                self._password_for(raw),
+                "21671123456",
                 "phone %r did not normalise to digits" % raw,
             )
 
@@ -749,11 +820,13 @@ class TestEncryptionSuppression(TransactionCase):
 
     def setUp(self):
         super().setUp()
-        self.report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "static",
-            "x_pdf_static_password": "Secret123",
-        })
+        self.report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "static",
+                "x_pdf_static_password": "Secret123",
+            }
+        )
 
     def test_48_snailmail_context_suppresses_encryption(self):
         """The postal provider cannot print an encrypted file."""
@@ -797,13 +870,15 @@ class TestArchivedAttachment(TransactionCase):
 
     def setUp(self):
         super().setUp()
-        self.report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "static",
-            "x_pdf_static_password": "Secret123",
-            "attachment": "'archived.pdf'",
-            "x_pdf_protect_stored_copy": True,
-        })
+        self.report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "static",
+                "x_pdf_static_password": "Secret123",
+                "attachment": "'archived.pdf'",
+                "x_pdf_protect_stored_copy": True,
+            }
+        )
 
     def _streams_for(self, partners):
         return {
@@ -821,10 +896,12 @@ class TestArchivedAttachment(TransactionCase):
             self.assertIn(b"/Encrypt", v["raw"], "archived copy is plaintext")
 
     def test_52_each_archived_copy_uses_its_own_partner_password(self):
-        self.report.write({
-            "x_pdf_password_method": "vat",
-            "x_pdf_static_password": False,
-        })
+        self.report.write(
+            {
+                "x_pdf_password_method": "vat",
+                "x_pdf_static_password": False,
+            }
+        )
         pair = _partners(self.env, 2)
         a = _scrub(pair[0], name="A", vat="VAT-A")
         b = _scrub(pair[1], name="B", vat="VAT-B")
@@ -885,10 +962,12 @@ class TestPasswordLimits(TransactionCase):
 
     def setUp(self):
         super().setUp()
-        self.report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "static",
-        })
+        self.report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "static",
+            }
+        )
 
     def test_54_password_at_the_limit_is_accepted(self):
         self.report.x_pdf_static_password = "x" * 127
@@ -900,5 +979,7 @@ class TestPasswordLimits(TransactionCase):
         self.assertIsNone(self.report._encrypt_pdf(_blank_pdf(), None))
 
     def test_56_limit_is_measured_in_bytes_not_characters(self):
-        self.report.x_pdf_static_password = "é" * 64  # 64 x 2 bytes = 128 bytes in UTF-8
+        self.report.x_pdf_static_password = (
+            "é" * 64
+        )  # 64 x 2 bytes = 128 bytes in UTF-8
         self.assertIsNone(self.report._encrypt_pdf(_blank_pdf(), None))
