@@ -1,0 +1,23 @@
+# Line-ending policy — ODOO_GUIDELINES §15.5.
+# This repo stores LF blobs (verified via `git cat-file -p`). Keep LF end-to-end
+# so black / isort / prettier / eslint never fight the working-tree EOL.
+* text=auto eol=lf
+
+# Binary assets — never touch bytes / never diff.
+*.png  binary
+*.ico  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.pdf  binary
+
+# GitHub Linguist — the App Store listing pages are marketing documentation,
+# not source. Without this the repo reads as an HTML project on GitHub because
+# index.html outweighs any single Python file. Linguist only reads the
+# .gitattributes on the DEFAULT branch, so the same block ships on 18.0 too
+# (a deliberate, publish-facing exception to the section 15.8 rule that keeps
+# the lint-tooling .gitattributes off the App Store branch).
+no_pdf_password_protection/static/description/** linguist-documentation
+no_pdf_password_protection_account/static/description/** linguist-documentation
+*.pot linguist-generated
+*.po  linguist-generated

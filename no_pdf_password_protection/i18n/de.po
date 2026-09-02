@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-13 00:00+0000\n"
-"PO-Revision-Date: 2026-05-13 00:00+0000\n"
+"POT-Creation-Date: 2026-08-31 00:00+0000\n"
+"PO-Revision-Date: 2026-08-31 00:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "Language: de\n"
@@ -17,25 +17,59 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: no_pdf_password_protection
+#: model:ir.model.fields,field_description:no_pdf_password_protection.field_ir_actions_report__x_pdf_aes_unavailable
+msgid "AES Unavailable On This Server"
+msgstr "AES auf diesem Server nicht verfügbar"
+
+#. module: no_pdf_password_protection
+#: model:ir.model.fields.selection,name:no_pdf_password_protection.selection__ir_actions_report__x_pdf_encryption_algo__aes128
+msgid "AES-128"
+msgstr "AES-128"
+
+#. module: no_pdf_password_protection
+#: model:ir.model.fields.selection,name:no_pdf_password_protection.selection__ir_actions_report__x_pdf_encryption_algo__aes256
+msgid "AES-256 (recommended)"
+msgstr "AES-256 (empfohlen)"
+
+#. module: no_pdf_password_protection
+#: model:ir.model.fields,help:no_pdf_password_protection.field_ir_actions_report__x_pdf_encryption_algo
+msgid "AES-256 is the current standard and is readable by Acrobat 9+ and every modern PDF viewer. RC4-128 is retained only for very old readers; it is cryptographically broken and should not be used for confidential documents."
+msgstr "AES-256 ist der aktuelle Standard und kann mit Acrobat 9+ und jedem modernen PDF-Reader gelesen werden. RC4-128 bleibt nur für sehr alte Reader erhalten; es gilt als kryptografisch gebrochen und sollte nicht für vertrauliche Dokumente verwendet werden."
+
+#. module: no_pdf_password_protection
+#: model:ir.model.fields,field_description:no_pdf_password_protection.field_ir_actions_report__x_pdf_protect_stored_copy
+msgid "Also Protect the Copy Kept in Odoo"
+msgstr "Auch die in Odoo gespeicherte Kopie schützen"
+
+#. module: no_pdf_password_protection
+#: model:ir.model.fields,help:no_pdf_password_protection.field_ir_actions_report__x_pdf_protect_stored_copy
+msgid "By default only documents that leave Odoo are encrypted - what you print, email, or publish on the portal. The copy Odoo archives on the record stays readable so your own staff can preview it without typing a password; it is already covered by Odoo's access rights. Turn this on to encrypt that archived copy too. Emailed invoices are an exception: Odoo sends the very file it stores, so that copy is always encrypted whatever this is set to."
+msgstr "Standardmäßig werden nur Dokumente verschlüsselt, die Odoo verlassen: was Sie drucken, per E-Mail senden oder im Portal veröffentlichen. Die von Odoo am Datensatz archivierte Kopie bleibt lesbar, damit Ihre Mitarbeiter sie ohne Passwort ansehen können; sie ist bereits durch die Zugriffsrechte geschützt. Aktivieren Sie dies, um auch diese Kopie zu verschlüsseln. Per E-Mail versandte Rechnungen sind eine Ausnahme: Odoo versendet genau die gespeicherte Datei, diese Kopie ist daher immer verschlüsselt."
+
+#. module: no_pdf_password_protection
+#: model:ir.model.fields,field_description:no_pdf_password_protection.field_ir_actions_report__display_name
+msgid "Display Name"
+msgstr "Anzeigename"
+
+#. module: no_pdf_password_protection
 #: model:ir.model.fields,field_description:no_pdf_password_protection.field_ir_actions_report__x_pdf_password_enabled
 msgid "Enable PDF Password Protection"
 msgstr "PDF-Passwortschutz aktivieren"
 
 #. module: no_pdf_password_protection
-#: model:ir.module.module,summary:no_pdf_password_protection.module_meta_information
-msgid "Encrypt PDF reports with passwords - static or dynamic (partner VAT, phone, email)"
-msgstr "PDF-Berichte mit Passwörtern verschlüsseln - statisch oder dynamisch (USt-IdNr., Telefon, E-Mail des Partners)"
+#: model:ir.model.fields,field_description:no_pdf_password_protection.field_ir_actions_report__x_pdf_encryption_algo
+msgid "Encryption Algorithm"
+msgstr "Verschlüsselungsalgorithmus"
 
 #. module: no_pdf_password_protection
-#: model:ir.module.module,shortdesc:no_pdf_password_protection.module_meta_information
+#: model:ir.model.fields,field_description:no_pdf_password_protection.field_ir_actions_report__id
+msgid "ID"
+msgstr "ID"
+
+#. module: no_pdf_password_protection
 #: model_terms:ir.ui.view,arch_db:no_pdf_password_protection.view_ir_actions_report_form_pdf_password
 msgid "PDF Password Protection"
 msgstr "PDF-Passwortschutz"
-
-#. module: no_pdf_password_protection
-#: model:ir.module.module,description:no_pdf_password_protection.module_meta_information
-msgid "PDF Password Protection - encrypt any Odoo PDF report with passwords. Static password or dynamic from partner fields (VAT, phone, email). GDPR-friendly. Works with all QWeb PDF reports."
-msgstr "PDF-Passwortschutz - verschlüsseln Sie jeden Odoo-PDF-Bericht mit Passwörtern. Statisches Passwort oder dynamisch aus Partnerdaten (USt-IdNr., Telefon, E-Mail). DSGVO-konform. Funktioniert mit allen QWeb-PDF-Berichten."
 
 #. module: no_pdf_password_protection
 #: model:ir.model.fields.selection,name:no_pdf_password_protection.selection__ir_actions_report__x_pdf_password_method__email
@@ -58,7 +92,32 @@ msgid "Password Source"
 msgstr "Passwortquelle"
 
 #. module: no_pdf_password_protection
+#: model_terms:ir.ui.view,arch_db:no_pdf_password_protection.view_ir_actions_report_form_pdf_password
+msgid "Printing several records together produces one merged file, which can\n                    carry only one password. When the selected records do not share a password\n                    the merged copy is produced without protection. Print a record on its own,\n                    or use Send &amp; Print, to get a protected copy."
+msgstr "Mehrere Datensätze zusammen zu drucken erzeugt eine zusammengeführte Datei, die nur ein Passwort tragen kann. Haben die gewählten Datensätze nicht dasselbe Passwort, wird die zusammengeführte Kopie ohne Schutz erstellt. Drucken Sie einen Datensatz einzeln oder nutzen Sie Senden &amp; Drucken für eine geschützte Kopie."
+
+#. module: no_pdf_password_protection
+#: model:ir.model.fields.selection,name:no_pdf_password_protection.selection__ir_actions_report__x_pdf_encryption_algo__rc4_128
+msgid "RC4-128 (legacy readers only)"
+msgstr "RC4-128 (nur für alte Reader)"
+
+#. module: no_pdf_password_protection
+#: model:ir.model,name:no_pdf_password_protection.model_ir_actions_report
+msgid "Report Action"
+msgstr "Bericht-Aktion"
+
+#. module: no_pdf_password_protection
 #: model:ir.model.fields,field_description:no_pdf_password_protection.field_ir_actions_report__x_pdf_static_password
 #: model:ir.model.fields.selection,name:no_pdf_password_protection.selection__ir_actions_report__x_pdf_password_method__static
 msgid "Static Password"
 msgstr "Statisches Passwort"
+
+#. module: no_pdf_password_protection
+#: model_terms:ir.ui.view,arch_db:no_pdf_password_protection.view_ir_actions_report_form_pdf_password
+msgid "This server only has the older PyPDF2 library, which cannot produce AES.\n                    Documents will be encrypted with RC4-128 whatever is selected above.\n                    Install <b>pypdf</b> on the server to enable AES."
+msgstr "Auf diesem Server ist nur die ältere Bibliothek PyPDF2 vorhanden, die kein AES erzeugen kann. Dokumente werden unabhängig von der obigen Auswahl mit RC4-128 verschlüsselt. Installieren Sie <b>pypdf</b> auf dem Server, um AES zu aktivieren."
+
+#. module: no_pdf_password_protection
+#: model:ir.model.fields,help:no_pdf_password_protection.field_ir_actions_report__x_pdf_aes_unavailable
+msgid "True when the installed PDF library cannot produce AES, so encryption silently falls back to RC4-128."
+msgstr "Wahr, wenn die installierte PDF-Bibliothek kein AES erzeugen kann; die Verschlüsselung fällt dann stillschweigend auf RC4-128 zurück."

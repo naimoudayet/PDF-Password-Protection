@@ -16,7 +16,7 @@
   <text x="100" y="240" fill="#FFFFFF" font-size="92" font-weight="800" letter-spacing="-1">PDF Password</text>
   <text x="100" y="340" fill="#FF7F4F" font-size="92" font-weight="800" letter-spacing="-1">Protection.</text>
 
-  <text x="100" y="412" fill="#FFFFFF" font-size="26" font-weight="500">Encrypt every QWeb PDF report with a password.</text>
+  <text x="100" y="412" fill="#FFFFFF" font-size="26" font-weight="500">Encrypt every PDF report with a password.</text>
   <text x="100" y="450" fill="#BBA8B5" font-size="20" font-weight="400">Static or dynamic (partner VAT, phone, email). Per-report toggle. GDPR-ready.</text>
 
   <line x1="100" y1="510" x2="1180" y2="510" stroke="#8A6A80" stroke-width="1" opacity="0.6"/>
@@ -28,7 +28,7 @@
     <text x="335" y="560" fill="#8A6A80">&#183;</text>
     <text x="360" y="560" fill="#FFFFFF">GDPR READY</text>
     <text x="520" y="560" fill="#8A6A80">&#183;</text>
-    <text x="545" y="560" fill="#FFFFFF">AES-128</text>
+    <text x="545" y="560" fill="#FFFFFF">AES-256</text>
   </g>
 
   <g font-size="16" font-weight="700" letter-spacing="2">

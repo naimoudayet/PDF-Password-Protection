@@ -22,9 +22,13 @@ services:
       HOST: db
       USER: odoo
       PASSWORD: odoo
+      # the addons are bind-mounted, so without this Odoo writes __pycache__
+      # directories straight into the working tree and they end up committed
+      PYTHONDONTWRITEBYTECODE: 1
     volumes:
       - odoo-data:/var/lib/odoo
       - ./no_pdf_password_protection:/mnt/extra-addons/no_pdf_password_protection
+      - ./no_pdf_password_protection_account:/mnt/extra-addons/no_pdf_password_protection_account
 
 volumes:
   db-data:
