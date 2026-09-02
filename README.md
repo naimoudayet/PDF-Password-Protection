@@ -1,16 +1,34 @@
 # PDF Password Protection
 
+![License](https://img.shields.io/badge/license-LGPL--3-blue)
+![Odoo](https://img.shields.io/badge/Odoo-17.0-blueviolet)
+![Languages](https://img.shields.io/badge/languages-9-orange)
+![Version](https://img.shields.io/badge/version-17.0.2.0.0-informational)
+
 Encrypt Odoo PDF reports with passwords. Choose a static password or generate one dynamically from partner data (VAT number, phone, email).
+
+## Two Modules, Published Separately
+
+This repository holds two Odoo modules. Each is free, LGPL-3, and listed on the Apps store on its own.
+
+| Module | What it covers | Needs |
+|---|---|---|
+| **`no_pdf_password_protection`** &mdash; *PDF Password Protection* | Every PDF report you print, or attach through an email template: quotations, delivery slips, payslips, purchase orders, custom reports. Also where you choose the password source and the encryption strength. | Nothing but Odoo |
+| **`no_pdf_password_protection_account`** &mdash; *PDF Password Protection for Invoices* | The invoice Odoo **emails**, which Accounting builds by a different route. Each customer's copy gets that customer's own password. | The module above, plus Accounting |
+
+**Use the first on its own and everything works.** The second is an add-on: it has no settings of its own, reads the configuration from the first, and installs itself automatically once both that module and Accounting are present. See [Invoice Emails (Send & Print)](#invoice-emails-send--print) below.
 
 ## Features
 
+- **AES-256 Encryption** -- Modern, standards-based encryption by default. AES-128 and legacy RC4-128 remain selectable per report for very old readers.
 - **Static Password** -- Set a fixed password for any report.
 - **Dynamic from Partner VAT** -- Automatically use the partner's VAT number as the PDF password.
-- **Dynamic from Partner Phone** -- Use the partner's phone or mobile number (spaces stripped) as the password.
+- **Dynamic from Partner Phone** -- Use the partner's phone or mobile number as the password, reduced to digits only so the recipient always knows what to type.
 - **Dynamic from Partner Email** -- Use the partner's email address as the password.
 - **Per-Report Configuration** -- Enable or disable password protection on each report individually.
 - **Smart Fallback** -- If a dynamic field is empty, the module falls back to the static password.
 - **Works with All QWeb PDF Reports** -- Invoices, quotations, payslips, delivery slips, and any custom report.
+- **Covers Invoice Emails** -- With the companion module installed, "Send & Print" delivers an encrypted invoice too, each one using its own customer's password.
 - **Translated into 9 Languages** -- English, French, Spanish, German, Dutch, Portuguese (BR), Italian, Chinese (Simplified), Arabic. Each user sees the dialog in their own Odoo language.
 
 ## How It Works
@@ -21,16 +39,20 @@ Encrypt Odoo PDF reports with passwords. Choose a static password or generate on
 
 The module overrides `_render_qweb_pdf` on `ir.actions.report` to encrypt the generated PDF using pypdf (or PyPDF2 as a fallback) after Odoo renders it.
 
+Encryption strength is set per report via **Encryption Algorithm**. AES-256 is the default and is readable by Acrobat 9+ and every modern PDF viewer. AES requires `pypdf`; on a deployment that only ships PyPDF2 the module logs a warning and falls back to RC4-128 rather than failing.
+
 ## Technical Details
 
 | Item                  | Value                                              |
 |-----------------------|----------------------------------------------------|
-| Odoo Version          | 17.0                                     |
+| Odoo Version          | 17.0                                               |
+| Module Version        | 17.0.2.0.0                                         |
+| Companion Module      | `no_pdf_password_protection_account` 17.0.1.0.0     |
 | License               | LGPL-3                                             |
 | Dependencies          | `base`                                             |
-| Python Dependencies   | Bundled with Odoo (PyPDF2 / pypdf)                 |
+| Python Dependencies   | `pypdf` (declared) -- Odoo 17 bundles PyPDF2 1.26, which has no AES and a different API |
 | Custom Fields Prefix  | `x_` (upgrade-safe)                                |
-| Encryption Standard   | AES-128 (pypdf default)                            |
+| Encryption Standard   | AES-256 default; AES-128 and RC4-128 selectable    |
 | Performance Impact    | Minimal (< 100ms per report)                       |
 | Languages             | EN, FR, ES, DE, NL, PT-BR, IT, ZH-CN, AR           |
 
@@ -41,6 +63,62 @@ The module overrides `_render_qweb_pdf` on `ir.actions.report` to encrypt the ge
 | `x_pdf_password_enabled`   | Boolean   | Enable PDF password protection           |
 | `x_pdf_password_method`    | Selection | Password source (static/vat/phone/email) |
 | `x_pdf_static_password`    | Char      | Static password value                    |
+| `x_pdf_encryption_algo`    | Selection | Cipher: `aes256` (default), `aes128`, `rc4_128` |
+| `x_pdf_protect_stored_copy`| Boolean   | Encrypt the archived copy too (default off, see above) |
+| `x_pdf_email_notice`       | Html      | Editable, translatable notice added above the email (companion module) |
+| `x_pdf_aes_unavailable`    | Boolean   | Computed; true when the server's PDF library cannot do AES |
+
+## Invoice Emails (Send & Print)
+
+Odoo builds the PDF it emails from an invoice through a different code path than the Print button, so protecting the report alone is not enough -- the Print button would hand you an encrypted file while the customer received a plaintext one.
+
+The companion module **`no_pdf_password_protection_account`** (*PDF Password Protection for Invoices* on the Apps store) closes that gap. It ships in this repository, depends on this module plus Accounting, and encrypts the invoice at the last step of the send pipeline, after Odoo has finished its own post-processing. Because it works one invoice at a time, each customer's document is encrypted with *that customer's* password -- something the merged Print path cannot do.
+
+It is marked `auto_install`, so it installs itself when you install PDF Password Protection on a database that already has Accounting. **If you already have both installed and are upgrading, Odoo will not pull it in retroactively** -- install `no_pdf_password_protection_account` once from the Apps list.
+
+**PDF/A e-invoices are deliberately skipped.** ISO 19005 forbids encryption, so encrypting a Factur-X or ZUGFeRD invoice would break its conformance and make the embedded e-invoicing XML unreadable for the recipient's accounts-payable system. When the generated PDF declares PDF/A, the module leaves it unencrypted and posts a note in the invoice chatter explaining why.
+
+## Behaviour You Should Know About
+
+**A mixed batch print comes back unlocked.** Odoo merges a multi-record print into one PDF, and a PDF carries a single password. When the selected records do not share one, the merged copy is produced *without* protection -- an ordinary bulk print is never interrupted, and it is recorded in the log rather than on every record, since printing many documents at once is a list action. Print a record on its own, or use Send & Print, to get a protected copy. Batches that resolve to the same password -- one customer, or a static password -- are protected as usual.
+
+**The email can explain the password.** The Send dialog carries an option, on by default and shown only when that invoice report has protection enabled, which puts a short notice above your message so the customer is not left with a file that will not open. The wording is a translatable field on the report: edit it in the UI, in your own words, per language. It is added only when the document really was protected -- never after a PDF/A skip or an unresolved password. The batch send has no such option; it always includes the notice.
+
+**Your own staff are not asked for a password.** The module protects documents that *leave* Odoo -- what you print, email, or publish on the portal. The copy Odoo archives on the record stays readable, so a colleague previewing an invoice from the chatter is not blocked by a password for a record they can already open; Odoo's access rights already govern who sees it. Every route out re-encrypts on the way, so nothing delivered is weakened by this.
+
+Turn on **Also Protect the Copy Kept in Odoo** if you want encryption at rest as well.
+
+**Emailed invoices follow the same rule.** The companion module locks the invoice as it enters the customer's email and as the portal hands it over, not while it sits on the record -- so a sent invoice still opens for your own team without the customer's password.
+
+**"Send by Post" is left unencrypted on purpose.** Snailmail hands the PDF to a postal printing provider that cannot open an encrypted file, so encryption is skipped for that render and noted in the log.
+
+**PDF/A e-invoices are left unencrypted on purpose.** See the Send & Print section above.
+
+**Portal downloads are encrypted.** A customer opening their invoice from the portal needs the password, even though they are already signed in. That is the point -- the file stays protected after it leaves Odoo -- but tell your customers, or they will call you.
+
+**Passwords are capped at 127 bytes**, the limit in the PDF specification. Anything longer is refused rather than encrypted, because readers truncate over-long passwords differently and the recipient may end up unable to open the file.
+
+**The static password is stored in the clear** and is readable by anyone who can read report definitions (typically Settings users) through the API, even though the form masks it. Treat it as a shared secret, not a credential.
+
+**Multi-company:** the static password is a single value on the report, not per company. Companies sharing a report share its password.
+
+**After uninstalling**, PDFs that were already encrypted stay encrypted -- the module is not needed to open them, but nothing can recover a password derived from partner data that has since changed.
+
+## Screenshots
+
+| | |
+|---|---|
+| ![Password protection settings on an invoice report](no_pdf_password_protection/static/description/screenshots/screenshot_1.png) | ![The four password sources](no_pdf_password_protection/static/description/screenshots/screenshot_2.png) |
+| Turn it on per report, pick the cipher, pick where the password comes from. | Static, or a different password per recipient from their VAT number, phone or email. |
+| ![Two customers selected for one print job, refused](no_pdf_password_protection/static/description/screenshots/screenshot_3.png) | ![The recipient opening the document](no_pdf_password_protection/static/description/screenshots/screenshot_4.png) |
+| A merged file carries one password, so a mixed batch is stopped and explained. | The delivered file asks for the password in any modern PDF reader. |
+
+Companion module (`no_pdf_password_protection_account`):
+
+| | |
+|---|---|
+| ![Sending a customer invoice by email](no_pdf_password_protection_account/static/description/screenshots/screenshot_1.png) | ![The sent invoice asking for a password](no_pdf_password_protection_account/static/description/screenshots/screenshot_2.png) |
+| Send the invoice as usual - no extra step. | The document that went out is locked; even Odoo's own preview asks for the password. |
 
 ## Installation
 
@@ -70,7 +148,7 @@ docker-compose up -d
 ## Running Tests
 
 ```bash
-docker exec -it pdfpwd-odoo-17 \
+docker exec -it pdfpwd-odoo-19 \
   odoo --test-enable --stop-after-init \
   -d test_db -i no_pdf_password_protection \
   --test-tags no_pdf_password_protection
