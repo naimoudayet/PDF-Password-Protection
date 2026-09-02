@@ -31,10 +31,11 @@ def _super_target(record, method):
     """The class our override's super() call resolves to."""
     mro = type(record).__mro__
     idx = next(
-        i for i, c in enumerate(mro)
+        i
+        for i, c in enumerate(mro)
         if "no_pdf_password_protection_account" in (getattr(c, "__module__", "") or "")
     )
-    return next(c for c in mro[idx + 1:] if method in c.__dict__)
+    return next(c for c in mro[idx + 1 :] if method in c.__dict__)
 
 
 class TestOutgoingInvoice(TransactionCase):
@@ -53,36 +54,44 @@ class TestOutgoingInvoice(TransactionCase):
 
     def setUp(self):
         super().setUp()
-        self.report.write({
-            "x_pdf_password_enabled": True,
-            "x_pdf_password_method": "static",
-            "x_pdf_static_password": "Secret123",
-            "x_pdf_encryption_algo": "aes256",
-        })
+        self.report.write(
+            {
+                "x_pdf_password_enabled": True,
+                "x_pdf_password_method": "static",
+                "x_pdf_static_password": "Secret123",
+                "x_pdf_encryption_algo": "aes256",
+            }
+        )
 
     def _move_for(self, name, vat=False):
         partner = self.env["res.partner"].create({"name": name, "vat": vat})
-        return self.env["account.move"].create({
-            "move_type": "out_invoice",
-            "partner_id": partner.id,
-        })
+        return self.env["account.move"].create(
+            {
+                "move_type": "out_invoice",
+                "partner_id": partner.id,
+            }
+        )
 
     def _posted_move_for(self, name, vat=False):
         """The send wizard refuses a draft, so this one carries a line."""
         partner = self.env["res.partner"].create({"name": name, "vat": vat})
-        move = self.env["account.move"].create({
-            "move_type": "out_invoice",
-            "partner_id": partner.id,
-            "invoice_line_ids": [(0, 0, {"name": "Item", "quantity": 1,
-                                         "price_unit": 100.0})],
-        })
+        move = self.env["account.move"].create(
+            {
+                "move_type": "out_invoice",
+                "partner_id": partner.id,
+                "invoice_line_ids": [
+                    (0, 0, {"name": "Item", "quantity": 1, "price_unit": 100.0})
+                ],
+            }
+        )
         move.action_post()
         return move
 
     def _mail_params(self, move, attachments):
         parent = _super_target(self.Send, "_get_mail_params")
-        with patch.object(parent, "_get_mail_params",
-                          return_value={"attachments": list(attachments)}):
+        with patch.object(
+            parent, "_get_mail_params", return_value={"attachments": list(attachments)}
+        ):
             return self.Send._get_mail_params(move, {"pdf_report": self.report})
 
     # ------------------------------------------------------------ the email
@@ -112,7 +121,9 @@ class TestOutgoingInvoice(TransactionCase):
 
     def test_04_filename_is_preserved(self):
         move = self._move_for("Acme", "ACME-VAT")
-        out = self._mail_params(move, [("INV_2026_0001.pdf", _blank_pdf())])["attachments"]
+        out = self._mail_params(move, [("INV_2026_0001.pdf", _blank_pdf())])[
+            "attachments"
+        ]
         self.assertEqual(out[0][0], "INV_2026_0001.pdf")
 
     def test_05_the_einvoicing_xml_is_not_touched(self):
@@ -131,8 +142,9 @@ class TestOutgoingInvoice(TransactionCase):
 
     def test_07_unresolvable_password_sends_the_file_intact(self):
         """Never corrupt a document we could not protect."""
-        self.report.write({"x_pdf_password_method": "vat",
-                           "x_pdf_static_password": False})
+        self.report.write(
+            {"x_pdf_password_method": "vat", "x_pdf_static_password": False}
+        )
         move = self._move_for("NoVat", False)
         source = _blank_pdf()
         out = self._mail_params(move, [("INV.pdf", source)])["attachments"]
@@ -159,10 +171,15 @@ class TestOutgoingInvoice(TransactionCase):
         """
         move = self._move_for("Acme", "ACME-VAT")
         source = _blank_pdf()
-        attachment = self.env["ir.attachment"].create({
-            "name": "INV.pdf", "raw": source, "mimetype": "application/pdf",
-            "res_model": "account.move", "res_id": move.id,
-        })
+        attachment = self.env["ir.attachment"].create(
+            {
+                "name": "INV.pdf",
+                "raw": source,
+                "mimetype": "application/pdf",
+                "res_model": "account.move",
+                "res_id": move.id,
+            }
+        )
         self._mail_params(move, [(attachment.name, attachment.raw)])
         attachment.invalidate_recordset()
         self.assertEqual(attachment.raw, source, "the archived copy was locked")
@@ -231,9 +248,14 @@ class TestOutgoingInvoice(TransactionCase):
 
     def _body_after_send(self, move, attachments, notice_on=True):
         parent = _super_target(self.Send, "_get_mail_params")
-        with patch.object(parent, "_get_mail_params",
-                          return_value={"attachments": list(attachments),
-                                        "body": "<p>Dear customer,</p>"}):
+        with patch.object(
+            parent,
+            "_get_mail_params",
+            return_value={
+                "attachments": list(attachments),
+                "body": "<p>Dear customer,</p>",
+            },
+        ):
             return self.Send._get_mail_params(
                 move, {"pdf_report": self.report, "pdf_notice_in_email": notice_on}
             )["body"]
@@ -243,23 +265,32 @@ class TestOutgoingInvoice(TransactionCase):
         move = self._move_for("Acme", "ACME-VAT")
         body = self._body_after_send(move, [("INV.pdf", _blank_pdf())])
         self.assertIn("NOTICE-TEXT", body)
-        self.assertTrue(body.index("NOTICE-TEXT") < body.index("Dear customer"),
-                        "the notice must come first")
+        self.assertTrue(
+            body.index("NOTICE-TEXT") < body.index("Dear customer"),
+            "the notice must come first",
+        )
 
     def test_19_no_notice_when_nothing_was_protected(self):
         """A PDF/A e-invoice is skipped; promising protection would be a lie."""
         self.report.x_pdf_email_notice = "<p>NOTICE-TEXT</p>"
         move = self._move_for("FrenchCo", "FR-VAT")
         pdfa = _blank_pdf() + b"<pdfaid:part>3</pdfaid:part>"
-        self.assertNotIn("NOTICE-TEXT", self._body_after_send(move, [("INV.pdf", pdfa)]))
+        self.assertNotIn(
+            "NOTICE-TEXT", self._body_after_send(move, [("INV.pdf", pdfa)])
+        )
 
     def test_20_no_notice_when_no_password_resolved(self):
-        self.report.write({"x_pdf_email_notice": "<p>NOTICE-TEXT</p>",
-                           "x_pdf_password_method": "vat",
-                           "x_pdf_static_password": False})
+        self.report.write(
+            {
+                "x_pdf_email_notice": "<p>NOTICE-TEXT</p>",
+                "x_pdf_password_method": "vat",
+                "x_pdf_static_password": False,
+            }
+        )
         move = self._move_for("NoVat", False)
-        self.assertNotIn("NOTICE-TEXT",
-                         self._body_after_send(move, [("INV.pdf", _blank_pdf())]))
+        self.assertNotIn(
+            "NOTICE-TEXT", self._body_after_send(move, [("INV.pdf", _blank_pdf())])
+        )
 
     def test_21_checkbox_off_suppresses_the_notice(self):
         self.report.x_pdf_email_notice = "<p>NOTICE-TEXT</p>"
@@ -290,6 +321,7 @@ class TestOutgoingInvoice(TransactionCase):
         """Concatenating as plain strings makes Odoo escape the whole body,
         so the customer sees markup instead of a sentence."""
         from markupsafe import Markup
+
         self.report.x_pdf_email_notice = "<p>NOTICE-TEXT</p>"
         move = self._move_for("Acme", "ACME-VAT")
         body = self._body_after_send(move, [("INV.pdf", _blank_pdf())])
@@ -301,8 +333,10 @@ class TestOutgoingInvoice(TransactionCase):
         """Users must be able to reword it without touching the module."""
         self.report.x_pdf_email_notice = "<p>Completely custom wording.</p>"
         move = self._move_for("Acme", "ACME-VAT")
-        self.assertIn("Completely custom wording.",
-                      self._body_after_send(move, [("INV.pdf", _blank_pdf())]))
+        self.assertIn(
+            "Completely custom wording.",
+            self._body_after_send(move, [("INV.pdf", _blank_pdf())]),
+        )
 
     def test_24_notice_field_is_translatable(self):
         """It is edited per language through the UI, not through a .po file."""
@@ -312,9 +346,12 @@ class TestOutgoingInvoice(TransactionCase):
 
     def test_25_wizard_only_offers_it_when_protection_is_on(self):
         move = self._posted_move_for("Acme", "ACME-VAT")
-        wiz = self.env["account.move.send.wizard"].create({
-            "move_id": move.id, "pdf_report_id": self.report.id,
-        })
+        wiz = self.env["account.move.send.wizard"].create(
+            {
+                "move_id": move.id,
+                "pdf_report_id": self.report.id,
+            }
+        )
         self.assertTrue(wiz.x_pdf_password_active)
         self.assertTrue(wiz.x_pdf_notice_in_email, "should default on")
         self.report.x_pdf_password_enabled = False
@@ -335,17 +372,23 @@ class TestOutgoingInvoice(TransactionCase):
         then calls invalidate_recordset() by hand; both hide the dependency.
         """
         move = self._posted_move_for("Acme", "ACME-VAT")
-        plain = self.env["ir.actions.report"].create({
-            "name": "Plain Invoice", "model": "account.move",
-            "report_type": "qweb-pdf",
-            "report_name": "no_pdf_password_protection_account.plain_test",
-        })
-        wiz = self.env["account.move.send.wizard"].create({
-            "move_id": move.id, "pdf_report_id": plain.id,
-        })
+        plain = self.env["ir.actions.report"].create(
+            {
+                "name": "Plain Invoice",
+                "model": "account.move",
+                "report_type": "qweb-pdf",
+                "report_name": "no_pdf_password_protection_account.plain_test",
+            }
+        )
+        wiz = self.env["account.move.send.wizard"].create(
+            {
+                "move_id": move.id,
+                "pdf_report_id": plain.id,
+            }
+        )
         self.assertFalse(wiz.x_pdf_password_active, "unprotected report")
 
-        wiz.pdf_report_id = self.report          # what the onchange does
+        wiz.pdf_report_id = self.report  # what the onchange does
         # deliberately no invalidate_recordset(): the depends must do the work
         self.assertTrue(
             wiz.x_pdf_password_active,
@@ -354,10 +397,13 @@ class TestOutgoingInvoice(TransactionCase):
 
     def test_26_wizard_choice_reaches_the_send_settings(self):
         move = self._posted_move_for("Acme", "ACME-VAT")
-        wiz = self.env["account.move.send.wizard"].create({
-            "move_id": move.id, "pdf_report_id": self.report.id,
-            "x_pdf_notice_in_email": False,
-        })
+        wiz = self.env["account.move.send.wizard"].create(
+            {
+                "move_id": move.id,
+                "pdf_report_id": self.report.id,
+                "x_pdf_notice_in_email": False,
+            }
+        )
         self.assertIs(wiz._get_sending_settings()["pdf_notice_in_email"], False)
 
     def test_27_paths_without_a_wizard_default_to_on(self):
