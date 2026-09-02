@@ -21,7 +21,7 @@ Versions use Odoo's `<odoo_version>.<module_major>.<module_minor>.<module_patch>
 - **`x_pdf_encryption_algo`** on `ir.actions.report` - choose AES-256 (default), AES-128, or RC4-128. RC4-128 is retained only for very old readers and is labelled as such.
 - **`no_pdf_password_protection_account`** - companion module bridging this module and Accounting. `auto_install`, LGPL-3, ships in this repository. It encrypts the invoice as the mail is assembled (`_get_mail_params`), after Odoo's own post-processing has run, so each invoice is encrypted with **its own customer's** password rather than the first record's.
 - PDF/A e-invoices are detected and deliberately left unencrypted, with an explanatory note posted to the invoice chatter. ISO 19005 forbids encryption; encrypting a Factur-X or ZUGFeRD invoice would break conformance and hide the embedded e-invoicing XML from the recipient's AP system.
-- 8 new tests covering the emitted cipher per algorithm, and 13 covering the accounting send path (87 total across both modules).
+- 8 new tests covering the emitted cipher per algorithm, and 13 covering the accounting send path (88 total across both modules).
 
 ### Fixed
 
