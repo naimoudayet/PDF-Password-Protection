@@ -1,6 +1,6 @@
 # Copyright 2026 Naim OUDAYET
 # License LGPL-3
-from odoo import fields, models
+from odoo import api, fields, models
 
 
 class AccountMoveSendWizard(models.TransientModel):
@@ -20,6 +20,7 @@ class AccountMoveSendWizard(models.TransientModel):
         "used to keep the option out of the way for everyone else.",
     )
 
+    @api.depends("pdf_report_id", "move_id")
     def _compute_x_pdf_password_active(self):
         for wizard in self:
             report = wizard.pdf_report_id or wizard._get_default_pdf_report_id(
