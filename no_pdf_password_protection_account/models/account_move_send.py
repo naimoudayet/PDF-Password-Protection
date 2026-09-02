@@ -173,7 +173,9 @@ class AccountMove(models.Model):
         rest is what lets your own staff preview the same invoice without a
         password.
         """
-        doc = super()._get_invoice_legal_documents(filetype, allow_fallback=allow_fallback)
+        doc = super()._get_invoice_legal_documents(
+            filetype, allow_fallback=allow_fallback
+        )
         return self._protect_legal_document(doc)
 
     def _get_invoice_legal_documents_all(self, allow_fallback=False):
