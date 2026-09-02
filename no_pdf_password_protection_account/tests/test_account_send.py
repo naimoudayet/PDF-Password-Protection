@@ -321,6 +321,37 @@ class TestOutgoingInvoice(TransactionCase):
         wiz.invalidate_recordset()
         self.assertFalse(wiz.x_pdf_password_active)
 
+    def test_25b_active_flag_recomputes_when_the_report_arrives_later(self):
+        """Regression: the compute carried no @api.depends.
+
+        The web client opens the dialog on an empty record and lets onchange
+        fill `pdf_report_id` in afterwards. With no depends the flag was
+        computed once, against the empty record, and never recomputed - so on
+        every real Send dialog the checkbox stayed hidden even though the
+        report was protected. Server-side reads all looked correct, which is
+        why only a browser caught it.
+
+        test_25 misses this because it passes the report at create time and
+        then calls invalidate_recordset() by hand; both hide the dependency.
+        """
+        move = self._posted_move_for("Acme", "ACME-VAT")
+        plain = self.env["ir.actions.report"].create({
+            "name": "Plain Invoice", "model": "account.move",
+            "report_type": "qweb-pdf",
+            "report_name": "no_pdf_password_protection_account.plain_test",
+        })
+        wiz = self.env["account.move.send.wizard"].create({
+            "move_id": move.id, "pdf_report_id": plain.id,
+        })
+        self.assertFalse(wiz.x_pdf_password_active, "unprotected report")
+
+        wiz.pdf_report_id = self.report          # what the onchange does
+        # deliberately no invalidate_recordset(): the depends must do the work
+        self.assertTrue(
+            wiz.x_pdf_password_active,
+            "the checkbox stays hidden on the real Send dialog",
+        )
+
     def test_26_wizard_choice_reaches_the_send_settings(self):
         move = self._posted_move_for("Acme", "ACME-VAT")
         wiz = self.env["account.move.send.wizard"].create({
