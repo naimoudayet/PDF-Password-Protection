@@ -4,3 +4,7 @@ __pycache__/
 .idea/
 .vscode/
 *.log
+
+# Agent notes are local-only (ODOO_GUIDELINES 11).
+CLAUDE.md
+.claude/
