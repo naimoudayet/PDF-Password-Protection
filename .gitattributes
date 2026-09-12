@@ -5,7 +5,7 @@
 # GitHub Linguist only.
 #
 # Section 15.8 keeps the lint-tooling .gitattributes (EOL policy, pre-commit
-# companion configs) on 16.0.dev and off this branch. This file is a different
+# companion configs) on 16.0-dev and off this branch. This file is a different
 # thing: Linguist reads .gitattributes from the repository's DEFAULT branch,
 # which is 19.0, so this copy has no effect today. It is kept so the
 # classification still holds if the default branch ever moves to this series,
