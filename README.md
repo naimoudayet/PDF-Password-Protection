@@ -11,10 +11,10 @@ Encrypt Odoo PDF reports with passwords. Choose a static password or generate on
 
 This repository holds two Odoo modules. Each is free, LGPL-3, and listed on the Apps store on its own.
 
-| Module | What it covers | Needs |
-|---|---|---|
-| **`no_pdf_password_protection`** &mdash; *PDF Password Protection* | Every PDF report you print, or attach through an email template: quotations, delivery slips, payslips, purchase orders, custom reports. Also where you choose the password source and the encryption strength. | Nothing but Odoo |
-| **`no_pdf_password_protection_account`** &mdash; *PDF Password: Invoices* | The invoice Odoo **emails**, which Accounting builds by a different route. Each customer's copy gets that customer's own password. | The module above, plus Accounting |
+| Module | Version | Price | What it covers | Needs |
+|---|---|---|---|---|
+| **`no_pdf_password_protection`** &mdash; *PDF Password Protection* | 19.0.2.0.0 | Free | Every PDF report you print, or attach through an email template: quotations, delivery slips, payslips, purchase orders, custom reports. Also where you choose the password source and the encryption strength. | Nothing but Odoo |
+| **`no_pdf_password_protection_account`** &mdash; *PDF Password: Invoices* | 19.0.1.0.0 | Free | The invoice Odoo **emails**, which Accounting builds by a different route. Each customer's copy gets that customer's own password. | The module above, plus Accounting |
 
 **Use the first on its own and everything works.** The second is an add-on: it has no settings of its own, reads the configuration from the first, and installs itself automatically once both that module and Accounting are present. See [Invoice Emails (Send & Print)](#invoice-emails-send--print) below.
 
