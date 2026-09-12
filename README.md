@@ -14,7 +14,7 @@ email template through the same `_render_qweb_pdf` call the Print button uses, s
 turning protection on covers **both** routes: the report you print and the invoice
 you email.
 
-On Odoo 18 and 19 that is no longer true - Accounting there builds the emailed
+On Odoo 17, 18 and 19 that is no longer true - Accounting there builds the emailed
 invoice by a separate path - so those branches carry a second module,
 `no_pdf_password_protection_account`, to cover it. This branch does not need one.
 
