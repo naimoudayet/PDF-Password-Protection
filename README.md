@@ -25,10 +25,10 @@ Each Odoo major version lives on its own branch. Pick the one matching your serv
 
 | Odoo Version | Stable | Development | Modules |
 |---|---|---|---|
-| 19.0 | [`19.0`](../../tree/19.0) | [`19.0.dev`](../../tree/19.0.dev) | both |
-| 18.0 | [`18.0`](../../tree/18.0) | [`18.0.dev`](../../tree/18.0.dev) | both |
-| 17.0 | [`17.0`](../../tree/17.0) | [`17.0.dev`](../../tree/17.0.dev) | both |
-| 16.0 | [`16.0`](../../tree/16.0) | [`16.0.dev`](../../tree/16.0.dev) | base only |
+| 19.0 | [`19.0`](../../tree/19.0) | [`19.0-dev`](../../tree/19.0-dev) | both |
+| 18.0 | [`18.0`](../../tree/18.0) | [`18.0-dev`](../../tree/18.0-dev) | both |
+| 17.0 | [`17.0`](../../tree/17.0) | [`17.0-dev`](../../tree/17.0-dev) | both |
+| 16.0 | [`16.0`](../../tree/16.0) | [`16.0-dev`](../../tree/16.0-dev) | base only |
 
 `PDF Password Protection` is on every branch. The invoice companion is on
 19.0, 18.0 and 17.0. The 16.0 branch does not need one: on that series Odoo
