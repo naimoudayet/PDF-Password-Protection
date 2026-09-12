@@ -1,3 +1,7 @@
+# Line-ending policy - ODOO_GUIDELINES 15.5.
+# This repo stores LF blobs (verified via `git cat-file -p`). Keep LF end-to-end.
+* text=auto eol=lf
+
 # GitHub Linguist only.
 #
 # Section 15.8 keeps the lint-tooling .gitattributes (EOL policy, pre-commit

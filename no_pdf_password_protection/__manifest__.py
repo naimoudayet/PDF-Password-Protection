@@ -9,7 +9,7 @@
     "Static password or dynamic from partner fields (VAT, phone, email). "
     "GDPR-friendly. Works with all QWeb PDF reports. "
     "If you also email invoices, add the free companion module "
-    "'PDF Password Protection for Invoices', which extends the "
+    "'PDF Password: Invoices', which extends the "
     "same settings to the copy Accounting sends out.",
     "version": "18.0.2.0.0",
     "category": "Extra Tools",
