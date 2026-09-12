@@ -1,7 +1,7 @@
 # Copyright 2026 Naim OUDAYET
 # License LGPL-3
 {
-    "name": "PDF Password Protection for Invoices",
+    "name": "PDF Password: Invoices",
     "summary": "Extend PDF password protection to the accounting Send & Print flow",
     "description": "Bridge between PDF Password Protection and Accounting. "
     "Odoo builds the invoice PDF it emails through a different "
