@@ -310,11 +310,12 @@ class TestOutgoingInvoice(TransactionCase):
     def test_22b_the_standard_sentence_is_translated(self):
         """A default stored on a translatable field would have been English
         for everyone; resolving it at send time gives the recipient's language."""
+        if not self.env["res.lang"].search_count([("code", "=", "fr_FR")]):
+            # Odoo 18+ refuses a context in a language that is not installed.
+            self.skipTest("fr_FR not active on this database")
         self.report.x_pdf_email_notice = False
         english = self.report._pdf_email_notice_html()
         french = self.report.with_context(lang="fr_FR")._pdf_email_notice_html()
-        if not self.env["res.lang"].search_count([("code", "=", "fr_FR")]):
-            self.skipTest("fr_FR not active on this database")
         self.assertNotEqual(english, french, "the standard sentence did not translate")
 
     def test_22c_the_notice_is_html_not_escaped_text(self):
