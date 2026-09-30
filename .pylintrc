@@ -11,7 +11,7 @@ manifest-required-authors=Naim OUDAYET
 manifest-required-keys=license
 manifest-deprecated-keys=
 license-allowed=AGPL-3,GPL-2,GPL-3,LGPL-3,OEEL-1,OPL-1,Other proprietary
-valid-odoo-versions=18.0
+valid-odoo-versions=19.0
 
 [MESSAGES CONTROL]
 disable=all
