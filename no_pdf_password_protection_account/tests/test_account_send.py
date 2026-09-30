@@ -182,7 +182,7 @@ class TestOutgoingInvoice(TransactionCase):
         )
         self._mail_params(move, [(attachment.name, attachment.raw)])
         attachment.invalidate_recordset()
-        self.assertEqual(attachment.raw, source, "the archived copy was locked")
+        self.assertEqual(bytes(attachment.raw), source, "the archived copy was locked")
 
     # ---------------------------------------------------- the portal / zip
 
