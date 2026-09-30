@@ -8,7 +8,7 @@
     "AES-256 by default (AES-128 and legacy RC4-128 also selectable). "
     "Static password or dynamic from partner fields (VAT, phone, email). "
     "GDPR-friendly. Works with all QWeb PDF reports.",
-    "version": "16.0.2.0.0",
+    "version": "16.0.2.0.1",
     "category": "Extra Tools",
     "website": "https://www.oudayet.com",
     "author": "Naim OUDAYET",

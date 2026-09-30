@@ -5,6 +5,12 @@ All notable changes to **PDF Password Protection** for Odoo 16.0 are documented 
 This file follows the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 Versions use Odoo's `<odoo_version>.<module_major>.<module_minor>.<module_patch>` scheme.
 
+## [16.0.2.0.1] - 2026-09-30
+
+### Fixed
+
+- The help on **Also Protect the Copy Kept in Odoo** said an emailed invoice was an exception whose copy kept in Odoo is always encrypted, because Odoo sends the very file it stores. It is not: the email carries its own encrypted copy, and the invoice kept on the record stays readable like every other document unless you turn that setting on. The help now says only what happens, in every language.
+
 ## [16.0.2.0.0] - 2026-09-02
 
 ### Security
