@@ -310,11 +310,12 @@ class TestOutgoingInvoice(TransactionCase):
     def test_22b_the_standard_sentence_is_translated(self):
         """A default stored on a translatable field would have been English
         for everyone; resolving it at send time gives the recipient's language."""
+        if not self.env["res.lang"].search_count([("code", "=", "fr_FR")]):
+            # Odoo 20 refuses a context in a language that is not installed.
+            self.skipTest("fr_FR not active on this database")
         self.report.x_pdf_email_notice = False
         english = self.report._pdf_email_notice_html()
         french = self.report.with_context(lang="fr_FR")._pdf_email_notice_html()
-        if not self.env["res.lang"].search_count([("code", "=", "fr_FR")]):
-            self.skipTest("fr_FR not active on this database")
         self.assertNotEqual(english, french, "the standard sentence did not translate")
 
     def test_22c_the_notice_is_html_not_escaped_text(self):
@@ -411,3 +412,35 @@ class TestOutgoingInvoice(TransactionCase):
         move = self._move_for("Acme", "ACME-VAT")
         settings = self.Send._get_default_sending_settings(move)
         self.assertTrue(settings["pdf_notice_in_email"])
+
+    # ------------------------------------------ stored files (Odoo 20)
+
+    def _stored_pdf(self, move):
+        return self.env["ir.attachment"].create(
+            {
+                "name": "INV.pdf",
+                "raw": _blank_pdf(),
+                "mimetype": "application/pdf",
+                "res_model": "account.move",
+                "res_id": move.id,
+            }
+        )
+
+    def test_28_emailed_stored_file_is_encrypted(self):
+        """Core mails ``(name, attachment.raw)``: on Odoo 20 that is a
+        BinaryValue, not bytes."""
+        move = self._move_for("Acme", "ACME-VAT")
+        attachment = self._stored_pdf(move)
+        params = self._mail_params(move, [(attachment.name, attachment.raw)])
+        (name, content) = params["attachments"][0]
+        self.assertEqual(name, "INV.pdf")
+        self.assertTrue(PdfReader(io.BytesIO(bytes(content))).is_encrypted)
+
+    def test_29_portal_download_of_the_stored_file_is_encrypted(self):
+        """The portal's legal document carries ``invoice_pdf.raw`` too."""
+        move = self._move_for("Acme", "ACME-VAT")
+        attachment = self._stored_pdf(move)
+        doc = move._protect_legal_document(
+            {"filename": "INV.pdf", "filetype": "pdf", "content": attachment.raw}
+        )
+        self.assertTrue(PdfReader(io.BytesIO(bytes(doc["content"]))).is_encrypted)

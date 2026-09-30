@@ -18,6 +18,17 @@ PDFA_MARKER = b"pdfaid"
 PDF_MAGIC = b"%PDF"
 
 
+def _as_bytes(value):
+    """Attachment content as bytes.
+
+    Odoo 20 hands stored files around as a BinaryValue (``attachment.raw``, the
+    mailer's attachments, the portal's legal documents), not as ``bytes``; it
+    converts with ``bytes()``. Bytes and empty values pass through."""
+    if not value or isinstance(value, bytes):
+        return value
+    return bytes(value)
+
+
 class AccountMoveSend(models.AbstractModel):
     _inherit = "account.move.send"
 
@@ -101,16 +112,17 @@ class AccountMoveSend(models.AbstractModel):
     @api.model
     def _protect_outgoing(self, move, report, name, raw):
         """Return `raw` encrypted, or unchanged when it must not be."""
-        if not raw or not raw.startswith(PDF_MAGIC):
+        data = _as_bytes(raw)
+        if not data or not data.startswith(PDF_MAGIC):
             # The electronic-invoicing XML travels alongside the PDF; it is not
             # ours to touch and the recipient's software must be able to read it.
             return raw
 
-        if self._pdf_declares_pdfa(raw):
+        if self._pdf_declares_pdfa(data):
             self._skip_pdfa_invoice(move, report)
             return raw
 
-        encrypted = report._encrypt_pdf(raw, [move.id])
+        encrypted = report._encrypt_pdf(data, [move.id])
         if encrypted:
             return encrypted
 
@@ -139,7 +151,7 @@ class AccountMoveSend(models.AbstractModel):
         conformance claim, not on the presence of the XML, which would
         otherwise disable protection for everyone.
         """
-        return PDFA_MARKER in (raw or b"")
+        return PDFA_MARKER in (_as_bytes(raw) or b"")
 
     @api.model
     def _skip_pdfa_invoice(self, invoice, report):
@@ -192,7 +204,7 @@ class AccountMove(models.Model):
         if not report or not report.x_pdf_password_enabled:
             return doc
 
-        raw = doc["content"]
+        raw = _as_bytes(doc["content"])
         if not raw.startswith(PDF_MAGIC):
             return doc
         if self.env["account.move.send"]._pdf_declares_pdfa(raw):

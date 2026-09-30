@@ -79,6 +79,8 @@ def _super_class_of_override(report):
 
     Needed so we can patch the upstream `_render_qweb_pdf` (i.e. the `super()`
     target of our override) and feed the override deterministic input bytes.
+    That is the first class after ours that defines the method: on Odoo 20 the
+    class right after ours (account_edi_ubl_cii's) does not.
     """
     mro = type(report).__mro__
     our_idx = next(
@@ -86,7 +88,7 @@ def _super_class_of_override(report):
         for i, c in enumerate(mro)
         if "no_pdf_password_protection" in (getattr(c, "__module__", "") or "")
     )
-    return mro[our_idx + 1]
+    return next(c for c in mro[our_idx + 1 :] if "_render_qweb_pdf" in c.__dict__)
 
 
 class TestPdfPasswordResolver(TransactionCase):

@@ -5,6 +5,16 @@ All notable changes to **PDF Password Protection** for Odoo 20.0 are documented 
 This file follows the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 Versions use Odoo's `<odoo_version>.<module_major>.<module_minor>.<module_patch>` scheme.
 
+## [20.0.2.0.0] - 2026-09-30
+
+### Changed
+
+- Ported to Odoo 20 (official `odoo:20` image; both modules' full test suites pass). Odoo 20 ships `pypdf`, so documents are always protected with AES-256 there.
+
+### Fixed
+
+- Odoo 20 hands stored files around as a binary object rather than raw bytes. The accounting companion read the invoice mailed by **Send & Print** and the one downloaded from the **portal** as bytes, which would have stopped both with an error; it now reads either form.
+
 ## [19.0.2.0.0] - 2026-08-31
 
 ### Security
