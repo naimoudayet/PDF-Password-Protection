@@ -1,15 +1,15 @@
-# OCA-derived prettier config — JS / SCSS only (static/description/ excluded in
-# .pre-commit-config.yaml). endOfLine: lf matches the repo blobs (§15.5).
-bracketSpacing: false
+# OCA-derived prettier config - JS / SCSS only (static/description/ excluded in
+# .pre-commit-config.yaml). endOfLine matches the repo's stored blobs (§15.5).
+# bracketSpacing and tabWidth match Odoo core JS style (`import { patch }`,
+# 4-space indent). Prettier defaults tabWidth to 2, so it MUST be stated:
+# without it a `pre-commit run -a` reindents every OWL file in the addon.
+bracketSpacing: true
 printWidth: 88
+tabWidth: 4
 proseWrap: always
 semi: true
 trailingComma: all
 endOfLine: lf
-plugins:
-  - "@prettier/plugin-xml"
-xmlWhitespaceSensitivity: ignore
-overrides:
-  - files: "*.xml"
-    options:
-      parser: xml
+# No XML plugin: the archived mirrors-prettier cannot resolve it (prettier looks
+# for plugins relative to the CWD, not the hook env), and reflowing hand-written
+# view XML gains nothing. XML is covered by oca-checks-odoo-module.
