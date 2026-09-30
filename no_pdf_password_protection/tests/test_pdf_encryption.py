@@ -80,14 +80,13 @@ def _super_class_of_override(report):
     Needed so we can patch the upstream `_render_qweb_pdf` (i.e. the `super()`
     target of our override) and feed the override deterministic input bytes.
     That is the first class after ours that defines the method: on Odoo 20 the
-    class right after ours (account_edi_ubl_cii's) does not.
+    class right after ours (account_edi_ubl_cii's) does not. "Ours" is this
+    module's class exactly - the accounting companion's module name contains
+    ours, sits earlier in the MRO, and matching it patched core account's
+    override in between, so the base override never ran.
     """
     mro = type(report).__mro__
-    our_idx = next(
-        i
-        for i, c in enumerate(mro)
-        if "no_pdf_password_protection" in (getattr(c, "__module__", "") or "")
-    )
+    our_idx = next(i for i, c in enumerate(mro) if c.__module__ == mod.__name__)
     return next(c for c in mro[our_idx + 1 :] if "_render_qweb_pdf" in c.__dict__)
 
 
