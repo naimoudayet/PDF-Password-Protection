@@ -11,7 +11,7 @@
     "If you also email invoices, add the free companion module "
     "'PDF Password: Invoices', which extends the "
     "same settings to the copy Accounting sends out.",
-    "version": "19.0.2.0.0",
+    "version": "19.0.2.0.1",
     "category": "Extra Tools",
     "website": "https://www.oudayet.com",
     "author": "Naim OUDAYET",
