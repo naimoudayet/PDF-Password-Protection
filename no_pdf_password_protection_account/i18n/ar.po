@@ -19,23 +19,41 @@ msgstr ""
 #. module: no_pdf_password_protection_account
 #. odoo-python
 #: code:addons/no_pdf_password_protection_account/models/ir_actions_report.py:0
-msgid "<p>The attached document is password protected. Please open it with the password we have shared with you.</p>"
-msgstr "<p>المستند المرفق محمي بكلمة مرور. يُرجى فتحه بكلمة المرور التي شاركناها معك.</p>"
-
-#. module: no_pdf_password_protection_account
-#: model:ir.model,name:no_pdf_password_protection_account.model_account_move_send
-msgid "Account Move Send"
-msgstr "إرسال قيد محاسبي"
-
-#. module: no_pdf_password_protection_account
-#: model:ir.model,name:no_pdf_password_protection_account.model_account_move_send_wizard
-msgid "Account Move Send Wizard"
-msgstr "معالج إرسال القيد المحاسبي"
+msgid ""
+"<p>The attached document is password protected. Please open it with the "
+"password we have shared with you.</p>"
+msgstr ""
+"<p>المستند المرفق محمي بكلمة مرور. يُرجى فتحه بكلمة المرور التي شاركناها "
+"معك.</p>"
 
 #. module: no_pdf_password_protection_account
 #: model:ir.model.fields,help:no_pdf_password_protection_account.field_account_move_send_wizard__x_pdf_notice_in_email
-msgid "Adds the notice configured on the invoice report above the message, so the customer is not left with a file that will not open. It is only added when the document really was protected."
-msgstr "يضيف فوق الرسالة الإشعار المُعدّ في تقرير الفاتورة، حتى لا يجد العميل ملفًا لا يُفتح. ولا يُضاف إلا إذا حُمي المستند فعلًا."
+msgid ""
+"Adds the notice configured on the invoice report above the message, so the "
+"customer is not left with a file that will not open. It is only added when "
+"the document really was protected."
+msgstr ""
+"يضيف فوق الرسالة الإشعار المُعدّ في تقرير الفاتورة، حتى لا يجد العميل ملفًا "
+"لا يُفتح. ولا يُضاف إلا إذا حُمي المستند فعلًا."
+
+#. module: no_pdf_password_protection_account
+#: model:ir.module.module,description:base.module_no_pdf_password_protection_account
+msgid ""
+"Bridge between PDF Password Protection and Accounting. Odoo builds the "
+"invoice PDF it emails through a different code path than the Print button, "
+"which would otherwise deliver an unencrypted invoice to the customer. This "
+"module closes that gap and gives every document its own recipient's "
+"password. Requires the free module 'PDF Password Protection', which is where"
+" the password source and encryption strength are configured; install that "
+"one first and this add-on installs itself automatically once Accounting is "
+"present. It has no settings of its own."
+msgstr ""
+"جسر بين حماية PDF بكلمة مرور والمحاسبة. ينشئ أودو ملف PDF للفاتورة الذي "
+"يرسله بالبريد الإلكتروني عبر مسار مختلف عن زر الطباعة، ما كان سيوصل إلى "
+"العميل فاتورة غير مشفّرة. تسد هذه الوحدة تلك الثغرة وتمنح كل مستند كلمة مرور"
+" مستلمه. تتطلب الوحدة المجانية «حماية PDF بكلمة مرور» حيث يُضبط مصدر كلمة "
+"المرور وقوة التشفير؛ ثبّتها أولًا، وستُثبَّت هذه الإضافة تلقائيًا بمجرد وجود"
+" المحاسبة. لا تملك إعدادات خاصة بها."
 
 #. module: no_pdf_password_protection_account
 #: model:ir.model.fields,field_description:no_pdf_password_protection_account.field_account_move__display_name
@@ -49,6 +67,11 @@ msgstr "اسم العرض"
 #: model:ir.model.fields,field_description:no_pdf_password_protection_account.field_account_move_send_wizard__x_pdf_notice_in_email
 msgid "Explain the password in the email"
 msgstr "شرح كلمة المرور في البريد"
+
+#. module: no_pdf_password_protection_account
+#: model:ir.module.module,summary:base.module_no_pdf_password_protection_account
+msgid "Extend PDF password protection to the accounting Send & Print flow"
+msgstr "توسيع حماية PDF بكلمة مرور لتشمل مسار الإرسال والطباعة في المحاسبة"
 
 #. module: no_pdf_password_protection_account
 #: model:ir.model.fields,field_description:no_pdf_password_protection_account.field_account_move__id
@@ -65,8 +88,17 @@ msgstr "قيد يومية"
 
 #. module: no_pdf_password_protection_account
 #: model_terms:ir.ui.view,arch_db:no_pdf_password_protection_account.view_ir_actions_report_form_pdf_notice
-msgid "Leave empty to use the standard sentence, already translated into every supported language."
-msgstr "اتركه فارغًا لاستخدام الجملة القياسية، وهي مترجمة بالفعل إلى كل اللغات المدعومة."
+msgid ""
+"Leave empty to use the standard sentence, already translated into every "
+"supported language."
+msgstr ""
+"اتركه فارغًا لاستخدام الجملة القياسية، وهي مترجمة بالفعل إلى كل اللغات "
+"المدعومة."
+
+#. module: no_pdf_password_protection_account
+#: model:ir.module.module,shortdesc:base.module_no_pdf_password_protection_account
+msgid "PDF Password: Invoices"
+msgstr "كلمة مرور PDF: الفواتير"
 
 #. module: no_pdf_password_protection_account
 #: model:ir.model.fields,field_description:no_pdf_password_protection_account.field_ir_actions_report__x_pdf_email_notice
@@ -80,8 +112,18 @@ msgstr "الحماية بكلمة مرور مُفعّلة"
 
 #. module: no_pdf_password_protection_account
 #: model:ir.model.fields,help:no_pdf_password_protection_account.field_ir_actions_report__x_pdf_email_notice
-msgid "Put above the message when a protected invoice is emailed, so the customer is not left with a file that will not open. Leave it empty to use the standard sentence, which is already translated into every language this module supports. Write your own here to replace it - and never put the password itself in this text if you use a fixed password, since it would travel in the same message."
-msgstr "يوضَع فوق الرسالة عند إرسال فاتورة محمية بالبريد، حتى لا يجد العميل ملفًا لا يُفتح. اتركه فارغًا لاستخدام الجملة القياسية المترجمة بالفعل إلى كل اللغات التي يدعمها هذا التطبيق. اكتب صياغتك هنا لاستبدالها - ولا تضع فيه كلمة المرور نفسها إذا كنت تستخدم كلمة ثابتة، لأنها ستسافر في الرسالة نفسها."
+msgid ""
+"Put above the message when a protected invoice is emailed, so the customer "
+"is not left with a file that will not open. Leave it empty to use the "
+"standard sentence, which is already translated into every language this "
+"module supports. Write your own here to replace it - and never put the "
+"password itself in this text if you use a fixed password, since it would "
+"travel in the same message."
+msgstr ""
+"يوضَع فوق الرسالة عند إرسال فاتورة محمية بالبريد، حتى لا يجد العميل ملفًا لا"
+" يُفتح. اتركه فارغًا لاستخدام الجملة القياسية المترجمة بالفعل إلى كل اللغات "
+"التي يدعمها هذا التطبيق. اكتب صياغتك هنا لاستبدالها - ولا تضع فيه كلمة "
+"المرور نفسها إذا كنت تستخدم كلمة ثابتة، لأنها ستسافر في الرسالة نفسها."
 
 #. module: no_pdf_password_protection_account
 #: model:ir.model,name:no_pdf_password_protection_account.model_ir_actions_report
@@ -89,12 +131,32 @@ msgid "Report Action"
 msgstr "إجراء التقرير"
 
 #. module: no_pdf_password_protection_account
+#: model:ir.model,name:no_pdf_password_protection_account.model_account_move_send_wizard
+msgid "Send Invoice Wizard"
+msgstr "معالج إرسال الفاتورة"
+
+#. module: no_pdf_password_protection_account
+#: model:ir.model,name:no_pdf_password_protection_account.model_account_move_send
+msgid "Shared Send Invoice Wizard Functions"
+msgstr "وظائف معالج إرسال الفواتير المشتركة"
+
+#. module: no_pdf_password_protection_account
 #. odoo-python
 #: code:addons/no_pdf_password_protection_account/models/account_move_send.py:0
-msgid "This invoice was sent without password protection: it is a PDF/A e-invoice, and encrypting it would break PDF/A conformance and make the embedded e-invoicing XML unreadable for the recipient."
-msgstr "تم إرسال هذه الفاتورة دون حماية بكلمة مرور: فهي فاتورة إلكترونية بصيغة PDF/A، وتشفيرها سيؤدي إلى فقدان التوافق مع PDF/A وجعل ملف XML للفوترة الإلكترونية المضمّن غير قابل للقراءة لدى المستلم."
+msgid ""
+"This invoice was sent without password protection: it is a PDF/A e-invoice, "
+"and encrypting it would break PDF/A conformance and make the embedded "
+"e-invoicing XML unreadable for the recipient."
+msgstr ""
+"تم إرسال هذه الفاتورة دون حماية بكلمة مرور: فهي فاتورة إلكترونية بصيغة "
+"PDF/A، وتشفيرها سيؤدي إلى فقدان التوافق مع PDF/A وجعل ملف XML للفوترة "
+"الإلكترونية المضمّن غير قابل للقراءة لدى المستلم."
 
 #. module: no_pdf_password_protection_account
 #: model:ir.model.fields,help:no_pdf_password_protection_account.field_account_move_send_wizard__x_pdf_password_active
-msgid "Whether the selected invoice report has password protection on; used to keep the option out of the way for everyone else."
-msgstr "يوضّح ما إذا كانت الحماية بكلمة مرور مُفعّلة على تقرير الفاتورة المحدد؛ ويُستخدم لإخفاء الخيار عن البقية."
+msgid ""
+"Whether the selected invoice report has password protection on; used to keep"
+" the option out of the way for everyone else."
+msgstr ""
+"يوضّح ما إذا كانت الحماية بكلمة مرور مُفعّلة على تقرير الفاتورة المحدد؛ "
+"ويُستخدم لإخفاء الخيار عن البقية."

@@ -19,23 +19,44 @@ msgstr ""
 #. module: no_pdf_password_protection_account
 #. odoo-python
 #: code:addons/no_pdf_password_protection_account/models/ir_actions_report.py:0
-msgid "<p>The attached document is password protected. Please open it with the password we have shared with you.</p>"
-msgstr "<p>Le document joint est protégé par un mot de passe. Veuillez l'ouvrir avec le mot de passe que nous vous avons communiqué.</p>"
-
-#. module: no_pdf_password_protection_account
-#: model:ir.model,name:no_pdf_password_protection_account.model_account_move_send
-msgid "Account Move Send"
-msgstr "Envoi d'écriture comptable"
-
-#. module: no_pdf_password_protection_account
-#: model:ir.model,name:no_pdf_password_protection_account.model_account_move_send_wizard
-msgid "Account Move Send Wizard"
-msgstr "Assistant d'envoi d'écriture comptable"
+msgid ""
+"<p>The attached document is password protected. Please open it with the "
+"password we have shared with you.</p>"
+msgstr ""
+"<p>Le document joint est protégé par un mot de passe. Veuillez l'ouvrir avec"
+" le mot de passe que nous vous avons communiqué.</p>"
 
 #. module: no_pdf_password_protection_account
 #: model:ir.model.fields,help:no_pdf_password_protection_account.field_account_move_send_wizard__x_pdf_notice_in_email
-msgid "Adds the notice configured on the invoice report above the message, so the customer is not left with a file that will not open. It is only added when the document really was protected."
-msgstr "Ajoute au-dessus du message l'avis configuré sur le rapport de facture, afin que le client ne reçoive pas un fichier qui refuse de s'ouvrir. Il n'est ajouté que si le document a réellement été protégé."
+msgid ""
+"Adds the notice configured on the invoice report above the message, so the "
+"customer is not left with a file that will not open. It is only added when "
+"the document really was protected."
+msgstr ""
+"Ajoute au-dessus du message l'avis configuré sur le rapport de facture, afin"
+" que le client ne reçoive pas un fichier qui refuse de s'ouvrir. Il n'est "
+"ajouté que si le document a réellement été protégé."
+
+#. module: no_pdf_password_protection_account
+#: model:ir.module.module,description:base.module_no_pdf_password_protection_account
+msgid ""
+"Bridge between PDF Password Protection and Accounting. Odoo builds the "
+"invoice PDF it emails through a different code path than the Print button, "
+"which would otherwise deliver an unencrypted invoice to the customer. This "
+"module closes that gap and gives every document its own recipient's "
+"password. Requires the free module 'PDF Password Protection', which is where"
+" the password source and encryption strength are configured; install that "
+"one first and this add-on installs itself automatically once Accounting is "
+"present. It has no settings of its own."
+msgstr ""
+"Passerelle entre Protection par mot de passe PDF et la Comptabilité. Odoo "
+"produit le PDF de facture qu'il envoie par e-mail par un autre chemin que le"
+" bouton Imprimer, ce qui enverrait sinon une facture non chiffrée au client."
+" Ce module comble cette lacune et donne à chaque document le mot de passe de"
+" son propre destinataire. Nécessite le module gratuit « Protection par mot "
+"de passe PDF », où se règlent la source du mot de passe et la force du "
+"chiffrement ; installez-le d'abord et ce module s'installe tout seul dès que"
+" la Comptabilité est présente. Il n'a aucun réglage propre."
 
 #. module: no_pdf_password_protection_account
 #: model:ir.model.fields,field_description:no_pdf_password_protection_account.field_account_move__display_name
@@ -51,12 +72,19 @@ msgid "Explain the password in the email"
 msgstr "Expliquer le mot de passe dans l'e-mail"
 
 #. module: no_pdf_password_protection_account
+#: model:ir.module.module,summary:base.module_no_pdf_password_protection_account
+msgid "Extend PDF password protection to the accounting Send & Print flow"
+msgstr ""
+"Étend la protection par mot de passe PDF au flux Envoyer et imprimer de la "
+"comptabilité"
+
+#. module: no_pdf_password_protection_account
 #: model:ir.model.fields,field_description:no_pdf_password_protection_account.field_account_move__id
 #: model:ir.model.fields,field_description:no_pdf_password_protection_account.field_account_move_send__id
 #: model:ir.model.fields,field_description:no_pdf_password_protection_account.field_account_move_send_wizard__id
 #: model:ir.model.fields,field_description:no_pdf_password_protection_account.field_ir_actions_report__id
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: no_pdf_password_protection_account
 #: model:ir.model,name:no_pdf_password_protection_account.model_account_move
@@ -65,8 +93,17 @@ msgstr "Pièce comptable"
 
 #. module: no_pdf_password_protection_account
 #: model_terms:ir.ui.view,arch_db:no_pdf_password_protection_account.view_ir_actions_report_form_pdf_notice
-msgid "Leave empty to use the standard sentence, already translated into every supported language."
-msgstr "Laissez vide pour utiliser la phrase standard, déjà traduite dans toutes les langues prises en charge."
+msgid ""
+"Leave empty to use the standard sentence, already translated into every "
+"supported language."
+msgstr ""
+"Laissez vide pour utiliser la phrase standard, déjà traduite dans toutes les"
+" langues prises en charge."
+
+#. module: no_pdf_password_protection_account
+#: model:ir.module.module,shortdesc:base.module_no_pdf_password_protection_account
+msgid "PDF Password: Invoices"
+msgstr "Mot de passe PDF : factures"
 
 #. module: no_pdf_password_protection_account
 #: model:ir.model.fields,field_description:no_pdf_password_protection_account.field_ir_actions_report__x_pdf_email_notice
@@ -80,8 +117,20 @@ msgstr "Protection par mot de passe active"
 
 #. module: no_pdf_password_protection_account
 #: model:ir.model.fields,help:no_pdf_password_protection_account.field_ir_actions_report__x_pdf_email_notice
-msgid "Put above the message when a protected invoice is emailed, so the customer is not left with a file that will not open. Leave it empty to use the standard sentence, which is already translated into every language this module supports. Write your own here to replace it - and never put the password itself in this text if you use a fixed password, since it would travel in the same message."
-msgstr "Placé au-dessus du message lorsqu'une facture protégée est envoyée par e-mail, afin que le client ne reçoive pas un fichier qui refuse de s'ouvrir. Laissez vide pour utiliser la phrase standard, déjà traduite dans toutes les langues prises en charge par ce module. Écrivez la vôtre ici pour la remplacer - et n'y mettez jamais le mot de passe lui-même si vous utilisez un mot de passe fixe, car il voyagerait dans le même message."
+msgid ""
+"Put above the message when a protected invoice is emailed, so the customer "
+"is not left with a file that will not open. Leave it empty to use the "
+"standard sentence, which is already translated into every language this "
+"module supports. Write your own here to replace it - and never put the "
+"password itself in this text if you use a fixed password, since it would "
+"travel in the same message."
+msgstr ""
+"Placé au-dessus du message lorsqu'une facture protégée est envoyée par "
+"e-mail, afin que le client ne reçoive pas un fichier qui refuse de s'ouvrir."
+" Laissez vide pour utiliser la phrase standard, déjà traduite dans toutes "
+"les langues prises en charge par ce module. Écrivez la vôtre ici pour la "
+"remplacer - et n'y mettez jamais le mot de passe lui-même si vous utilisez "
+"un mot de passe fixe, car il voyagerait dans le même message."
 
 #. module: no_pdf_password_protection_account
 #: model:ir.model,name:no_pdf_password_protection_account.model_ir_actions_report
@@ -89,12 +138,33 @@ msgid "Report Action"
 msgstr "Action de rapport"
 
 #. module: no_pdf_password_protection_account
+#: model:ir.model,name:no_pdf_password_protection_account.model_account_move_send_wizard
+msgid "Send Invoice Wizard"
+msgstr "Assistant d’envoi de facture"
+
+#. module: no_pdf_password_protection_account
+#: model:ir.model,name:no_pdf_password_protection_account.model_account_move_send
+msgid "Shared Send Invoice Wizard Functions"
+msgstr "Fonctions partagées de l’assistant d’envoi de facture"
+
+#. module: no_pdf_password_protection_account
 #. odoo-python
 #: code:addons/no_pdf_password_protection_account/models/account_move_send.py:0
-msgid "This invoice was sent without password protection: it is a PDF/A e-invoice, and encrypting it would break PDF/A conformance and make the embedded e-invoicing XML unreadable for the recipient."
-msgstr "Cette facture a été envoyée sans protection par mot de passe : il s'agit d'une facture électronique PDF/A, et la chiffrer romprait la conformité PDF/A et rendrait le XML de facturation électronique intégré illisible pour le destinataire."
+msgid ""
+"This invoice was sent without password protection: it is a PDF/A e-invoice, "
+"and encrypting it would break PDF/A conformance and make the embedded "
+"e-invoicing XML unreadable for the recipient."
+msgstr ""
+"Cette facture a été envoyée sans protection par mot de passe : il s'agit "
+"d'une facture électronique PDF/A, et la chiffrer romprait la conformité "
+"PDF/A et rendrait le XML de facturation électronique intégré illisible pour "
+"le destinataire."
 
 #. module: no_pdf_password_protection_account
 #: model:ir.model.fields,help:no_pdf_password_protection_account.field_account_move_send_wizard__x_pdf_password_active
-msgid "Whether the selected invoice report has password protection on; used to keep the option out of the way for everyone else."
-msgstr "Indique si le rapport de facture sélectionné a la protection par mot de passe activée ; sert à masquer l'option pour tous les autres."
+msgid ""
+"Whether the selected invoice report has password protection on; used to keep"
+" the option out of the way for everyone else."
+msgstr ""
+"Indique si le rapport de facture sélectionné a la protection par mot de "
+"passe activée ; sert à masquer l'option pour tous les autres."
