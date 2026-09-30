@@ -53,11 +53,10 @@ msgid ""
 "email, or publish on the portal. The copy Odoo archives on the record stays "
 "readable so your own staff can preview it without typing a password; it is "
 "already covered by Odoo's access rights. Turn this on to encrypt that "
-"archived copy too. Emailed invoices are an exception: Odoo sends the very "
-"file it stores, so that copy is always encrypted whatever this is set to."
+"archived copy too."
 msgstr ""
 "默认仅对离开 Odoo 的文档加密：即您打印、发送邮件或发布到门户的文件。Odoo 在单据上归档的副本保持可读，以便内部员工无需输入密码即可预览；它已受"
-" Odoo 访问权限保护。启用此项可一并加密该归档副本。通过邮件发送的发票是例外：Odoo 发送的就是它存储的那个文件，因此该副本始终加密。"
+" Odoo 访问权限保护。启用此项可一并加密该归档副本。"
 
 #. module: no_pdf_password_protection
 #: model:ir.model.fields,field_description:no_pdf_password_protection.field_ir_actions_report__display_name
