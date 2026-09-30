@@ -3,7 +3,7 @@
 ![License](https://img.shields.io/badge/license-LGPL--3-blue)
 ![Odoo](https://img.shields.io/badge/Odoo-16.0-blueviolet)
 ![Languages](https://img.shields.io/badge/languages-9-orange)
-![Version](https://img.shields.io/badge/version-16.0.2.0.0-informational)
+![Version](https://img.shields.io/badge/version-16.0.2.0.1-informational)
 
 Encrypt Odoo PDF reports with passwords. Choose a static password or generate one dynamically from partner data (VAT number, phone, email).
 
@@ -45,7 +45,7 @@ Encryption strength is set per report via **Encryption Algorithm**. AES-256 is t
 | Item                  | Value                                              |
 |-----------------------|----------------------------------------------------|
 | Odoo Version          | 16.0                                               |
-| Module Version        | 16.0.2.0.0                                         |
+| Module Version        | 16.0.2.0.1                                         |
 | License               | LGPL-3                                             |
 | Dependencies          | `base`                                             |
 | Python Dependencies   | `pypdf` (declared) -- Odoo 16 bundles PyPDF2 1.26, which has no AES and a different API |
