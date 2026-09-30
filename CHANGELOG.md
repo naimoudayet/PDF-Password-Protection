@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to **PDF Password Protection** for Odoo 19.0 are documented here.
+All notable changes to **PDF Password Protection** for Odoo 20.0 are documented here.
 
 This file follows the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 Versions use Odoo's `<odoo_version>.<module_major>.<module_minor>.<module_patch>` scheme.

@@ -13,7 +13,7 @@
     "encryption strength are configured; install that one first "
     "and this add-on installs itself automatically once "
     "Accounting is present. It has no settings of its own.",
-    "version": "19.0.1.0.0",
+    "version": "20.0.1.0.0",
     "category": "Extra Tools",
     "website": "https://www.oudayet.com",
     "author": "Naim OUDAYET",

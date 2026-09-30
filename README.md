@@ -1,9 +1,9 @@
 # PDF Password Protection
 
 ![License](https://img.shields.io/badge/license-LGPL--3-blue)
-![Odoo](https://img.shields.io/badge/Odoo-19.0-blueviolet)
+![Odoo](https://img.shields.io/badge/Odoo-20.0-blueviolet)
 ![Languages](https://img.shields.io/badge/languages-9-orange)
-![Version](https://img.shields.io/badge/version-19.0.2.0.0-informational)
+![Version](https://img.shields.io/badge/version-20.0.2.0.0-informational)
 
 Encrypt Odoo PDF reports with passwords. Choose a static password or generate one dynamically from partner data (VAT number, phone, email).
 
@@ -13,8 +13,8 @@ This repository holds two Odoo modules. Each is free, LGPL-3, and listed on the 
 
 | Module | Version | Price | What it covers | Needs |
 |---|---|---|---|---|
-| **`no_pdf_password_protection`** &mdash; *PDF Password Protection* | 19.0.2.0.0 | Free | Every PDF report you print, or attach through an email template: quotations, delivery slips, payslips, purchase orders, custom reports. Also where you choose the password source and the encryption strength. | Nothing but Odoo |
-| **`no_pdf_password_protection_account`** &mdash; *PDF Password: Invoices* | 19.0.1.0.0 | Free | The invoice Odoo **emails**, which Accounting builds by a different route. Each customer's copy gets that customer's own password. | The module above, plus Accounting |
+| **`no_pdf_password_protection`** &mdash; *PDF Password Protection* | 20.0.2.0.0 | Free | Every PDF report you print, or attach through an email template: quotations, delivery slips, payslips, purchase orders, custom reports. Also where you choose the password source and the encryption strength. | Nothing but Odoo |
+| **`no_pdf_password_protection_account`** &mdash; *PDF Password: Invoices* | 20.0.1.0.0 | Free | The invoice Odoo **emails**, which Accounting builds by a different route. Each customer's copy gets that customer's own password. | The module above, plus Accounting |
 
 **Use the first on its own and everything works.** The second is an add-on: it has no settings of its own, reads the configuration from the first, and installs itself automatically once both that module and Accounting are present. See [Invoice Emails (Send & Print)](#invoice-emails-send--print) below.
 
@@ -45,9 +45,9 @@ Encryption strength is set per report via **Encryption Algorithm**. AES-256 is t
 
 | Item                  | Value                                              |
 |-----------------------|----------------------------------------------------|
-| Odoo Version          | 19.0                                               |
-| Module Version        | 19.0.2.0.0                                         |
-| Companion Module      | `no_pdf_password_protection_account` 19.0.1.0.0     |
+| Odoo Version          | 20.0                                               |
+| Module Version        | 20.0.2.0.0                                         |
+| Companion Module      | `no_pdf_password_protection_account` 20.0.1.0.0     |
 | License               | LGPL-3                                             |
 | Dependencies          | `base`                                             |
 | Python Dependencies   | None declared -- uses whichever of pypdf / PyPDF2 Odoo already ships |
@@ -148,7 +148,7 @@ docker-compose up -d
 ## Running Tests
 
 ```bash
-docker exec -it pdfpwd-odoo-19 \
+docker exec -it pdfpwd-odoo-20 \
   odoo --test-enable --stop-after-init \
   -d test_db -i no_pdf_password_protection \
   --test-tags no_pdf_password_protection
@@ -178,7 +178,7 @@ Under GDPR Article 32, organizations must implement appropriate technical measur
 
 ## Compatibility
 
-- Odoo 19.0 Community and Enterprise
+- Odoo 20.0 Community and Enterprise
 - Works with any module that generates QWeb PDF reports (Accounting, Sale, Purchase, HR, Stock, etc.)
 
 ## Author
@@ -188,7 +188,7 @@ Under GDPR Article 32, organizations must implement appropriate technical measur
 - Website: [oudayet.com](https://www.oudayet.com)
 - Email: contact@oudayet.com
 - GitHub: [@naimoudayet](https://github.com/naimoudayet)
-- [Odoo App Store](https://apps.odoo.com/apps/modules/19.0/no_pdf_password_protection)
+- [Odoo App Store](https://apps.odoo.com/apps/modules/20.0/no_pdf_password_protection)
 
 ## License
 

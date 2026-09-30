@@ -1,4 +1,4 @@
-FROM odoo:19
+FROM odoo:20
 USER root
 
 # pypdf is the maintained successor to PyPDF2 and shares the same
