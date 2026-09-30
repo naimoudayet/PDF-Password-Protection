@@ -311,7 +311,7 @@ class TestOutgoingInvoice(TransactionCase):
         """A default stored on a translatable field would have been English
         for everyone; resolving it at send time gives the recipient's language."""
         if not self.env["res.lang"].search_count([("code", "=", "fr_FR")]):
-            # Odoo 20 refuses a context in a language that is not installed.
+            # Odoo 18+ refuses a context in a language that is not installed.
             self.skipTest("fr_FR not active on this database")
         self.report.x_pdf_email_notice = False
         english = self.report._pdf_email_notice_html()
