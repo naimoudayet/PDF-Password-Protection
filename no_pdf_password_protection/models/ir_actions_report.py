@@ -95,9 +95,7 @@ class IrActionsReport(models.Model):
         "you print, email, or publish on the portal. The copy Odoo archives on "
         "the record stays readable so your own staff can preview it without "
         "typing a password; it is already covered by Odoo's access rights. "
-        "Turn this on to encrypt that archived copy too. "
-        "Emailed invoices are an exception: Odoo sends the very file it "
-        "stores, so that copy is always encrypted whatever this is set to.",
+        "Turn this on to encrypt that archived copy too.",
     )
     x_pdf_aes_unavailable = fields.Boolean(
         string="AES Unavailable On This Server",
